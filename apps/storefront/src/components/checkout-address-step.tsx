@@ -119,8 +119,8 @@ const AddressStep = ({ cart, onNext }: AddressStepProps) => {
   return (
     <div className="flex flex-col gap-8">
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-        <div className="flex flex-col gap-2">
-          <h3 className="text-zinc-900 !text-base font-semibold">
+        <div className="flex flex-col gap-4">
+          <h3 className="text-city-white text-base font-semibold">
             Shipping Address
           </h3>
           {/* Shipping Address */}
@@ -133,22 +133,22 @@ const AddressStep = ({ cart, onNext }: AddressStepProps) => {
         </div>
 
         {/* Billing Address Checkbox */}
-        <div className="flex items-center gap-x-2">
+        <div className="flex items-center gap-x-3">
           <Checkbox
             id="same_as_billing"
             type="checkbox"
             checked={sameAsBilling}
             onChange={(e) => setSameAsBilling(!!e.target.checked)}
           />
-          <label htmlFor="same_as_billing" className="text-sm">
+          <label htmlFor="same_as_billing" className="text-sm text-city-gray">
             Billing address is the same as shipping address
           </label>
         </div>
 
         {/* Billing Address (if different) */}
         {!sameAsBilling && (
-          <div className="flex flex-col gap-2">
-            <h3 className="text-zinc-900 !text-base font-semibold">
+          <div className="flex flex-col gap-4">
+            <h3 className="text-city-white text-base font-semibold">
               Billing Address
             </h3>
             <AddressForm
@@ -162,7 +162,7 @@ const AddressStep = ({ cart, onNext }: AddressStepProps) => {
 
         {/* Email */}
         <div className="flex flex-col gap-2">
-          <label htmlFor="email" className="block text-sm font-medium">
+          <label htmlFor="email" className="block text-sm font-medium text-city-gray">
             Email Address
           </label>
           <Input
@@ -173,7 +173,7 @@ const AddressStep = ({ cart, onNext }: AddressStepProps) => {
             placeholder="your@email.com"
             className="w-full"
           />
-          <p className="text-xs text-zinc-600">
+          <p className="text-xs text-city-muted">
             You'll receive order updates to this email.
           </p>
         </div>

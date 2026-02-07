@@ -9,7 +9,7 @@ interface CheckoutSummaryProps {
 
 const CheckoutSummary = ({ cart }: CheckoutSummaryProps) => {
   return (
-    <div className="h-fit sticky lg:top-20">
+    <div className="h-fit sticky lg:top-20 bg-city-navy border border-city-steel/30 rounded-lg p-6">
       <div className="flex flex-col gap-8">
         <Suspense fallback={<Loading />}>
           <div className="space-y-4">

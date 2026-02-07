@@ -1,90 +1,90 @@
 import {
-  CartLineItem,
-  CartSummary,
   CartEmpty,
+  CartLineItem,
   CartPromo,
+  CartSummary,
 } from "@/components/cart"
 import { Button } from "@/components/ui/button"
 import { Loading } from "@/components/ui/loading"
-import { useCart, useCreateCart } from "@/lib/hooks/use-cart"
+import { useCart } from "@/lib/hooks/use-cart"
 import { sortCartItems } from "@/lib/utils/cart"
-import { Link, useLoaderData } from "@tanstack/react-router"
-
-const DEFAULT_CART_FIELDS =
-  "id, *items, total, currency_code, subtotal, shipping_total, discount_total, tax_total, *promotions"
+import { getCountryCodeFromPath } from "@/lib/utils/region"
+import { Link, useLocation } from "@tanstack/react-router"
 
 const Cart = () => {
-  const { region, countryCode } = useLoaderData({
-    from: "/$countryCode/cart",
-  })
-  const { data: cart, isLoading: cartLoading } = useCart({
-    fields: DEFAULT_CART_FIELDS,
-  })
-  const createCartMutation = useCreateCart()
+  const { data: cart, isLoading } = useCart()
+  const sortedItems = sortCartItems(cart?.items || [])
+  const location = useLocation()
+  const countryCode = getCountryCodeFromPath(location.pathname) || "us"
 
-  // Auto-create cart if none exists
-  if (!cart && !cartLoading && !createCartMutation.isPending) {
-    createCartMutation.mutate({ region_id: region.id })
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-city-dark flex items-center justify-center">
+        <Loading />
+      </div>
+    )
   }
 
-  const cartItems = sortCartItems(cart?.items || [])
+  if (!cart || sortedItems.length === 0) {
+    return (
+      <div className="min-h-screen bg-city-dark">
+        <div className="content-container py-12">
+          <h1 className="text-3xl font-bold text-city-white mb-8">Shopping Cart</h1>
+          <CartEmpty />
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="content-container py-12">
-      {cartLoading ? (
-        <Loading />
-      ) : cartItems.length === 0 ? (
-        <CartEmpty />
-      ) : (
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="space-y-6 w-full md:w-2/3">
-            <div className="flex items-center justify-between mb-8">
-              <h1 className="text-zinc-900 text-xl">Cart</h1>
-              {cartItems.length > 0 && (
-                <Link
-                  to="/$countryCode/store"
-                  params={{ countryCode }}
-                  className="text-zinc-600 hover:text-zinc-500 text-sm underline"
-                >
-                  Continue shopping
-                </Link>
-              )}
-            </div>
-            {cartItems.map((item, index) => (
-              <div key={item.id}>
-                <CartLineItem
-                  item={item}
-                  cart={cart!}
-                  fields={DEFAULT_CART_FIELDS}
-                />
-                {index < cartItems.length - 1 && (
-                  <hr className="bg-zinc-200 mt-6" />
-                )}
+    <div className="min-h-screen bg-city-dark">
+      <div className="content-container py-12">
+        <h1 className="text-3xl font-bold text-city-white mb-8">Shopping Cart</h1>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          {/* Cart Items */}
+          <div className="lg:col-span-2">
+            <div className="bg-city-navy border border-city-steel/30 rounded-lg p-6">
+              <div className="divide-y divide-city-steel/30">
+                {sortedItems.map((item) => (
+                  <CartLineItem key={item.id} item={item} cart={cart} />
+                ))}
               </div>
-            ))}
+            </div>
+
+            <div className="mt-6">
+              <Link
+                to="/$countryCode/store"
+                params={{ countryCode }}
+                className="text-city-cyan hover:text-city-cyan-light transition-colors text-sm"
+              >
+                Continue Shopping
+              </Link>
+            </div>
           </div>
 
-          {cart && (
-            <div className="flex flex-col gap-y-8 w-full md:w-1/3">
-              <div>
-                <h2 className="text-zinc-900 text-xl">
-                  Cart Summary
-                </h2>
-              </div>
+          {/* Order Summary */}
+          <div className="lg:col-span-1">
+            <div className="bg-city-navy border border-city-steel/30 rounded-lg p-6 sticky top-20">
+              <h2 className="text-lg font-semibold text-city-white mb-6">Order Summary</h2>
 
-              <div className="flex flex-col gap-y-4">
-                <CartSummary cart={cart} />
+              <CartSummary cart={cart} />
 
+              <div className="mt-6">
                 <CartPromo cart={cart} />
               </div>
 
-              <Link to="/$countryCode/checkout" params={{ countryCode }}>
-                <Button className="w-full">Checkout</Button>
-              </Link>
+              <div className="mt-8">
+                <Link to="/$countryCode/checkout" params={{ countryCode }}>
+                  <Button className="w-full" variant="primary">
+                    Proceed to Checkout
+                  </Button>
+                </Link>
+              </div>
             </div>
-          )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

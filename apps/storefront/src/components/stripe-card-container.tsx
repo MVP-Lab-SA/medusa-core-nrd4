@@ -82,12 +82,14 @@ const StripeCardContainer: React.FC<StripeCardContainerProps> = ({
     <>
       {isSelected && (
         <div className="my-4 transition-all duration-150 ease-in-out">
-          <p className="text-base font-semibold text-zinc-900 mb-4">
+          <p className="text-base font-semibold text-city-white mb-4">
             Enter your card details:
           </p>
-          <div className="space-y-4 flex flex-wrap">
+          <div className="space-y-4">
             <div>
-              <label htmlFor="card-number">Card number</label>
+              <label htmlFor="card-number" className="block text-sm text-city-gray mb-1">
+                Card number
+              </label>
               <Input
                 id="card-number"
                 value={cardNumber}
@@ -96,12 +98,14 @@ const StripeCardContainer: React.FC<StripeCardContainerProps> = ({
                 maxLength={19}
               />
               {cardBrand && (
-                <p className="text-sm text-zinc-900">{cardBrand}</p>
+                <p className="text-sm text-city-cyan mt-1">{cardBrand}</p>
               )}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="expiry-date">Expiry date</label>
+                <label htmlFor="expiry-date" className="block text-sm text-city-gray mb-1">
+                  Expiry date
+                </label>
                 <Input
                   id="expiry-date"
                   value={expiryDate}
@@ -111,7 +115,9 @@ const StripeCardContainer: React.FC<StripeCardContainerProps> = ({
                 />
               </div>
               <div>
-                <label htmlFor="cvv">CVV</label>
+                <label htmlFor="cvv" className="block text-sm text-city-gray mb-1">
+                  CVV
+                </label>
                 <Input
                   id="cvv"
                   value={cvv}
@@ -122,7 +128,9 @@ const StripeCardContainer: React.FC<StripeCardContainerProps> = ({
               </div>
             </div>
             <div>
-              <label htmlFor="cardholder-name">Cardholder name</label>
+              <label htmlFor="cardholder-name" className="block text-sm text-city-gray mb-1">
+                Cardholder name
+              </label>
               <Input
                 id="cardholder-name"
                 value={cardholderName}
@@ -131,7 +139,7 @@ const StripeCardContainer: React.FC<StripeCardContainerProps> = ({
               />
             </div>
           </div>
-          <div className="mt-3 text-xs text-zinc-600">
+          <div className="mt-3 text-xs text-city-muted">
             This is a demo form. In production, use Stripe Elements for secure
             card input.
           </div>

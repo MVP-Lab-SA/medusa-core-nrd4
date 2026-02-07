@@ -108,7 +108,7 @@ const AddressForm = ({
       {/* Name fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
-          <label htmlFor="first_name" className="block text-sm font-medium">
+          <label htmlFor="first_name" className="block text-sm font-medium text-city-gray">
             First Name
           </label>
           <Input
@@ -121,13 +121,13 @@ const AddressForm = ({
             placeholder="First name"
           />
           {errors.first_name && touchedFields.first_name && (
-            <div className="text-rose-900 text-sm mt-1">
+            <div className="text-rose-400 text-sm mt-1">
               {errors.first_name}
             </div>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor="last_name" className="block text-sm font-medium">
+          <label htmlFor="last_name" className="block text-sm font-medium text-city-gray">
             Last Name
           </label>
           <Input
@@ -140,7 +140,7 @@ const AddressForm = ({
             placeholder="Last name"
           />
           {errors.last_name && touchedFields.last_name && (
-            <div className="text-rose-900 text-sm mt-1">
+            <div className="text-rose-400 text-sm mt-1">
               {errors.last_name}
             </div>
           )}
@@ -149,7 +149,7 @@ const AddressForm = ({
 
       {/* Company */}
       <div className="flex flex-col gap-2">
-        <label htmlFor="company" className="block text-sm font-medium">
+        <label htmlFor="company" className="block text-sm font-medium text-city-gray">
           Company
         </label>
         <Input
@@ -165,7 +165,7 @@ const AddressForm = ({
 
       {/* Address fields */}
       <div className="flex flex-col gap-2">
-        <label htmlFor="address_1" className="block text-sm font-medium">
+        <label htmlFor="address_1" className="block text-sm font-medium text-city-gray">
           Address Line 1
         </label>
         <Input
@@ -178,12 +178,12 @@ const AddressForm = ({
           placeholder="Address line 1"
         />
         {errors.address_1 && touchedFields.address_1 && (
-          <div className="text-rose-900 text-sm mt-1">{errors.address_1}</div>
+          <div className="text-rose-400 text-sm mt-1">{errors.address_1}</div>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="address_2" className="block text-sm font-medium">
+        <label htmlFor="address_2" className="block text-sm font-medium text-city-gray">
           Address Line 2
         </label>
         <Input
@@ -199,7 +199,7 @@ const AddressForm = ({
       {/* City, Province, Postal Code */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="flex flex-col gap-2">
-          <label htmlFor="city" className="block text-sm font-medium">
+          <label htmlFor="city" className="block text-sm font-medium text-city-gray">
             City
           </label>
           <Input
@@ -212,11 +212,11 @@ const AddressForm = ({
             placeholder="City"
           />
           {errors.city && touchedFields.city && (
-            <div className="text-rose-900 text-sm mt-1">{errors.city}</div>
+            <div className="text-rose-400 text-sm mt-1">{errors.city}</div>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor="province" className="block text-sm font-medium">
+          <label htmlFor="province" className="block text-sm font-medium text-city-gray">
             State / Province
           </label>
           <Input
@@ -230,7 +230,7 @@ const AddressForm = ({
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor="postal_code" className="block text-sm font-medium">
+          <label htmlFor="postal_code" className="block text-sm font-medium text-city-gray">
             Postal Code
           </label>
           <Input
@@ -243,7 +243,7 @@ const AddressForm = ({
             placeholder="Postal code"
           />
           {errors.postal_code && touchedFields.postal_code && (
-            <div className="text-rose-900 text-sm mt-1">
+            <div className="text-rose-400 text-sm mt-1">
               {errors.postal_code}
             </div>
           )}
@@ -254,7 +254,7 @@ const AddressForm = ({
       <div className="flex flex-col gap-2">
         <label
           htmlFor="country_code"
-          className="block text-sm font-medium text-zinc-900 mb-2"
+          className="block text-sm font-medium text-city-gray mb-2"
         >
           Country
         </label>
@@ -263,7 +263,7 @@ const AddressForm = ({
           value={addressFormData.country_code}
           onValueChange={(value) => handleChange("country_code", value)}
         >
-          <SelectTrigger className="!border-zinc-200 !rounded-none !text-base !font-medium !px-4 !py-2 !h-auto !shadow-none !ring-0 focus:!ring-0">
+          <SelectTrigger className="!border-city-steel/50 !rounded-lg !text-base !font-medium !px-4 !py-2 !h-auto !shadow-none !ring-0 focus:!ring-0 !bg-city-dark !text-city-white">
             <SelectValue placeholder="Select country" />
           </SelectTrigger>
           <SelectContent>
@@ -275,7 +275,7 @@ const AddressForm = ({
           </SelectContent>
         </Select>
         {errors.country_code && touchedFields.country_code && (
-          <div className="text-rose-900 text-sm mt-1">
+          <div className="text-rose-400 text-sm mt-1">
             {errors.country_code}
           </div>
         )}
@@ -283,7 +283,7 @@ const AddressForm = ({
 
       {/* Phone */}
       <div className="flex flex-col gap-2">
-        <label htmlFor="phone" className="block text-sm font-medium">
+        <label htmlFor="phone" className="block text-sm font-medium text-city-gray">
           Phone
         </label>
         <Input

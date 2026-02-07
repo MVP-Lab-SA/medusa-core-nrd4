@@ -84,7 +84,7 @@ const PaymentStep = ({ cart, onNext, onBack }: PaymentStepProps) => {
       {!paidByGiftcard && (availablePaymentMethods?.length ?? 0) > 0 && (
         <>
           {availablePaymentMethods.length === 0 && (
-            <p className="text-base font-medium text-zinc-600">
+            <p className="text-base font-medium text-city-muted">
               No payment methods available
             </p>
           )}
@@ -112,11 +112,11 @@ const PaymentStep = ({ cart, onNext, onBack }: PaymentStepProps) => {
 
       {paidByGiftcard && (
         <div className="flex flex-col w-1/3">
-          <p className="text-base font-semibold text-zinc-900 mb-1">
+          <p className="text-base font-semibold text-city-white mb-1">
             Payment method
           </p>
           <p
-            className="text-base font-semibold text-zinc-600"
+            className="text-base font-semibold text-city-cyan"
             data-testid="payment-method-summary"
           >
             Gift card
@@ -126,7 +126,7 @@ const PaymentStep = ({ cart, onNext, onBack }: PaymentStepProps) => {
 
       {error && (
         <div
-          className="text-rose-900 text-sm"
+          className="text-rose-400 text-sm bg-rose-500/10 px-4 py-2 rounded-lg"
           data-testid="payment-method-error-message"
         >
           {error}
