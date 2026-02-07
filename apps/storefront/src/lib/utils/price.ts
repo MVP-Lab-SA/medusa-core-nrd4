@@ -78,6 +78,20 @@ export const getPricesForVariant = (variant: HttpTypes.StoreProductVariant | und
   }
 }
 
+// ============ CONVERT TO LOCALE ============
+
+export const convertToLocale = ({
+  amount,
+  currency_code,
+  locale = "en-US",
+}: {
+  amount: number;
+  currency_code: string;
+  locale?: string;
+}): string => {
+  return formatPrice({ amount, currency_code, locale })
+}
+
 export function getProductPrice({
   product,
   variant_id,

@@ -1,4 +1,5 @@
 import CountrySelect from "@/components/country-select"
+import { Newsletter } from "@/components/newsletter"
 import { useCategories } from "@/lib/hooks/use-categories"
 import { useRegions } from "@/lib/hooks/use-regions"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
@@ -43,7 +44,7 @@ const Footer = () => {
           </div>
 
           {/* Links columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Products */}
             <div className="flex flex-col gap-y-4">
               <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
@@ -80,45 +81,74 @@ const Footer = () => {
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
+                  <Link
+                    to="/$countryCode/about"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
                     About Us
-                  </span>
+                  </Link>
                 </li>
                 <li>
-                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
-                    Enterprise
-                  </span>
-                </li>
-                <li>
-                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
+                  <Link
+                    to="/$countryCode/contact"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
                     Contact
-                  </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/faq"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    FAQ
+                  </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Support */}
+            {/* Account */}
             <div className="flex flex-col gap-y-4">
               <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
-                Support
+                Account
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
-                    Documentation
-                  </span>
+                  <Link
+                    to="/$countryCode/account/login"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Sign In
+                  </Link>
                 </li>
                 <li>
-                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
-                    API Reference
-                  </span>
+                  <Link
+                    to="/$countryCode/account/register"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Create Account
+                  </Link>
                 </li>
                 <li>
-                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
-                    Help Center
-                  </span>
+                  <Link
+                    to="/$countryCode/account"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    My Orders
+                  </Link>
                 </li>
               </ul>
+            </div>
+
+            {/* Newsletter */}
+            <div className="sm:col-span-2 lg:col-span-1">
+              <Newsletter variant="inline" />
             </div>
           </div>
         </div>
@@ -131,14 +161,16 @@ const Footer = () => {
             </span>
             <div className="flex gap-6">
               <Link
+                to="/$countryCode/privacy"
+                params={{ countryCode }}
                 className="text-xs text-city-muted hover:text-city-cyan transition-colors"
-                to={"/"}
               >
                 Privacy Policy
               </Link>
               <Link
+                to="/$countryCode/terms"
+                params={{ countryCode }}
                 className="text-xs text-city-muted hover:text-city-cyan transition-colors"
-                to={"/"}
               >
                 Terms of Service
               </Link>

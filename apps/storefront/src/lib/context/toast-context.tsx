@@ -1,9 +1,24 @@
-import { createContext, ReactNode, useContext, useState } from "react"
+import { CheckCircleSolid, ExclamationCircleSolid, InformationCircleSolid, XCircleSolid, XMark } from "@medusajs/icons"
+import { clsx } from "clsx"
+import { createContext, ReactNode, useContext, useState, useCallback } from "react"
+
+type ToastType = "info" | "success" | "warning" | "error"
+
+interface Toast {
+  id: string;
+  message: string;
+  type: ToastType;
+}
 
 type ToastContextType = {
-  message: string | null;
-  showToast: (message: string) => void;
-  hideToast: () => void;
+  toasts: Toast[];
+  showToast: (message: string, type?: ToastType) => void;
+  hideToast: (id: string) => void;
+  // Convenience methods
+  success: (message: string) => void;
+  error: (message: string) => void;
+  warning: (message: string) => void;
+  info: (message: string) => void;
 };
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined)
@@ -17,48 +32,64 @@ export const useToast = () => {
   return context
 }
 
+const ToastIcon = ({ type }: { type: ToastType }) => {
+  const icons = {
+    info: <InformationCircleSolid className="w-5 h-5 text-blue-400" />,
+    success: <CheckCircleSolid className="w-5 h-5 text-emerald-400" />,
+    warning: <ExclamationCircleSolid className="w-5 h-5 text-amber-400" />,
+    error: <XCircleSolid className="w-5 h-5 text-red-400" />,
+  }
+  return icons[type]
+}
+
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
-  const [message, setMessage] = useState<string | null>(null)
+  const [toasts, setToasts] = useState<Toast[]>([])
 
-  const showToast = (msg: string) => {
-    setMessage(msg)
-    // Auto-dismiss after 3 seconds
+  const hideToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id))
+  }, [])
+
+  const showToast = useCallback((message: string, type: ToastType = "info") => {
+    const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    setToasts((prev) => [...prev, { id, message, type }])
+    
+    // Auto-dismiss after 4 seconds
     setTimeout(() => {
-      setMessage(null)
-    }, 3000)
-  }
+      hideToast(id)
+    }, 4000)
+  }, [hideToast])
 
-  const hideToast = () => {
-    setMessage(null)
-  }
+  const success = useCallback((message: string) => showToast(message, "success"), [showToast])
+  const error = useCallback((message: string) => showToast(message, "error"), [showToast])
+  const warning = useCallback((message: string) => showToast(message, "warning"), [showToast])
+  const info = useCallback((message: string) => showToast(message, "info"), [showToast])
 
   return (
-    <ToastContext.Provider value={{ message, showToast, hideToast }}>
+    <ToastContext.Provider value={{ toasts, showToast, hideToast, success, error, warning, info }}>
       {children}
-      {message && (
-        <div
-          className="fixed right-6 top-16 z-40 mt-4 transition-all duration-300 ease-in-out"
-          style={{
-            animation: "slideDown 0.3s ease-out",
-          }}
-        >
-          <div className="bg-white shadow-lg px-6 py-3">
-            <p className="text-zinc-900 text-base font-medium">{message}</p>
+      
+      {/* Toast Container */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3 max-w-sm">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className={clsx(
+              "bg-city-navy border border-city-steel shadow-lg shadow-city-dark/50",
+              "px-4 py-3 flex items-start gap-3",
+              "animate-enter"
+            )}
+          >
+            <ToastIcon type={toast.type} />
+            <p className="text-city-white text-sm flex-1">{toast.message}</p>
+            <button
+              onClick={() => hideToast(toast.id)}
+              className="text-city-muted hover:text-city-white transition-colors"
+            >
+              <XMark className="w-4 h-4" />
+            </button>
           </div>
-        </div>
-      )}
-      <style>{`
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
+        ))}
+      </div>
     </ToastContext.Provider>
   )
 }

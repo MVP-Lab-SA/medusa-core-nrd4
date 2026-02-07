@@ -1,13 +1,13 @@
 import { clsx } from "clsx"
 import { forwardRef } from "react"
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
   helperText?: string;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, label, error, helperText, ...props }, ref) => {
     return (
       <div className="w-full">
@@ -16,14 +16,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-        <input
+        <textarea
           ref={ref}
           className={clsx(
-            "appearance-none shadow-none outline-none focus:outline-none",
+            "appearance-none shadow-none outline-none focus:outline-none resize-none",
             "border border-city-steel",
             "rounded-none",
             "text-base font-medium text-city-white",
-            "px-4 py-3 w-full",
+            "px-4 py-3 w-full min-h-[120px]",
             "bg-city-navy",
             "placeholder:text-city-muted",
             "focus:border-city-cyan focus:ring-1 focus:ring-city-cyan/30",
@@ -44,4 +44,4 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   }
 )
 
-Input.displayName = "Input"
+Textarea.displayName = "Textarea"
