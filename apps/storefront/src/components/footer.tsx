@@ -22,59 +22,122 @@ const Footer = () => {
 
   return (
     <footer
-      className="bg-zinc-50 border-t border-zinc-300 w-full"
+      className="bg-city-navy border-t border-city-steel/30 w-full"
       data-testid="footer"
     >
       <div className="content-container flex flex-col w-full">
         <div className="flex flex-col gap-y-12 lg:flex-row items-start justify-between py-16">
-          <div className="lg:w-1/3 flex flex-col gap-y-4">
+          {/* Brand column */}
+          <div className="lg:w-1/3 flex flex-col gap-y-6">
             <Link
               to="/$countryCode"
               params={{ countryCode }}
-              className="text-xl font-bold text-zinc-900 hover:text-zinc-600 transition-colors w-fit"
+              className="text-2xl font-bold text-city-white hover:text-city-cyan transition-colors w-fit tracking-tight"
             >
-              Bloom
+              DAKKAH<span className="text-city-cyan">.</span>
             </Link>
-            <p className="text-zinc-600 max-w-md text-base font-medium">
-              Build Medusa based ecommerce stores with AI.
+            <p className="text-city-gray max-w-md text-base leading-relaxed">
+              Precision infrastructure for smart cities. Powering Saudi Arabia's urban transformation with cutting-edge IoT technology.
             </p>
             <CountrySelect regions={regions ?? []} />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12">
-            {categories && categories.length > 0 ? (
-              <FooterColumn
-                title="Categories"
-                countryCode={countryCode}
-                links={categories.map((category) => ({
-                  name: category.name,
-                  handle: category.handle,
-                  isExternal: false,
-                }))}
-              />
-            ) : (
-              <div className="flex flex-col gap-y-4">
-                <h3 className="text-zinc-900 text-sm font-medium uppercase tracking-wide">
-                  Categories
-                </h3>
-                <p className="text-sm text-zinc-600">No categories</p>
-              </div>
-            )}
+
+          {/* Links columns */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12">
+            {/* Products */}
+            <div className="flex flex-col gap-y-4">
+              <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                Products
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link
+                    to="/$countryCode/store"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    All Products
+                  </Link>
+                </li>
+                {categories?.map((category) => (
+                  <li key={category.handle}>
+                    <Link
+                      to="/$countryCode/categories/$handle"
+                      params={{ countryCode, handle: category.handle }}
+                      className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                    >
+                      {category.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div className="flex flex-col gap-y-4">
+              <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                Company
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
+                    About Us
+                  </span>
+                </li>
+                <li>
+                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
+                    Enterprise
+                  </span>
+                </li>
+                <li>
+                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
+                    Contact
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Support */}
+            <div className="flex flex-col gap-y-4">
+              <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                Support
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
+                    Documentation
+                  </span>
+                </li>
+                <li>
+                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
+                    API Reference
+                  </span>
+                </li>
+                <li>
+                  <span className="text-city-gray hover:text-city-cyan transition-colors text-sm cursor-pointer">
+                    Help Center
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div className="border-t border-zinc-300 py-6">
+
+        {/* Bottom bar */}
+        <div className="border-t border-city-steel/30 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-xs text-zinc-600">
-              © {new Date().getFullYear()} Bloom. All rights reserved.
+            <span className="text-xs text-city-muted">
+              {new Date().getFullYear()} Dakkah CityOS. All rights reserved.
             </span>
             <div className="flex gap-6">
               <Link
-                className="text-xs text-zinc-600 hover:text-zinc-500 transition-colors"
+                className="text-xs text-city-muted hover:text-city-cyan transition-colors"
                 to={"/"}
               >
                 Privacy Policy
               </Link>
               <Link
-                className="text-xs text-zinc-600 hover:text-zinc-500 transition-colors"
+                className="text-xs text-city-muted hover:text-city-cyan transition-colors"
                 to={"/"}
               >
                 Terms of Service
@@ -84,52 +147,6 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  )
-}
-
-const FooterColumn = ({
-  title,
-  countryCode,
-  links,
-}: {
-  title: string;
-  countryCode: string;
-  links: {
-    name: string;
-    handle: string;
-    isExternal: boolean;
-  }[];
-}) => {
-  return (
-    <div className="flex flex-col gap-y-4">
-      <h3 className="text-zinc-900 text-sm font-medium uppercase tracking-wide">
-        {title}
-      </h3>
-      <ul className="space-y-3">
-        {links.map((link) => (
-          <li key={link.handle} className="text-sm">
-            {link.isExternal ? (
-              <a
-                href={link.handle}
-                target="_blank"
-                rel="noreferrer"
-                className="text-zinc-600 hover:text-zinc-500 transition-colors"
-              >
-                {link.name}
-              </a>
-            ) : (
-              <Link
-                to="/$countryCode/categories/$handle"
-                params={{ countryCode, handle: link.handle }}
-                className="text-zinc-600 hover:text-zinc-500 transition-colors"
-              >
-                {link.name}
-              </Link>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
   )
 }
 

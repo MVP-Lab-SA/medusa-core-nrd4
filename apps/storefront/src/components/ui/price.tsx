@@ -46,10 +46,10 @@ export const Price = ({
     }
   }, [price, originalPrice, currencyCode])
   return (
-    <div className={clsx("flex flex-col text-zinc-900", className)}>
+    <div className={clsx("flex flex-col text-city-white", className)}>
       {originalPrice && (
         <p>
-          <span className="line-through text-zinc-600">
+          <span className="line-through text-city-muted">
             {formattedSalePrice}
           </span>
         </p>
@@ -68,7 +68,7 @@ export const Price = ({
           "text-xl": textSize === "xlarge" && textWeight === "regular",
           "text-xl font-bold":
             textSize === "xlarge" && textWeight === "plus",
-          "text-blue-500": originalPrice,
+          "text-city-cyan": originalPrice,
         })}
       >
         {type === "range" && "From "}

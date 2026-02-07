@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Roboto+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 @config "../../tailwind.config.js";
 @import "./theme.css";
 
 @layer base {
   :root {
-    @apply bg-white text-zinc-900 antialiased;
+    @apply bg-city-dark text-city-white antialiased;
     text-rendering: optimizeLegibility;
   }
 }
@@ -14,6 +14,34 @@
   /* Content container */
   .content-container {
     @apply max-w-[1440px] w-full mx-auto px-6;
+  }
+
+  /* Cyan glow effect */
+  .glow-cyan {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), 0 0 40px rgba(6, 182, 212, 0.1);
+  }
+
+  /* Grid pattern overlay */
+  .grid-pattern {
+    background-image: 
+      linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Subtle scan line effect */
+  .scan-lines::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(6, 182, 212, 0.01) 2px,
+      rgba(6, 182, 212, 0.01) 4px
+    );
+    pointer-events: none;
   }
 }
 
@@ -40,21 +68,6 @@
   input:not([type="checkbox"]):focus ~ label {
     @apply left-0;
   }
-
-  /* input:not([type="checkbox"]):-webkit-autofill,
-  input:not([type="checkbox"]):-webkit-autofill:hover,
-  input:not([type="checkbox"]):-webkit-autofill:focus,
-  textarea:-webkit-autofill,
-  textarea:-webkit-autofill:hover,
-  textarea:-webkit-autofill:focus,
-  select:-webkit-autofill,
-  select:-webkit-autofill:hover,
-  select:-webkit-autofill:focus {
-    border: 1px solid #212121;
-    -webkit-text-fill-color: #212121;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-    transition: background-color 5000s ease-in-out 0s;
-  } */
 }
 
 /* Navigation menu dropdown animations */

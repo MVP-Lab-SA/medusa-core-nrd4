@@ -18,20 +18,24 @@ const ProductCard = ({ product }: ProductCardProps) => {
       params={{ countryCode, handle: product.handle }}
       className="group flex flex-col w-full"
     >
-      <div className="aspect-[29/34] w-full overflow-hidden bg-zinc-50 relative">
+      <div className="aspect-square w-full overflow-hidden bg-city-slate/50 relative border border-city-steel/30 transition-all duration-300 group-hover:border-city-cyan/50">
         <Thumbnail
           thumbnail={product.thumbnail}
           alt={product.title}
-          className="absolute inset-0 object-cover object-center w-full h-full"
+          className="absolute inset-0 object-cover object-center w-full h-full transition-transform duration-500 group-hover:scale-105"
         />
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-city-cyan/0 transition-colors duration-300 group-hover:bg-city-cyan/5" />
       </div>
 
-      <div className="flex text-base font-medium mt-4 justify-between">
-        <span className="text-zinc-900">{product.title}</span>
+      <div className="flex flex-col gap-2 mt-4">
+        <span className="text-city-white font-medium group-hover:text-city-cyan transition-colors">
+          {product.title}
+        </span>
         <ProductPrice
           product={product}
           variant={product.variants?.[0]}
-          className="text-zinc-600"
+          className="text-city-gray"
         />
       </div>
     </Link>
