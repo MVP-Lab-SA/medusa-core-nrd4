@@ -91,20 +91,29 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
+                    to="/$countryCode/blog"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Blog
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/stores"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Find a Store
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to="/$countryCode/contact"
                     params={{ countryCode }}
                     className="text-city-gray hover:text-city-cyan transition-colors text-sm"
                   >
                     Contact
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/$countryCode/faq"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
-                  >
-                    FAQ
                   </Link>
                 </li>
               </ul>
@@ -127,20 +136,74 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/$countryCode/account/register"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
-                  >
-                    Create Account
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     to="/$countryCode/account"
                     params={{ countryCode }}
                     className="text-city-gray hover:text-city-cyan transition-colors text-sm"
                   >
                     My Orders
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/wishlist"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Wishlist
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/loyalty"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Rewards
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div className="flex flex-col gap-y-4">
+              <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                Resources
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link
+                    to="/$countryCode/faq"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/returns"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Returns
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/gift-cards"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Gift Cards
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/lookbook"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Lookbook
                   </Link>
                 </li>
               </ul>

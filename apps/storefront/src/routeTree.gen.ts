@@ -19,15 +19,19 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CountryCodeIndexRouteImport } from './routes/$countryCode/index'
 import { Route as CountryCodeWishlistRouteImport } from './routes/$countryCode/wishlist'
 import { Route as CountryCodeTermsRouteImport } from './routes/$countryCode/terms'
+import { Route as CountryCodeStoresRouteImport } from './routes/$countryCode/stores'
 import { Route as CountryCodeStoreRouteImport } from './routes/$countryCode/store'
 import { Route as CountryCodeReturnsRouteImport } from './routes/$countryCode/returns'
 import { Route as CountryCodePrivacyRouteImport } from './routes/$countryCode/privacy'
+import { Route as CountryCodeLoyaltyRouteImport } from './routes/$countryCode/loyalty'
+import { Route as CountryCodeLookbookRouteImport } from './routes/$countryCode/lookbook'
 import { Route as CountryCodeGiftCardsRouteImport } from './routes/$countryCode/gift-cards'
 import { Route as CountryCodeFaqRouteImport } from './routes/$countryCode/faq'
 import { Route as CountryCodeContactRouteImport } from './routes/$countryCode/contact'
 import { Route as CountryCodeCompareRouteImport } from './routes/$countryCode/compare'
 import { Route as CountryCodeCheckoutRouteImport } from './routes/$countryCode/checkout'
 import { Route as CountryCodeCartRouteImport } from './routes/$countryCode/cart'
+import { Route as CountryCodeBlogRouteImport } from './routes/$countryCode/blog'
 import { Route as CountryCodeAboutRouteImport } from './routes/$countryCode/about'
 import { Route as CountryCodeAccountIndexRouteImport } from './routes/$countryCode/account/index'
 import { Route as CountryCodeProductsHandleRouteImport } from './routes/$countryCode/products/$handle'
@@ -88,6 +92,11 @@ const CountryCodeTermsRoute = CountryCodeTermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => CountryCodeRoute,
 } as any)
+const CountryCodeStoresRoute = CountryCodeStoresRouteImport.update({
+  id: '/stores',
+  path: '/stores',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
 const CountryCodeStoreRoute = CountryCodeStoreRouteImport.update({
   id: '/store',
   path: '/store',
@@ -101,6 +110,16 @@ const CountryCodeReturnsRoute = CountryCodeReturnsRouteImport.update({
 const CountryCodePrivacyRoute = CountryCodePrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const CountryCodeLoyaltyRoute = CountryCodeLoyaltyRouteImport.update({
+  id: '/loyalty',
+  path: '/loyalty',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const CountryCodeLookbookRoute = CountryCodeLookbookRouteImport.update({
+  id: '/lookbook',
+  path: '/lookbook',
   getParentRoute: () => CountryCodeRoute,
 } as any)
 const CountryCodeGiftCardsRoute = CountryCodeGiftCardsRouteImport.update({
@@ -131,6 +150,11 @@ const CountryCodeCheckoutRoute = CountryCodeCheckoutRouteImport.update({
 const CountryCodeCartRoute = CountryCodeCartRouteImport.update({
   id: '/cart',
   path: '/cart',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const CountryCodeBlogRoute = CountryCodeBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => CountryCodeRoute,
 } as any)
 const CountryCodeAboutRoute = CountryCodeAboutRouteImport.update({
@@ -194,15 +218,19 @@ export interface FileRoutesByFullPath {
   '/health': typeof HealthRoute
   '/store': typeof StoreRoute
   '/$countryCode/about': typeof CountryCodeAboutRoute
+  '/$countryCode/blog': typeof CountryCodeBlogRoute
   '/$countryCode/cart': typeof CountryCodeCartRoute
   '/$countryCode/checkout': typeof CountryCodeCheckoutRoute
   '/$countryCode/compare': typeof CountryCodeCompareRoute
   '/$countryCode/contact': typeof CountryCodeContactRoute
   '/$countryCode/faq': typeof CountryCodeFaqRoute
   '/$countryCode/gift-cards': typeof CountryCodeGiftCardsRoute
+  '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
+  '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
+  '/$countryCode/stores': typeof CountryCodeStoresRoute
   '/$countryCode/terms': typeof CountryCodeTermsRoute
   '/$countryCode/wishlist': typeof CountryCodeWishlistRoute
   '/$countryCode/': typeof CountryCodeIndexRoute
@@ -223,15 +251,19 @@ export interface FileRoutesByTo {
   '/health': typeof HealthRoute
   '/store': typeof StoreRoute
   '/$countryCode/about': typeof CountryCodeAboutRoute
+  '/$countryCode/blog': typeof CountryCodeBlogRoute
   '/$countryCode/cart': typeof CountryCodeCartRoute
   '/$countryCode/checkout': typeof CountryCodeCheckoutRoute
   '/$countryCode/compare': typeof CountryCodeCompareRoute
   '/$countryCode/contact': typeof CountryCodeContactRoute
   '/$countryCode/faq': typeof CountryCodeFaqRoute
   '/$countryCode/gift-cards': typeof CountryCodeGiftCardsRoute
+  '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
+  '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
+  '/$countryCode/stores': typeof CountryCodeStoresRoute
   '/$countryCode/terms': typeof CountryCodeTermsRoute
   '/$countryCode/wishlist': typeof CountryCodeWishlistRoute
   '/$countryCode': typeof CountryCodeIndexRoute
@@ -254,15 +286,19 @@ export interface FileRoutesById {
   '/health': typeof HealthRoute
   '/store': typeof StoreRoute
   '/$countryCode/about': typeof CountryCodeAboutRoute
+  '/$countryCode/blog': typeof CountryCodeBlogRoute
   '/$countryCode/cart': typeof CountryCodeCartRoute
   '/$countryCode/checkout': typeof CountryCodeCheckoutRoute
   '/$countryCode/compare': typeof CountryCodeCompareRoute
   '/$countryCode/contact': typeof CountryCodeContactRoute
   '/$countryCode/faq': typeof CountryCodeFaqRoute
   '/$countryCode/gift-cards': typeof CountryCodeGiftCardsRoute
+  '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
+  '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
+  '/$countryCode/stores': typeof CountryCodeStoresRoute
   '/$countryCode/terms': typeof CountryCodeTermsRoute
   '/$countryCode/wishlist': typeof CountryCodeWishlistRoute
   '/$countryCode/': typeof CountryCodeIndexRoute
@@ -286,15 +322,19 @@ export interface FileRouteTypes {
     | '/health'
     | '/store'
     | '/$countryCode/about'
+    | '/$countryCode/blog'
     | '/$countryCode/cart'
     | '/$countryCode/checkout'
     | '/$countryCode/compare'
     | '/$countryCode/contact'
     | '/$countryCode/faq'
     | '/$countryCode/gift-cards'
+    | '/$countryCode/lookbook'
+    | '/$countryCode/loyalty'
     | '/$countryCode/privacy'
     | '/$countryCode/returns'
     | '/$countryCode/store'
+    | '/$countryCode/stores'
     | '/$countryCode/terms'
     | '/$countryCode/wishlist'
     | '/$countryCode/'
@@ -315,15 +355,19 @@ export interface FileRouteTypes {
     | '/health'
     | '/store'
     | '/$countryCode/about'
+    | '/$countryCode/blog'
     | '/$countryCode/cart'
     | '/$countryCode/checkout'
     | '/$countryCode/compare'
     | '/$countryCode/contact'
     | '/$countryCode/faq'
     | '/$countryCode/gift-cards'
+    | '/$countryCode/lookbook'
+    | '/$countryCode/loyalty'
     | '/$countryCode/privacy'
     | '/$countryCode/returns'
     | '/$countryCode/store'
+    | '/$countryCode/stores'
     | '/$countryCode/terms'
     | '/$countryCode/wishlist'
     | '/$countryCode'
@@ -345,15 +389,19 @@ export interface FileRouteTypes {
     | '/health'
     | '/store'
     | '/$countryCode/about'
+    | '/$countryCode/blog'
     | '/$countryCode/cart'
     | '/$countryCode/checkout'
     | '/$countryCode/compare'
     | '/$countryCode/contact'
     | '/$countryCode/faq'
     | '/$countryCode/gift-cards'
+    | '/$countryCode/lookbook'
+    | '/$countryCode/loyalty'
     | '/$countryCode/privacy'
     | '/$countryCode/returns'
     | '/$countryCode/store'
+    | '/$countryCode/stores'
     | '/$countryCode/terms'
     | '/$countryCode/wishlist'
     | '/$countryCode/'
@@ -449,6 +497,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeTermsRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/stores': {
+      id: '/$countryCode/stores'
+      path: '/stores'
+      fullPath: '/$countryCode/stores'
+      preLoaderRoute: typeof CountryCodeStoresRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/store': {
       id: '/$countryCode/store'
       path: '/store'
@@ -468,6 +523,20 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/$countryCode/privacy'
       preLoaderRoute: typeof CountryCodePrivacyRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/loyalty': {
+      id: '/$countryCode/loyalty'
+      path: '/loyalty'
+      fullPath: '/$countryCode/loyalty'
+      preLoaderRoute: typeof CountryCodeLoyaltyRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/lookbook': {
+      id: '/$countryCode/lookbook'
+      path: '/lookbook'
+      fullPath: '/$countryCode/lookbook'
+      preLoaderRoute: typeof CountryCodeLookbookRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/gift-cards': {
@@ -510,6 +579,13 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/$countryCode/cart'
       preLoaderRoute: typeof CountryCodeCartRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/blog': {
+      id: '/$countryCode/blog'
+      path: '/blog'
+      fullPath: '/$countryCode/blog'
+      preLoaderRoute: typeof CountryCodeBlogRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/about': {
@@ -580,15 +656,19 @@ declare module '@tanstack/react-router' {
 
 interface CountryCodeRouteChildren {
   CountryCodeAboutRoute: typeof CountryCodeAboutRoute
+  CountryCodeBlogRoute: typeof CountryCodeBlogRoute
   CountryCodeCartRoute: typeof CountryCodeCartRoute
   CountryCodeCheckoutRoute: typeof CountryCodeCheckoutRoute
   CountryCodeCompareRoute: typeof CountryCodeCompareRoute
   CountryCodeContactRoute: typeof CountryCodeContactRoute
   CountryCodeFaqRoute: typeof CountryCodeFaqRoute
   CountryCodeGiftCardsRoute: typeof CountryCodeGiftCardsRoute
+  CountryCodeLookbookRoute: typeof CountryCodeLookbookRoute
+  CountryCodeLoyaltyRoute: typeof CountryCodeLoyaltyRoute
   CountryCodePrivacyRoute: typeof CountryCodePrivacyRoute
   CountryCodeReturnsRoute: typeof CountryCodeReturnsRoute
   CountryCodeStoreRoute: typeof CountryCodeStoreRoute
+  CountryCodeStoresRoute: typeof CountryCodeStoresRoute
   CountryCodeTermsRoute: typeof CountryCodeTermsRoute
   CountryCodeWishlistRoute: typeof CountryCodeWishlistRoute
   CountryCodeIndexRoute: typeof CountryCodeIndexRoute
@@ -604,15 +684,19 @@ interface CountryCodeRouteChildren {
 
 const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodeAboutRoute: CountryCodeAboutRoute,
+  CountryCodeBlogRoute: CountryCodeBlogRoute,
   CountryCodeCartRoute: CountryCodeCartRoute,
   CountryCodeCheckoutRoute: CountryCodeCheckoutRoute,
   CountryCodeCompareRoute: CountryCodeCompareRoute,
   CountryCodeContactRoute: CountryCodeContactRoute,
   CountryCodeFaqRoute: CountryCodeFaqRoute,
   CountryCodeGiftCardsRoute: CountryCodeGiftCardsRoute,
+  CountryCodeLookbookRoute: CountryCodeLookbookRoute,
+  CountryCodeLoyaltyRoute: CountryCodeLoyaltyRoute,
   CountryCodePrivacyRoute: CountryCodePrivacyRoute,
   CountryCodeReturnsRoute: CountryCodeReturnsRoute,
   CountryCodeStoreRoute: CountryCodeStoreRoute,
+  CountryCodeStoresRoute: CountryCodeStoresRoute,
   CountryCodeTermsRoute: CountryCodeTermsRoute,
   CountryCodeWishlistRoute: CountryCodeWishlistRoute,
   CountryCodeIndexRoute: CountryCodeIndexRoute,
