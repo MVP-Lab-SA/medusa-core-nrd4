@@ -1,4 +1,4 @@
-import * as React from "react"
+import { useState, useRef, useEffect, KeyboardEvent, ClipboardEvent } from "react"
 import { clx } from "@medusajs/ui"
 
 interface OTPInputProps {
@@ -7,8 +7,10 @@ interface OTPInputProps {
   onChange?: (value: string) => void
   onComplete?: (value: string) => void
   disabled?: boolean
-  error?: boolean
   className?: string
+  label?: string
+  error?: string
+  autoFocus?: boolean
 }
 
 export function OTPInput({
@@ -17,14 +19,25 @@ export function OTPInput({
   onChange,
   onComplete,
   disabled = false,
-  error = false,
-  className
+  className,
+  label,
+  error,
+  autoFocus = true,
 }: OTPInputProps) {
-  const inputRefs = React.useRef<(HTMLInputElement | null)[]>([])
+  const [otp, setOtp] = useState<string[]>(
+    value.split("").concat(Array(length - value.length).fill(""))
+  )
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
-  const values = React.useMemo(() => {
-    const chars = value.split("")
-    return Array.from({ length }, (_, i) => chars[i] || "")
+  useEffect(() => {
+    if (autoFocus && inputRefs.current[0]) {
+      inputRefs.current[0].focus()
+    }
+  }, [autoFocus])
+
+  useEffect(() => {
+    const newOtp = value.split("").concat(Array(length - value.length).fill(""))
+    setOtp(newOtp.slice(0, length))
   }, [value, length])
 
   const focusInput = (index: number) => {
@@ -36,40 +49,40 @@ export function OTPInput({
   const handleChange = (index: number, inputValue: string) => {
     if (disabled) return
 
-    const newValue = inputValue.slice(-1)
-    
-    if (!/^\d*$/.test(newValue)) return
+    const digit = inputValue.replace(/[^0-9]/g, "").slice(-1)
+    const newOtp = [...otp]
+    newOtp[index] = digit
+    setOtp(newOtp)
 
-    const newValues = [...values]
-    newValues[index] = newValue
-    const combinedValue = newValues.join("")
-    
-    onChange?.(combinedValue)
+    const otpValue = newOtp.join("")
+    onChange?.(otpValue)
 
-    if (newValue && index < length - 1) {
+    if (digit && index < length - 1) {
       focusInput(index + 1)
     }
 
-    if (combinedValue.length === length) {
-      onComplete?.(combinedValue)
+    if (newOtp.every(d => d !== "") && newOtp.length === length) {
+      onComplete?.(otpValue)
     }
   }
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {
     if (disabled) return
 
     switch (e.key) {
       case "Backspace":
         e.preventDefault()
-        if (values[index]) {
-          const newValues = [...values]
-          newValues[index] = ""
-          onChange?.(newValues.join(""))
+        if (otp[index]) {
+          const newOtp = [...otp]
+          newOtp[index] = ""
+          setOtp(newOtp)
+          onChange?.(newOtp.join(""))
         } else if (index > 0) {
           focusInput(index - 1)
-          const newValues = [...values]
-          newValues[index - 1] = ""
-          onChange?.(newValues.join(""))
+          const newOtp = [...otp]
+          newOtp[index - 1] = ""
+          setOtp(newOtp)
+          onChange?.(newOtp.join(""))
         }
         break
       case "ArrowLeft":
@@ -80,61 +93,83 @@ export function OTPInput({
         e.preventDefault()
         focusInput(index + 1)
         break
+      case "Delete":
+        e.preventDefault()
+        const newOtp = [...otp]
+        newOtp[index] = ""
+        setOtp(newOtp)
+        onChange?.(newOtp.join(""))
+        break
     }
   }
 
-  const handlePaste = (e: React.ClipboardEvent) => {
-    if (disabled) return
+  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault()
-    
-    const pastedData = e.clipboardData.getData("text/plain").replace(/\D/g, "")
-    const newValues = pastedData.slice(0, length).split("")
-    
-    while (newValues.length < length) {
-      newValues.push("")
-    }
-    
-    const combinedValue = newValues.slice(0, length).join("")
-    onChange?.(combinedValue)
+    if (disabled) return
 
-    if (combinedValue.length === length) {
-      onComplete?.(combinedValue)
+    const pastedData = e.clipboardData.getData("text").replace(/[^0-9]/g, "")
+    const newOtp = [...otp]
+
+    for (let i = 0; i < Math.min(pastedData.length, length); i++) {
+      newOtp[i] = pastedData[i]
+    }
+
+    setOtp(newOtp)
+    const otpValue = newOtp.join("")
+    onChange?.(otpValue)
+
+    const nextEmptyIndex = newOtp.findIndex(d => d === "")
+    if (nextEmptyIndex !== -1) {
+      focusInput(nextEmptyIndex)
     } else {
-      focusInput(combinedValue.length)
+      focusInput(length - 1)
+      if (newOtp.every(d => d !== "")) {
+        onComplete?.(otpValue)
+      }
     }
   }
 
   return (
-    <div className={clx("flex gap-3 justify-center", className)}>
-      {Array.from({ length }).map((_, index) => (
-        <input
-          key={index}
-          ref={(el) => {
-            inputRefs.current[index] = el
-          }}
-          type="text"
-          inputMode="numeric"
-          pattern="\d*"
-          maxLength={1}
-          value={values[index]}
-          onChange={(e) => handleChange(index, e.target.value)}
-          onKeyDown={(e) => handleKeyDown(index, e)}
-          onPaste={handlePaste}
-          onFocus={(e) => e.target.select()}
-          disabled={disabled}
-          className={clx(
-            "w-12 h-14 text-center text-2xl font-bold rounded-lg border-2 transition-all",
-            "bg-zinc-900 text-white",
-            "focus:outline-none",
-            error
-              ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/30"
-              : values[index]
-              ? "border-cyan-500"
-              : "border-zinc-700 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/30",
-            disabled && "opacity-50 cursor-not-allowed"
-          )}
-        />
-      ))}
+    <div className={className}>
+      {label && (
+        <label className="block text-sm font-medium text-neutral-300 mb-3 text-center">
+          {label}
+        </label>
+      )}
+      
+      <div className="flex justify-center gap-3">
+        {Array.from({ length }).map((_, index) => (
+          <input
+            key={index}
+            ref={(el) => {
+              inputRefs.current[index] = el
+            }}
+            type="text"
+            inputMode="numeric"
+            maxLength={1}
+            value={otp[index] || ""}
+            onChange={(e) => handleChange(index, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(index, e)}
+            onPaste={handlePaste}
+            onFocus={(e) => e.target.select()}
+            disabled={disabled}
+            className={clx(
+              "w-12 h-14 text-center text-xl font-semibold",
+              "bg-neutral-900 border-2 border-neutral-700 rounded-lg",
+              "text-white",
+              "focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500",
+              "transition-all duration-200",
+              otp[index] && "border-cyan-500/50",
+              disabled && "opacity-50 cursor-not-allowed",
+              error && "border-red-500"
+            )}
+          />
+        ))}
+      </div>
+
+      {error && (
+        <p className="mt-3 text-sm text-red-400 text-center">{error}</p>
+      )}
     </div>
   )
 }

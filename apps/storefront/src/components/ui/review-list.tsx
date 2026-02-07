@@ -1,121 +1,109 @@
-import * as React from "react"
-import { Star, ThumbsUp, ThumbsDown, Check, ChevronDown } from "lucide-react"
+import { useState } from "react"
 import { clx } from "@medusajs/ui"
+import { Star, ThumbUp, Check } from "@medusajs/icons"
 
 interface Review {
   id: string
-  author: string
   rating: number
-  title?: string
+  title: string
   content: string
-  date: Date
+  author: string
+  date: string
   verified?: boolean
   helpful?: number
-  notHelpful?: number
-  images?: string[]
   recommend?: boolean
-  response?: {
-    author: string
-    content: string
-    date: Date
-  }
 }
 
 interface ReviewListProps {
   reviews: Review[]
-  averageRating?: number
   totalReviews?: number
-  ratingDistribution?: Record<number, number>
-  onHelpful?: (reviewId: string, helpful: boolean) => void
+  averageRating?: number
+  ratingDistribution?: { rating: number; count: number }[]
   onLoadMore?: () => void
+  onHelpful?: (reviewId: string) => void
   hasMore?: boolean
   className?: string
 }
 
 export function ReviewList({
   reviews,
-  averageRating,
   totalReviews,
+  averageRating,
   ratingDistribution,
-  onHelpful,
   onLoadMore,
+  onHelpful,
   hasMore = false,
-  className
+  className,
 }: ReviewListProps) {
-  const [sortBy, setSortBy] = React.useState<"recent" | "helpful" | "rating">("recent")
-  const [expandedImages, setExpandedImages] = React.useState<string[]>([])
+  const [sortBy, setSortBy] = useState<"newest" | "highest" | "lowest" | "helpful">("newest")
 
-  const sortedReviews = React.useMemo(() => {
-    const sorted = [...reviews]
+  const sortedReviews = [...reviews].sort((a, b) => {
     switch (sortBy) {
+      case "highest":
+        return b.rating - a.rating
+      case "lowest":
+        return a.rating - b.rating
       case "helpful":
-        return sorted.sort((a, b) => (b.helpful || 0) - (a.helpful || 0))
-      case "rating":
-        return sorted.sort((a, b) => b.rating - a.rating)
+        return (b.helpful || 0) - (a.helpful || 0)
       default:
-        return sorted.sort((a, b) => b.date.getTime() - a.date.getTime())
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
     }
-  }, [reviews, sortBy])
+  })
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric"
-    })
+  const renderStars = (rating: number, size: "sm" | "md" = "sm") => {
+    const sizeClass = size === "sm" ? "w-4 h-4" : "w-5 h-5"
+    return (
+      <div className="flex items-center gap-0.5">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            className={clx(
+              sizeClass,
+              star <= rating ? "text-amber-400" : "text-neutral-600"
+            )}
+          />
+        ))}
+      </div>
+    )
   }
 
   return (
-    <div className={clx("space-y-8", className)}>
+    <div className={className}>
       {/* Summary */}
-      {(averageRating !== undefined || ratingDistribution) && (
-        <div className="grid md:grid-cols-2 gap-8 p-6 rounded-xl bg-zinc-900 border border-zinc-800">
-          {/* Average Rating */}
+      {(averageRating !== undefined || totalReviews !== undefined) && (
+        <div className="flex flex-col md:flex-row gap-8 mb-8 pb-8 border-b border-neutral-800">
           {averageRating !== undefined && (
             <div className="text-center md:text-left">
-              <div className="flex items-baseline gap-2 justify-center md:justify-start">
-                <span className="text-5xl font-bold text-white">
-                  {averageRating.toFixed(1)}
-                </span>
-                <span className="text-zinc-500">/ 5</span>
+              <div className="text-5xl font-bold text-white mb-2">
+                {averageRating.toFixed(1)}
               </div>
-              <div className="flex gap-1 justify-center md:justify-start my-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    className={clx(
-                      "w-5 h-5",
-                      star <= Math.round(averageRating)
-                        ? "text-yellow-500 fill-current"
-                        : "text-zinc-600"
-                    )}
-                  />
-                ))}
-              </div>
-              <p className="text-zinc-400 text-sm">
-                Based on {totalReviews || reviews.length} reviews
-              </p>
+              {renderStars(Math.round(averageRating), "md")}
+              {totalReviews !== undefined && (
+                <p className="text-sm text-neutral-500 mt-2">
+                  Based on {totalReviews} review{totalReviews !== 1 ? "s" : ""}
+                </p>
+              )}
             </div>
           )}
 
-          {/* Rating Distribution */}
           {ratingDistribution && (
-            <div className="space-y-2">
+            <div className="flex-1 space-y-2">
               {[5, 4, 3, 2, 1].map((rating) => {
-                const count = ratingDistribution[rating] || 0
-                const total = Object.values(ratingDistribution).reduce((a, b) => a + b, 0)
+                const item = ratingDistribution.find((d) => d.rating === rating)
+                const count = item?.count || 0
+                const total = ratingDistribution.reduce((acc, d) => acc + d.count, 0)
                 const percentage = total > 0 ? (count / total) * 100 : 0
 
                 return (
                   <div key={rating} className="flex items-center gap-3">
-                    <span className="text-zinc-400 text-sm w-12">{rating} star</span>
-                    <div className="flex-1 h-2 rounded-full bg-zinc-800 overflow-hidden">
+                    <span className="text-sm text-neutral-400 w-8">{rating} star</span>
+                    <div className="flex-1 h-2 bg-neutral-800 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-yellow-500 rounded-full"
+                        className="h-full bg-amber-400 rounded-full transition-all"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
-                    <span className="text-zinc-500 text-sm w-8">{count}</span>
+                    <span className="text-sm text-neutral-500 w-8">{count}</span>
                   </div>
                 )
               })}
@@ -125,18 +113,19 @@ export function ReviewList({
       )}
 
       {/* Sort */}
-      <div className="flex items-center justify-between">
-        <p className="text-zinc-400">
-          {reviews.length} {reviews.length === 1 ? "review" : "reviews"}
-        </p>
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-white">
+          {reviews.length} Review{reviews.length !== 1 ? "s" : ""}
+        </h3>
         <select
           value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as "recent" | "helpful" | "rating")}
-          className="px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white text-sm focus:outline-none focus:border-cyan-500"
+          onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+          className="px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
         >
-          <option value="recent">Most Recent</option>
+          <option value="newest">Newest</option>
+          <option value="highest">Highest Rated</option>
+          <option value="lowest">Lowest Rated</option>
           <option value="helpful">Most Helpful</option>
-          <option value="rating">Highest Rated</option>
         </select>
       </div>
 
@@ -145,135 +134,63 @@ export function ReviewList({
         {sortedReviews.map((review) => (
           <div
             key={review.id}
-            className="p-6 rounded-xl bg-zinc-900 border border-zinc-800"
+            className="p-6 bg-neutral-900 border border-neutral-800 rounded-xl"
           >
-            {/* Header */}
-            <div className="flex items-start justify-between mb-4">
+            <div className="flex items-start justify-between mb-3">
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-white font-medium">{review.author}</span>
-                  {review.verified && (
-                    <span className="flex items-center gap-1 text-green-500 text-xs">
-                      <Check className="w-3 h-3" />
-                      Verified Purchase
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-0.5">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={clx(
-                          "w-4 h-4",
-                          star <= review.rating
-                            ? "text-yellow-500 fill-current"
-                            : "text-zinc-600"
-                        )}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-zinc-500 text-sm">{formatDate(review.date)}</span>
-                </div>
+                {renderStars(review.rating)}
+                <h4 className="text-white font-medium mt-2">{review.title}</h4>
               </div>
-              {review.recommend !== undefined && (
-                <span className={clx(
-                  "text-xs px-2 py-1 rounded-full",
-                  review.recommend
-                    ? "bg-green-500/10 text-green-400"
-                    : "bg-red-500/10 text-red-400"
-                )}>
-                  {review.recommend ? "Recommends" : "Does not recommend"}
+              {review.recommend && (
+                <span className="flex items-center gap-1 text-xs text-emerald-400">
+                  <Check className="w-3 h-3" />
+                  Recommends
                 </span>
               )}
             </div>
 
-            {/* Content */}
-            {review.title && (
-              <h4 className="text-white font-medium mb-2">{review.title}</h4>
-            )}
-            <p className="text-zinc-300 mb-4">{review.content}</p>
+            <p className="text-neutral-300 text-sm mb-4">{review.content}</p>
 
-            {/* Images */}
-            {review.images && review.images.length > 0 && (
-              <div className="flex gap-2 mb-4">
-                {review.images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setExpandedImages([image])}
-                    className="w-20 h-20 rounded-lg overflow-hidden hover:opacity-80 transition-opacity"
-                  >
-                    <img
-                      src={image}
-                      alt=""
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Response */}
-            {review.response && (
-              <div className="mt-4 p-4 rounded-lg bg-zinc-800/50 border-l-2 border-cyan-500">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-cyan-400 font-medium text-sm">
-                    {review.response.author}
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2 text-neutral-500">
+                <span className="font-medium text-neutral-400">{review.author}</span>
+                {review.verified && (
+                  <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded">
+                    Verified Purchase
                   </span>
-                  <span className="text-zinc-500 text-xs">
-                    {formatDate(review.response.date)}
-                  </span>
-                </div>
-                <p className="text-zinc-300 text-sm">{review.response.content}</p>
+                )}
+                <span>-</span>
+                <span>{new Date(review.date).toLocaleDateString()}</span>
               </div>
-            )}
 
-            {/* Helpful */}
-            {onHelpful && (
-              <div className="flex items-center gap-4 mt-4 pt-4 border-t border-zinc-800">
-                <span className="text-zinc-500 text-sm">Was this helpful?</span>
+              {onHelpful && (
                 <button
-                  onClick={() => onHelpful(review.id, true)}
-                  className="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors"
+                  onClick={() => onHelpful(review.id)}
+                  className="flex items-center gap-1.5 text-neutral-500 hover:text-white transition-colors"
                 >
-                  <ThumbsUp className="w-4 h-4" />
-                  <span className="text-sm">{review.helpful || 0}</span>
+                  <ThumbUp className="w-4 h-4" />
+                  Helpful {review.helpful ? `(${review.helpful})` : ""}
                 </button>
-                <button
-                  onClick={() => onHelpful(review.id, false)}
-                  className="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors"
-                >
-                  <ThumbsDown className="w-4 h-4" />
-                  <span className="text-sm">{review.notHelpful || 0}</span>
-                </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Load More */}
       {hasMore && onLoadMore && (
-        <button
-          onClick={onLoadMore}
-          className="w-full py-3 rounded-lg border border-zinc-700 text-zinc-300 hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2"
-        >
-          Load More Reviews
-          <ChevronDown className="w-4 h-4" />
-        </button>
+        <div className="mt-8 text-center">
+          <button
+            onClick={onLoadMore}
+            className="px-6 py-3 border border-neutral-700 text-white font-medium rounded-lg hover:border-neutral-500 transition-colors"
+          >
+            Load More Reviews
+          </button>
+        </div>
       )}
 
-      {/* Image Modal */}
-      {expandedImages.length > 0 && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-          onClick={() => setExpandedImages([])}
-        >
-          <img
-            src={expandedImages[0]}
-            alt=""
-            className="max-w-full max-h-full object-contain"
-          />
+      {reviews.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-neutral-400">No reviews yet. Be the first to review!</p>
         </div>
       )}
     </div>

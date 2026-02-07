@@ -1,6 +1,6 @@
-import * as React from "react"
-import { X } from "lucide-react"
+import { useState, useEffect } from "react"
 import { clx } from "@medusajs/ui"
+import { XMark } from "@medusajs/icons"
 
 interface SidebarProps {
   isOpen: boolean
@@ -10,18 +10,38 @@ interface SidebarProps {
   title?: string
   children: React.ReactNode
   className?: string
+  showOverlay?: boolean
 }
 
 export function Sidebar({
   isOpen,
   onClose,
   position = "left",
-  width = "w-80",
+  width = "320px",
   title,
   children,
-  className
+  className,
+  showOverlay = true,
 }: SidebarProps) {
-  React.useEffect(() => {
+  const [isVisible, setIsVisible] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true)
+      requestAnimationFrame(() => {
+        setIsAnimating(true)
+      })
+    } else {
+      setIsAnimating(false)
+      const timeout = setTimeout(() => {
+        setIsVisible(false)
+      }, 300)
+      return () => clearTimeout(timeout)
+    }
+  }, [isOpen])
+
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden"
     } else {
@@ -32,111 +52,50 @@ export function Sidebar({
     }
   }, [isOpen])
 
-  React.useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
-    document.addEventListener("keydown", handleEscape)
-    return () => document.removeEventListener("keydown", handleEscape)
-  }, [onClose])
+  if (!isVisible) return null
 
   return (
-    <>
-      {/* Backdrop */}
-      <div
-        className={clx(
-          "fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300",
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        )}
-        onClick={onClose}
-      />
+    <div className="fixed inset-0 z-50">
+      {showOverlay && (
+        <div
+          className={clx(
+            "absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300",
+            isAnimating ? "opacity-100" : "opacity-0"
+          )}
+          onClick={onClose}
+        />
+      )}
 
-      {/* Sidebar */}
       <aside
+        style={{ width }}
         className={clx(
-          "fixed inset-y-0 z-50 flex flex-col bg-zinc-900 border-zinc-700 transition-transform duration-300 ease-out",
-          width,
+          "absolute top-0 bottom-0 bg-neutral-900 border-neutral-700 shadow-2xl",
+          "flex flex-col transition-transform duration-300 ease-out",
           position === "left" ? "left-0 border-r" : "right-0 border-l",
           position === "left"
-            ? isOpen ? "translate-x-0" : "-translate-x-full"
-            : isOpen ? "translate-x-0" : "translate-x-full",
+            ? isAnimating
+              ? "translate-x-0"
+              : "-translate-x-full"
+            : isAnimating
+            ? "translate-x-0"
+            : "translate-x-full",
           className
         )}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-zinc-800">
-          {title && <h2 className="text-lg font-semibold text-white">{title}</h2>}
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors ml-auto"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        {title && (
+          <header className="flex items-center justify-between px-6 py-4 border-b border-neutral-800">
+            <h2 className="text-lg font-semibold text-white">{title}</h2>
+            <button
+              onClick={onClose}
+              className="p-2 -mr-2 hover:bg-neutral-800 rounded-lg transition-colors"
+            >
+              <XMark className="w-5 h-5 text-neutral-400" />
+            </button>
+          </header>
+        )}
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto">
-          {children}
-        </div>
+        <div className="flex-1 overflow-y-auto">{children}</div>
       </aside>
-    </>
-  )
-}
-
-interface SidebarSectionProps {
-  title?: string
-  children: React.ReactNode
-  className?: string
-}
-
-export function SidebarSection({ title, children, className }: SidebarSectionProps) {
-  return (
-    <div className={clx("p-4 border-b border-zinc-800", className)}>
-      {title && (
-        <h3 className="text-sm font-medium text-zinc-400 uppercase tracking-wider mb-3">
-          {title}
-        </h3>
-      )}
-      {children}
     </div>
-  )
-}
-
-interface SidebarItemProps {
-  icon?: React.ReactNode
-  label: string
-  badge?: string | number
-  active?: boolean
-  onClick?: () => void
-  className?: string
-}
-
-export function SidebarItem({
-  icon,
-  label,
-  badge,
-  active = false,
-  onClick,
-  className
-}: SidebarItemProps) {
-  return (
-    <button
-      onClick={onClick}
-      className={clx(
-        "w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left",
-        active
-          ? "bg-cyan-500/10 text-cyan-400"
-          : "text-zinc-300 hover:bg-zinc-800 hover:text-white",
-        className
-      )}
-    >
-      {icon && <span className="flex-shrink-0">{icon}</span>}
-      <span className="flex-1 truncate">{label}</span>
-      {badge !== undefined && (
-        <span className="px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400 text-xs">
-          {badge}
-        </span>
-      )}
-    </button>
   )
 }

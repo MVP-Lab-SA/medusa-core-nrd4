@@ -1,21 +1,20 @@
-import * as React from "react"
-import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
 import { clx } from "@medusajs/ui"
+import { ChevronLeft, ChevronRight, Star } from "@medusajs/icons"
 
 interface Testimonial {
   id: string
   content: string
   author: string
   role?: string
-  company?: string
   avatar?: string
   rating?: number
+  company?: string
 }
 
 interface TestimonialsProps {
   testimonials: Testimonial[]
-  variant?: "carousel" | "grid" | "masonry"
-  columns?: 2 | 3
+  variant?: "carousel" | "grid" | "single"
   autoPlay?: boolean
   autoPlayInterval?: number
   className?: string
@@ -24,169 +23,82 @@ interface TestimonialsProps {
 export function Testimonials({
   testimonials,
   variant = "carousel",
-  columns = 3,
   autoPlay = true,
   autoPlayInterval = 5000,
-  className
+  className,
 }: TestimonialsProps) {
-  const [currentIndex, setCurrentIndex] = React.useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
-  React.useEffect(() => {
-    if (!autoPlay || variant !== "carousel" || testimonials.length <= 1) return
+  useEffect(() => {
+    if (variant === "carousel" && autoPlay && !isPaused && testimonials.length > 1) {
+      intervalRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+      }, autoPlayInterval)
+    }
 
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % testimonials.length)
-    }, autoPlayInterval)
-
-    return () => clearInterval(interval)
-  }, [autoPlay, autoPlayInterval, testimonials.length, variant])
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [variant, autoPlay, isPaused, autoPlayInterval, testimonials.length])
 
   const goToPrev = () => {
-    setCurrentIndex((prev) => 
-      prev === 0 ? testimonials.length - 1 : prev - 1
-    )
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
   }
 
   const goToNext = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length)
   }
 
-  if (variant === "carousel") {
-    return (
-      <div className={clx("relative", className)}>
-        <div className="overflow-hidden">
-          <div
-            className="flex transition-transform duration-500"
-            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-          >
-            {testimonials.map((testimonial) => (
-              <div
-                key={testimonial.id}
-                className="w-full flex-shrink-0 px-4"
-              >
-                <TestimonialCard testimonial={testimonial} centered />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {testimonials.length > 1 && (
-          <>
-            <button
-              onClick={goToPrev}
-              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-zinc-800 text-white hover:bg-zinc-700 transition-colors"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button
-              onClick={goToNext}
-              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-zinc-800 text-white hover:bg-zinc-700 transition-colors"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-
-            <div className="flex justify-center gap-2 mt-6">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={clx(
-                    "w-2 h-2 rounded-full transition-all",
-                    index === currentIndex
-                      ? "w-8 bg-cyan-500"
-                      : "bg-zinc-600 hover:bg-zinc-500"
-                  )}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    )
-  }
-
-  if (variant === "masonry") {
-    return (
-      <div className={clx("columns-1 md:columns-2 lg:columns-3 gap-4", className)}>
-        {testimonials.map((testimonial) => (
-          <div key={testimonial.id} className="break-inside-avoid mb-4">
-            <TestimonialCard testimonial={testimonial} />
-          </div>
-        ))}
-      </div>
-    )
-  }
-
-  // Grid variant
-  return (
+  const TestimonialCard = ({ testimonial, featured = false }: { testimonial: Testimonial; featured?: boolean }) => (
     <div
       className={clx(
-        "grid gap-6",
-        columns === 2 ? "md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3",
-        className
+        "p-6 bg-neutral-900 border border-neutral-800 rounded-xl",
+        featured && "p-8"
       )}
     >
-      {testimonials.map((testimonial) => (
-        <TestimonialCard key={testimonial.id} testimonial={testimonial} />
-      ))}
-    </div>
-  )
-}
-
-interface TestimonialCardProps {
-  testimonial: Testimonial
-  centered?: boolean
-}
-
-function TestimonialCard({ testimonial, centered = false }: TestimonialCardProps) {
-  return (
-    <div
-      className={clx(
-        "p-6 rounded-xl bg-zinc-900 border border-zinc-800",
-        centered && "text-center max-w-2xl mx-auto"
-      )}
-    >
-      <Quote className={clx(
-        "w-10 h-10 text-cyan-500/30 mb-4",
-        centered && "mx-auto"
-      )} />
-
       {testimonial.rating && (
-        <div className={clx("flex gap-1 mb-4", centered && "justify-center")}>
+        <div className="flex items-center gap-1 mb-4">
           {[1, 2, 3, 4, 5].map((star) => (
             <Star
               key={star}
               className={clx(
-                "w-5 h-5",
-                star <= testimonial.rating!
-                  ? "text-yellow-500 fill-current"
-                  : "text-zinc-600"
+                "w-4 h-4",
+                star <= testimonial.rating! ? "text-amber-400" : "text-neutral-600"
               )}
             />
           ))}
         </div>
       )}
 
-      <p className="text-zinc-300 mb-6 leading-relaxed">
+      <blockquote className={clx(
+        "text-neutral-300 mb-6",
+        featured ? "text-lg" : "text-sm"
+      )}>
         "{testimonial.content}"
-      </p>
+      </blockquote>
 
-      <div className={clx("flex items-center gap-4", centered && "justify-center")}>
+      <div className="flex items-center gap-3">
         {testimonial.avatar ? (
           <img
             src={testimonial.avatar}
             alt={testimonial.author}
-            className="w-12 h-12 rounded-full object-cover"
+            className="w-10 h-10 rounded-full object-cover"
           />
         ) : (
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold">
-            {testimonial.author.charAt(0)}
+          <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center">
+            <span className="text-cyan-400 font-semibold">
+              {testimonial.author.charAt(0)}
+            </span>
           </div>
         )}
-        <div className={centered ? "text-left" : ""}>
-          <p className="text-white font-medium">{testimonial.author}</p>
+        <div>
+          <p className="text-white font-medium text-sm">{testimonial.author}</p>
           {(testimonial.role || testimonial.company) && (
-            <p className="text-zinc-500 text-sm">
+            <p className="text-neutral-500 text-xs">
               {testimonial.role}
               {testimonial.role && testimonial.company && " at "}
               {testimonial.company}
@@ -196,19 +108,81 @@ function TestimonialCard({ testimonial, centered = false }: TestimonialCardProps
       </div>
     </div>
   )
-}
 
-interface TestimonialQuoteProps {
-  content: string
-  author: string
-  className?: string
-}
+  if (variant === "grid") {
+    return (
+      <div className={clx("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", className)}>
+        {testimonials.map((testimonial) => (
+          <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+        ))}
+      </div>
+    )
+  }
 
-export function TestimonialQuote({ content, author, className }: TestimonialQuoteProps) {
+  if (variant === "single" && testimonials.length > 0) {
+    return (
+      <div className={clx("max-w-2xl mx-auto", className)}>
+        <TestimonialCard testimonial={testimonials[0]} featured />
+      </div>
+    )
+  }
+
+  // Carousel variant (default)
   return (
-    <blockquote className={clx("relative pl-6 border-l-2 border-cyan-500", className)}>
-      <p className="text-zinc-300 italic mb-2">"{content}"</p>
-      <cite className="text-zinc-500 text-sm not-italic">- {author}</cite>
-    </blockquote>
+    <div
+      className={clx("relative", className)}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <div className="overflow-hidden">
+        <div
+          className="flex transition-transform duration-500 ease-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {testimonials.map((testimonial) => (
+            <div key={testimonial.id} className="w-full flex-shrink-0 px-4">
+              <div className="max-w-2xl mx-auto">
+                <TestimonialCard testimonial={testimonial} featured />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {testimonials.length > 1 && (
+        <>
+          <button
+            onClick={goToPrev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 p-3 bg-neutral-800 hover:bg-neutral-700 rounded-full transition-colors"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </button>
+          <button
+            onClick={goToNext}
+            className="absolute right-0 top-1/2 -translate-y-1/2 p-3 bg-neutral-800 hover:bg-neutral-700 rounded-full transition-colors"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight className="w-5 h-5 text-white" />
+          </button>
+
+          <div className="flex justify-center gap-2 mt-6">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={clx(
+                  "w-2 h-2 rounded-full transition-all",
+                  index === currentIndex
+                    ? "bg-cyan-500 w-6"
+                    : "bg-neutral-700 hover:bg-neutral-600"
+                )}
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
   )
 }

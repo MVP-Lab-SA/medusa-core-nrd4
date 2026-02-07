@@ -1,6 +1,6 @@
-import * as React from "react"
-import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Download } from "lucide-react"
+import { useState, useEffect, useCallback } from "react"
 import { clx } from "@medusajs/ui"
+import { XMark, ChevronLeft, ChevronRight, Plus, Minus } from "@medusajs/icons"
 
 interface LightboxImage {
   src: string
@@ -13,10 +13,8 @@ interface LightboxProps {
   initialIndex?: number
   isOpen: boolean
   onClose: () => void
-  showThumbnails?: boolean
-  showCounter?: boolean
   enableZoom?: boolean
-  enableDownload?: boolean
+  showThumbnails?: boolean
   className?: string
 }
 
@@ -25,28 +23,32 @@ export function Lightbox({
   initialIndex = 0,
   isOpen,
   onClose,
-  showThumbnails = true,
-  showCounter = true,
   enableZoom = true,
-  enableDownload = true,
-  className
+  showThumbnails = true,
+  className,
 }: LightboxProps) {
-  const [currentIndex, setCurrentIndex] = React.useState(initialIndex)
-  const [zoom, setZoom] = React.useState(1)
-  const [position, setPosition] = React.useState({ x: 0, y: 0 })
-  const [isDragging, setIsDragging] = React.useState(false)
-  const dragStart = React.useRef({ x: 0, y: 0 })
+  const [currentIndex, setCurrentIndex] = useState(initialIndex)
+  const [isZoomed, setIsZoomed] = useState(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentIndex(initialIndex)
-    setZoom(1)
-    setPosition({ x: 0, y: 0 })
   }, [initialIndex, isOpen])
 
-  React.useEffect(() => {
-    if (!isOpen) return
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isOpen])
 
-    const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!isOpen) return
+
       switch (e.key) {
         case "Escape":
           onClose()
@@ -57,74 +59,28 @@ export function Lightbox({
         case "ArrowRight":
           goToNext()
           break
-        case "+":
-        case "=":
-          handleZoomIn()
-          break
-        case "-":
-          handleZoomOut()
-          break
       }
-    }
+    },
+    [isOpen, onClose]
+  )
 
+  useEffect(() => {
     document.addEventListener("keydown", handleKeyDown)
-    document.body.style.overflow = "hidden"
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown)
-      document.body.style.overflow = ""
-    }
-  }, [isOpen, currentIndex])
+    return () => document.removeEventListener("keydown", handleKeyDown)
+  }, [handleKeyDown])
 
   const goToPrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
-    setZoom(1)
-    setPosition({ x: 0, y: 0 })
+    setIsZoomed(false)
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
   }
 
   const goToNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
-    setZoom(1)
-    setPosition({ x: 0, y: 0 })
+    setIsZoomed(false)
+    setCurrentIndex((prev) => (prev + 1) % images.length)
   }
 
-  const handleZoomIn = () => {
-    setZoom((prev) => Math.min(prev + 0.5, 3))
-  }
-
-  const handleZoomOut = () => {
-    setZoom((prev) => {
-      const newZoom = Math.max(prev - 0.5, 1)
-      if (newZoom === 1) setPosition({ x: 0, y: 0 })
-      return newZoom
-    })
-  }
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (zoom > 1) {
-      setIsDragging(true)
-      dragStart.current = { x: e.clientX - position.x, y: e.clientY - position.y }
-    }
-  }
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (isDragging && zoom > 1) {
-      setPosition({
-        x: e.clientX - dragStart.current.x,
-        y: e.clientY - dragStart.current.y
-      })
-    }
-  }
-
-  const handleMouseUp = () => {
-    setIsDragging(false)
-  }
-
-  const handleDownload = () => {
-    const link = document.createElement("a")
-    link.href = images[currentIndex].src
-    link.download = images[currentIndex].alt || "image"
-    link.click()
+  const toggleZoom = () => {
+    setIsZoomed(!isZoomed)
   }
 
   if (!isOpen) return null
@@ -132,131 +88,99 @@ export function Lightbox({
   const currentImage = images[currentIndex]
 
   return (
-    <div
-      className={clx(
-        "fixed inset-0 z-50 bg-black/95 flex flex-col",
-        className
-      )}
-    >
+    <div className={clx("fixed inset-0 z-50 bg-black", className)}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-4">
-          {showCounter && (
-            <span className="text-white text-sm">
-              {currentIndex + 1} / {images.length}
-            </span>
-          )}
-        </div>
-
+      <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 bg-gradient-to-b from-black/50 to-transparent">
+        <span className="text-white/70 text-sm">
+          {currentIndex + 1} / {images.length}
+        </span>
         <div className="flex items-center gap-2">
           {enableZoom && (
-            <>
-              <button
-                onClick={handleZoomOut}
-                disabled={zoom <= 1}
-                className="p-2 rounded-lg hover:bg-white/10 text-white disabled:opacity-50 transition-colors"
-              >
-                <ZoomOut className="w-5 h-5" />
-              </button>
-              <span className="text-white text-sm w-16 text-center">
-                {Math.round(zoom * 100)}%
-              </span>
-              <button
-                onClick={handleZoomIn}
-                disabled={zoom >= 3}
-                className="p-2 rounded-lg hover:bg-white/10 text-white disabled:opacity-50 transition-colors"
-              >
-                <ZoomIn className="w-5 h-5" />
-              </button>
-            </>
-          )}
-          {enableDownload && (
             <button
-              onClick={handleDownload}
-              className="p-2 rounded-lg hover:bg-white/10 text-white transition-colors"
+              onClick={toggleZoom}
+              className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+              aria-label={isZoomed ? "Zoom out" : "Zoom in"}
             >
-              <Download className="w-5 h-5" />
+              {isZoomed ? (
+                <Minus className="w-5 h-5" />
+              ) : (
+                <Plus className="w-5 h-5" />
+              )}
             </button>
           )}
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-white/10 text-white transition-colors"
+            className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+            aria-label="Close"
           >
-            <X className="w-5 h-5" />
+            <XMark className="w-6 h-6" />
           </button>
         </div>
       </div>
 
-      {/* Main Image */}
+      {/* Main image */}
       <div
-        className="flex-1 flex items-center justify-center relative overflow-hidden"
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        className="absolute inset-0 flex items-center justify-center p-16"
+        onClick={(e) => e.target === e.currentTarget && onClose()}
       >
-        {images.length > 1 && (
-          <button
-            onClick={goToPrev}
-            className="absolute left-4 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-10"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-        )}
-
         <img
           src={currentImage.src}
           alt={currentImage.alt || ""}
           className={clx(
-            "max-w-full max-h-full object-contain transition-transform",
-            zoom > 1 ? "cursor-grab" : "cursor-zoom-in",
-            isDragging && "cursor-grabbing"
+            "max-w-full max-h-full object-contain transition-transform duration-300",
+            isZoomed && "scale-150 cursor-zoom-out"
           )}
-          style={{
-            transform: `scale(${zoom}) translate(${position.x / zoom}px, ${position.y / zoom}px)`
-          }}
-          onClick={() => zoom === 1 && handleZoomIn()}
-          draggable={false}
+          onClick={enableZoom ? toggleZoom : undefined}
         />
-
-        {images.length > 1 && (
-          <button
-            onClick={goToNext}
-            className="absolute right-4 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-10"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        )}
       </div>
 
       {/* Caption */}
       {currentImage.caption && (
-        <div className="text-center py-2">
-          <p className="text-white text-sm">{currentImage.caption}</p>
+        <div className="absolute bottom-20 left-0 right-0 text-center">
+          <p className="text-white/80 text-sm px-4">{currentImage.caption}</p>
         </div>
+      )}
+
+      {/* Navigation */}
+      {images.length > 1 && (
+        <>
+          <button
+            onClick={goToPrev}
+            className="absolute left-4 top-1/2 -translate-y-1/2 p-3 text-white/70 hover:text-white bg-black/30 hover:bg-black/50 rounded-full transition-colors"
+            aria-label="Previous image"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            onClick={goToNext}
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 text-white/70 hover:text-white bg-black/30 hover:bg-black/50 rounded-full transition-colors"
+            aria-label="Next image"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+        </>
       )}
 
       {/* Thumbnails */}
       {showThumbnails && images.length > 1 && (
-        <div className="flex justify-center gap-2 p-4 overflow-x-auto">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 p-2 bg-black/50 rounded-lg">
           {images.map((image, index) => (
             <button
               key={index}
               onClick={() => {
+                setIsZoomed(false)
                 setCurrentIndex(index)
-                setZoom(1)
-                setPosition({ x: 0, y: 0 })
               }}
               className={clx(
-                "flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors",
+                "w-12 h-12 rounded overflow-hidden border-2 transition-all",
                 index === currentIndex
                   ? "border-cyan-500"
-                  : "border-transparent hover:border-white/50"
+                  : "border-transparent opacity-50 hover:opacity-100"
               )}
             >
               <img
                 src={image.src}
-                alt={image.alt || ""}
+                alt=""
                 className="w-full h-full object-cover"
               />
             </button>
@@ -267,19 +191,30 @@ export function Lightbox({
   )
 }
 
-// Hook for lightbox
+// Hook for easy lightbox usage
 export function useLightbox(images: LightboxImage[]) {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [initialIndex, setInitialIndex] = React.useState(0)
+  const [isOpen, setIsOpen] = useState(false)
+  const [initialIndex, setInitialIndex] = useState(0)
 
-  const open = React.useCallback((index = 0) => {
+  const open = (index: number = 0) => {
     setInitialIndex(index)
     setIsOpen(true)
-  }, [])
+  }
 
-  const close = React.useCallback(() => {
-    setIsOpen(false)
-  }, [])
+  const close = () => setIsOpen(false)
 
-  return { isOpen, initialIndex, open, close, images }
+  return {
+    isOpen,
+    initialIndex,
+    open,
+    close,
+    LightboxComponent: () => (
+      <Lightbox
+        images={images}
+        initialIndex={initialIndex}
+        isOpen={isOpen}
+        onClose={close}
+      />
+    ),
+  }
 }

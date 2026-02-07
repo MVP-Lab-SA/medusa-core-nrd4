@@ -1,4 +1,3 @@
-import * as React from "react"
 import { clx } from "@medusajs/ui"
 
 interface SizeOption {
@@ -6,16 +5,15 @@ interface SizeOption {
   label: string
   disabled?: boolean
   outOfStock?: boolean
-  inventory?: number
+  lowStock?: boolean
 }
 
 interface SizeSelectorProps {
   options: SizeOption[]
   value?: string
   onChange?: (value: string) => void
-  variant?: "default" | "compact" | "grid"
-  showInventory?: boolean
-  lowStockThreshold?: number
+  variant?: "buttons" | "dropdown"
+  showLabel?: boolean
   className?: string
 }
 
@@ -23,142 +21,75 @@ export function SizeSelector({
   options,
   value,
   onChange,
-  variant = "default",
-  showInventory = false,
-  lowStockThreshold = 5,
-  className
+  variant = "buttons",
+  showLabel = true,
+  className,
 }: SizeSelectorProps) {
-  if (variant === "compact") {
-    return (
-      <div className={clx("flex flex-wrap gap-2", className)}>
-        {options.map((option) => {
-          const isSelected = value === option.value
-          const isDisabled = option.disabled || option.outOfStock
+  const selectedOption = options.find((opt) => opt.value === value)
 
-          return (
-            <button
+  if (variant === "dropdown") {
+    return (
+      <div className={className}>
+        {showLabel && (
+          <label className="block text-sm text-neutral-400 mb-2">
+            Size: {selectedOption && <span className="text-white font-medium">{selectedOption.label}</span>}
+          </label>
+        )}
+        <select
+          value={value || ""}
+          onChange={(e) => onChange?.(e.target.value)}
+          className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+        >
+          <option value="" disabled>Select a size</option>
+          {options.map((option) => (
+            <option
               key={option.value}
-              onClick={() => !isDisabled && onChange?.(option.value)}
-              disabled={isDisabled}
-              className={clx(
-                "px-3 py-1.5 text-sm font-medium rounded-md transition-all",
-                isSelected
-                  ? "bg-cyan-500 text-black"
-                  : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700",
-                isDisabled && "opacity-50 cursor-not-allowed line-through"
-              )}
+              value={option.value}
+              disabled={option.disabled || option.outOfStock}
             >
               {option.label}
-            </button>
-          )
-        })}
+              {option.outOfStock ? " - Out of Stock" : option.lowStock ? " - Low Stock" : ""}
+            </option>
+          ))}
+        </select>
       </div>
     )
   }
 
-  if (variant === "grid") {
-    return (
-      <div className={clx("grid grid-cols-4 gap-2", className)}>
-        {options.map((option) => {
-          const isSelected = value === option.value
-          const isDisabled = option.disabled || option.outOfStock
-          const isLowStock = option.inventory !== undefined && 
-            option.inventory > 0 && 
-            option.inventory <= lowStockThreshold
-
-          return (
-            <button
-              key={option.value}
-              onClick={() => !isDisabled && onChange?.(option.value)}
-              disabled={isDisabled}
-              className={clx(
-                "relative p-3 rounded-lg border-2 transition-all text-center",
-                isSelected
-                  ? "border-cyan-500 bg-cyan-500/10"
-                  : "border-zinc-700 hover:border-zinc-600",
-                isDisabled && "opacity-50 cursor-not-allowed"
-              )}
-            >
-              <span className={clx(
-                "text-sm font-medium",
-                isSelected ? "text-cyan-400" : "text-white",
-                isDisabled && "line-through"
-              )}>
-                {option.label}
-              </span>
-              
-              {showInventory && option.inventory !== undefined && (
-                <span className={clx(
-                  "block text-xs mt-1",
-                  option.outOfStock
-                    ? "text-red-400"
-                    : isLowStock
-                    ? "text-orange-400"
-                    : "text-zinc-500"
-                )}>
-                  {option.outOfStock
-                    ? "Out of stock"
-                    : isLowStock
-                    ? `Only ${option.inventory} left`
-                    : "In stock"}
-                </span>
-              )}
-
-              {option.outOfStock && (
-                <span className="absolute inset-0 flex items-center justify-center">
-                  <span className="w-full h-0.5 bg-zinc-500 rotate-[-20deg]" />
-                </span>
-              )}
-            </button>
-          )
-        })}
-      </div>
-    )
-  }
-
-  // Default variant
   return (
-    <div className={clx("flex flex-wrap gap-2", className)}>
-      {options.map((option) => {
-        const isSelected = value === option.value
-        const isDisabled = option.disabled || option.outOfStock
-        const isLowStock = option.inventory !== undefined && 
-          option.inventory > 0 && 
-          option.inventory <= lowStockThreshold
+    <div className={className}>
+      {showLabel && (
+        <p className="text-sm text-neutral-400 mb-2">
+          Size: {selectedOption && <span className="text-white font-medium">{selectedOption.label}</span>}
+        </p>
+      )}
+      <div className="flex flex-wrap gap-2">
+        {options.map((option) => {
+          const isSelected = value === option.value
+          const isDisabled = option.disabled || option.outOfStock
 
-        return (
-          <button
-            key={option.value}
-            onClick={() => !isDisabled && onChange?.(option.value)}
-            disabled={isDisabled}
-            className={clx(
-              "relative min-w-[48px] px-4 py-2 rounded-lg border-2 transition-all",
-              isSelected
-                ? "border-cyan-500 bg-cyan-500/10"
-                : "border-zinc-700 hover:border-zinc-600",
-              isDisabled && "opacity-50 cursor-not-allowed"
-            )}
-          >
-            <span className={clx(
-              "font-medium",
-              isSelected ? "text-cyan-400" : "text-white",
-              isDisabled && "line-through"
-            )}>
+          return (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => !isDisabled && onChange?.(option.value)}
+              disabled={isDisabled}
+              className={clx(
+                "relative min-w-[3rem] h-11 px-4 rounded-lg font-medium text-sm transition-all duration-200",
+                isSelected
+                  ? "bg-cyan-500 text-black ring-2 ring-cyan-500 ring-offset-2 ring-offset-black"
+                  : "bg-neutral-900 text-white border border-neutral-700 hover:border-neutral-500",
+                isDisabled && "opacity-40 cursor-not-allowed line-through"
+              )}
+            >
               {option.label}
-            </span>
-
-            {isLowStock && !option.outOfStock && (
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-orange-500" />
-            )}
-
-            {option.outOfStock && (
-              <span className="absolute inset-0 flex items-center justify-center">
-                <span className="w-full h-0.5 bg-zinc-500 rotate-[-20deg]" />
-              </span>
-            )}
-          </button>
-        )
-      })}
+              {option.lowStock && !option.outOfStock && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full" />
+              )}
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }

@@ -1,40 +1,47 @@
-import * as React from "react"
-import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, Settings } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
 import { clx } from "@medusajs/ui"
+import { TriangleRightMini, PauseSolid, Adjustments, XCircleSolid, ArrowsPointingOut } from "@medusajs/icons"
 
 interface VideoPlayerProps {
   src: string
   poster?: string
+  title?: string
   autoPlay?: boolean
   muted?: boolean
   loop?: boolean
   controls?: boolean
-  aspectRatio?: "16/9" | "4/3" | "1/1" | "9/16"
   className?: string
+  aspectRatio?: string
+  onPlay?: () => void
+  onPause?: () => void
+  onEnded?: () => void
 }
 
 export function VideoPlayer({
   src,
   poster,
+  title,
   autoPlay = false,
   muted = false,
   loop = false,
   controls = true,
-  aspectRatio = "16/9",
-  className
+  className,
+  aspectRatio = "aspect-video",
+  onPlay,
+  onPause,
+  onEnded,
 }: VideoPlayerProps) {
-  const videoRef = React.useRef<HTMLVideoElement>(null)
-  const containerRef = React.useRef<HTMLDivElement>(null)
-  const [isPlaying, setIsPlaying] = React.useState(autoPlay)
-  const [isMuted, setIsMuted] = React.useState(muted)
-  const [progress, setProgress] = React.useState(0)
-  const [duration, setDuration] = React.useState(0)
-  const [currentTime, setCurrentTime] = React.useState(0)
-  const [isFullscreen, setIsFullscreen] = React.useState(false)
-  const [showControls, setShowControls] = React.useState(true)
-  const controlsTimeoutRef = React.useRef<NodeJS.Timeout>()
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [isPlaying, setIsPlaying] = useState(autoPlay)
+  const [isMuted, setIsMuted] = useState(muted)
+  const [progress, setProgress] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [showControls, setShowControls] = useState(true)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
@@ -47,58 +54,78 @@ export function VideoPlayer({
       setDuration(video.duration)
     }
 
-    const handlePlay = () => setIsPlaying(true)
-    const handlePause = () => setIsPlaying(false)
+    const handlePlay = () => {
+      setIsPlaying(true)
+      onPlay?.()
+    }
+
+    const handlePause = () => {
+      setIsPlaying(false)
+      onPause?.()
+    }
+
+    const handleEnded = () => {
+      setIsPlaying(false)
+      onEnded?.()
+    }
 
     video.addEventListener("timeupdate", handleTimeUpdate)
     video.addEventListener("loadedmetadata", handleLoadedMetadata)
     video.addEventListener("play", handlePlay)
     video.addEventListener("pause", handlePause)
+    video.addEventListener("ended", handleEnded)
 
     return () => {
       video.removeEventListener("timeupdate", handleTimeUpdate)
       video.removeEventListener("loadedmetadata", handleLoadedMetadata)
       video.removeEventListener("play", handlePlay)
       video.removeEventListener("pause", handlePause)
+      video.removeEventListener("ended", handleEnded)
     }
-  }, [])
+  }, [onPlay, onPause, onEnded])
 
   const togglePlay = () => {
-    if (!videoRef.current) return
-    if (isPlaying) {
-      videoRef.current.pause()
-    } else {
-      videoRef.current.play()
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause()
+      } else {
+        videoRef.current.play()
+      }
     }
   }
 
   const toggleMute = () => {
-    if (!videoRef.current) return
-    videoRef.current.muted = !isMuted
-    setIsMuted(!isMuted)
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted
+      setIsMuted(!isMuted)
+    }
   }
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!videoRef.current) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const percent = (e.clientX - rect.left) / rect.width
-    videoRef.current.currentTime = percent * duration
+    if (videoRef.current) {
+      const rect = e.currentTarget.getBoundingClientRect()
+      const percent = (e.clientX - rect.left) / rect.width
+      videoRef.current.currentTime = percent * videoRef.current.duration
+    }
   }
 
   const toggleFullscreen = () => {
-    if (!containerRef.current) return
-    if (!isFullscreen) {
-      containerRef.current.requestFullscreen?.()
+    const container = videoRef.current?.parentElement
+    if (!container) return
+
+    if (!document.fullscreenElement) {
+      container.requestFullscreen()
+      setIsFullscreen(true)
     } else {
-      document.exitFullscreen?.()
+      document.exitFullscreen()
+      setIsFullscreen(false)
     }
-    setIsFullscreen(!isFullscreen)
   }
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = Math.floor(seconds % 60)
-    return `${mins}:${secs.toString().padStart(2, "0")}`
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`
   }
 
   const handleMouseMove = () => {
@@ -106,26 +133,16 @@ export function VideoPlayer({
     if (controlsTimeoutRef.current) {
       clearTimeout(controlsTimeoutRef.current)
     }
-    controlsTimeoutRef.current = setTimeout(() => {
-      if (isPlaying) setShowControls(false)
-    }, 3000)
-  }
-
-  const aspectRatioClass = {
-    "16/9": "aspect-video",
-    "4/3": "aspect-[4/3]",
-    "1/1": "aspect-square",
-    "9/16": "aspect-[9/16]"
+    if (isPlaying) {
+      controlsTimeoutRef.current = setTimeout(() => {
+        setShowControls(false)
+      }, 3000)
+    }
   }
 
   return (
     <div
-      ref={containerRef}
-      className={clx(
-        "relative bg-black rounded-xl overflow-hidden group",
-        aspectRatioClass[aspectRatio],
-        className
-      )}
+      className={clx("relative bg-black rounded-xl overflow-hidden group", aspectRatio, className)}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => isPlaying && setShowControls(false)}
     >
@@ -137,117 +154,86 @@ export function VideoPlayer({
         muted={muted}
         loop={loop}
         playsInline
-        className="w-full h-full object-contain"
         onClick={togglePlay}
+        className="w-full h-full object-contain cursor-pointer"
       />
 
-      {/* Play Button Overlay */}
-      {!isPlaying && (
+      {/* Play button overlay */}
+      {!isPlaying && !controls && (
         <button
           onClick={togglePlay}
           className="absolute inset-0 flex items-center justify-center bg-black/30"
         >
-          <div className="p-4 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors">
-            <Play className="w-12 h-12 text-white fill-current" />
+          <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <TriangleRightMini className="w-10 h-10 text-white ml-1" />
           </div>
         </button>
       )}
 
-      {/* Controls */}
+      {/* Custom controls */}
       {controls && (
         <div
           className={clx(
-            "absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent transition-opacity",
+            "absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 to-transparent transition-opacity duration-300",
             showControls || !isPlaying ? "opacity-100" : "opacity-0"
           )}
         >
-          {/* Progress Bar */}
+          {title && (
+            <p className="text-white font-medium mb-3 text-sm">{title}</p>
+          )}
+
+          {/* Progress bar */}
           <div
-            className="h-1 bg-white/30 rounded-full cursor-pointer mb-3"
             onClick={handleProgressClick}
+            className="h-1 bg-white/30 rounded-full cursor-pointer mb-3 group/progress"
           >
             <div
               className="h-full bg-cyan-500 rounded-full relative"
               style={{ width: `${progress}%` }}
             >
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-cyan-500" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-cyan-500 rounded-full opacity-0 group-hover/progress:opacity-100 transition-opacity" />
             </div>
           </div>
 
-          {/* Controls Row */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={togglePlay}
-              className="p-2 rounded-lg hover:bg-white/10 text-white transition-colors"
-            >
-              {isPlaying ? (
-                <Pause className="w-5 h-5" />
-              ) : (
-                <Play className="w-5 h-5 fill-current" />
-              )}
-            </button>
+          {/* Controls row */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={togglePlay}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              >
+                {isPlaying ? (
+                  <PauseSolid className="w-5 h-5 text-white" />
+                ) : (
+                  <TriangleRightMini className="w-5 h-5 text-white" />
+                )}
+              </button>
 
-            <button
-              onClick={toggleMute}
-              className="p-2 rounded-lg hover:bg-white/10 text-white transition-colors"
-            >
-              {isMuted ? (
-                <VolumeX className="w-5 h-5" />
-              ) : (
-                <Volume2 className="w-5 h-5" />
-              )}
-            </button>
+              <button
+                onClick={toggleMute}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              >
+                {isMuted ? (
+                  <XCircleSolid className="w-5 h-5 text-white" />
+                ) : (
+                  <Adjustments className="w-5 h-5 text-white" />
+                )}
+              </button>
 
-            <span className="text-white text-sm">
-              {formatTime(currentTime)} / {formatTime(duration)}
-            </span>
-
-            <div className="flex-1" />
+              <span className="text-xs text-white/70">
+                {formatTime(currentTime)} / {formatTime(duration)}
+              </span>
+            </div>
 
             <button
               onClick={toggleFullscreen}
-              className="p-2 rounded-lg hover:bg-white/10 text-white transition-colors"
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
             >
-              {isFullscreen ? (
-                <Minimize className="w-5 h-5" />
-              ) : (
-                <Maximize className="w-5 h-5" />
-              )}
+              <ArrowsPointingOut className="w-5 h-5 text-white" />
             </button>
           </div>
         </div>
       )}
-    </div>
-  )
-}
-
-interface YouTubeEmbedProps {
-  videoId: string
-  title?: string
-  aspectRatio?: "16/9" | "4/3"
-  className?: string
-}
-
-export function YouTubeEmbed({
-  videoId,
-  title = "YouTube video",
-  aspectRatio = "16/9",
-  className
-}: YouTubeEmbedProps) {
-  const aspectRatioClass = {
-    "16/9": "aspect-video",
-    "4/3": "aspect-[4/3]"
-  }
-
-  return (
-    <div className={clx("rounded-xl overflow-hidden", aspectRatioClass[aspectRatio], className)}>
-      <iframe
-        src={`https://www.youtube.com/embed/${videoId}`}
-        title={title}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        className="w-full h-full"
-      />
     </div>
   )
 }

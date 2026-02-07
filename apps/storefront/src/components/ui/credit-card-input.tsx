@@ -1,205 +1,178 @@
-import * as React from "react"
-import { CreditCard, Lock } from "lucide-react"
+import { useState, ChangeEvent } from "react"
 import { clx } from "@medusajs/ui"
+import { CreditCard } from "@medusajs/icons"
 
 interface CreditCardInputProps {
-  onCardNumberChange?: (value: string) => void
-  onExpiryChange?: (value: string) => void
-  onCvcChange?: (value: string) => void
-  onNameChange?: (value: string) => void
+  onCardChange?: (data: CardData) => void
   disabled?: boolean
   className?: string
+  error?: string
 }
 
-const CARD_TYPES = {
-  visa: /^4/,
-  mastercard: /^5[1-5]/,
-  amex: /^3[47]/,
-  discover: /^6(?:011|5)/,
+interface CardData {
+  number: string
+  expiry: string
+  cvc: string
+  complete: boolean
+  brand: string
+}
+
+const formatCardNumber = (value: string): string => {
+  const digits = value.replace(/\D/g, "")
+  const groups = digits.match(/.{1,4}/g) || []
+  return groups.join(" ").slice(0, 19)
+}
+
+const formatExpiry = (value: string): string => {
+  const digits = value.replace(/\D/g, "")
+  if (digits.length >= 2) {
+    return `${digits.slice(0, 2)}/${digits.slice(2, 4)}`
+  }
+  return digits
+}
+
+const detectCardBrand = (number: string): string => {
+  const digits = number.replace(/\D/g, "")
+  if (/^4/.test(digits)) return "visa"
+  if (/^5[1-5]/.test(digits) || /^2[2-7]/.test(digits)) return "mastercard"
+  if (/^3[47]/.test(digits)) return "amex"
+  if (/^6(?:011|5)/.test(digits)) return "discover"
+  return "unknown"
+}
+
+const CardBrandIcon = ({ brand }: { brand: string }) => {
+  const brandStyles: Record<string, { bg: string; text: string }> = {
+    visa: { bg: "bg-blue-600", text: "VISA" },
+    mastercard: { bg: "bg-red-600", text: "MC" },
+    amex: { bg: "bg-blue-400", text: "AMEX" },
+    discover: { bg: "bg-orange-500", text: "DISC" },
+    unknown: { bg: "bg-neutral-600", text: "" },
+  }
+  
+  const style = brandStyles[brand] || brandStyles.unknown
+  
+  if (brand === "unknown") {
+    return <CreditCard className="w-6 h-6 text-neutral-500" />
+  }
+  
+  return (
+    <span className={clx("px-2 py-0.5 rounded text-[10px] font-bold text-white", style.bg)}>
+      {style.text}
+    </span>
+  )
 }
 
 export function CreditCardInput({
-  onCardNumberChange,
-  onExpiryChange,
-  onCvcChange,
-  onNameChange,
+  onCardChange,
   disabled = false,
-  className
+  className,
+  error,
 }: CreditCardInputProps) {
-  const [cardNumber, setCardNumber] = React.useState("")
-  const [expiry, setExpiry] = React.useState("")
-  const [cvc, setCvc] = React.useState("")
-  const [name, setName] = React.useState("")
-  const [cardType, setCardType] = React.useState<string | null>(null)
+  const [cardNumber, setCardNumber] = useState("")
+  const [expiry, setExpiry] = useState("")
+  const [cvc, setCvc] = useState("")
+  const [brand, setBrand] = useState("unknown")
 
-  const detectCardType = (number: string) => {
-    const cleaned = number.replace(/\s/g, "")
-    for (const [type, pattern] of Object.entries(CARD_TYPES)) {
-      if (pattern.test(cleaned)) {
-        return type
-      }
-    }
-    return null
+  const updateCardData = (number: string, exp: string, cvcVal: string) => {
+    const cleanNumber = number.replace(/\D/g, "")
+    const cleanExpiry = exp.replace(/\D/g, "")
+    const cleanCvc = cvcVal.replace(/\D/g, "")
+    
+    const isComplete =
+      cleanNumber.length >= 15 &&
+      cleanExpiry.length === 4 &&
+      cleanCvc.length >= 3
+
+    onCardChange?.({
+      number: cleanNumber,
+      expiry: exp,
+      cvc: cleanCvc,
+      complete: isComplete,
+      brand,
+    })
   }
 
-  const formatCardNumber = (value: string) => {
-    const cleaned = value.replace(/\D/g, "")
-    const groups = cleaned.match(/.{1,4}/g)
-    return groups ? groups.join(" ") : cleaned
-  }
-
-  const formatExpiry = (value: string) => {
-    const cleaned = value.replace(/\D/g, "")
-    if (cleaned.length >= 2) {
-      return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}`
-    }
-    return cleaned
-  }
-
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCardNumber(e.target.value)
-    if (formatted.replace(/\s/g, "").length <= 16) {
-      setCardNumber(formatted)
-      setCardType(detectCardType(formatted))
-      onCardNumberChange?.(formatted.replace(/\s/g, ""))
-    }
+    setCardNumber(formatted)
+    const newBrand = detectCardBrand(formatted)
+    setBrand(newBrand)
+    updateCardData(formatted, expiry, cvc)
   }
 
-  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace("/", "")
-    const formatted = formatExpiry(value)
-    if (value.length <= 4) {
-      setExpiry(formatted)
-      onExpiryChange?.(formatted)
-    }
+  const handleExpiryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatExpiry(e.target.value)
+    setExpiry(formatted)
+    updateCardData(cardNumber, formatted, cvc)
   }
 
-  const handleCvcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const cleaned = e.target.value.replace(/\D/g, "")
-    const maxLength = cardType === "amex" ? 4 : 3
-    if (cleaned.length <= maxLength) {
-      setCvc(cleaned)
-      onCvcChange?.(cleaned)
-    }
+  const handleCvcChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 4)
+    setCvc(value)
+    updateCardData(cardNumber, expiry, value)
   }
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toUpperCase()
-    setName(value)
-    onNameChange?.(value)
-  }
-
-  const getCardIcon = () => {
-    switch (cardType) {
-      case "visa":
-        return <span className="text-blue-500 font-bold text-sm">VISA</span>
-      case "mastercard":
-        return <span className="text-orange-500 font-bold text-sm">MC</span>
-      case "amex":
-        return <span className="text-blue-400 font-bold text-sm">AMEX</span>
-      case "discover":
-        return <span className="text-orange-400 font-bold text-sm">DISC</span>
-      default:
-        return <CreditCard className="w-5 h-5 text-zinc-500" />
-    }
-  }
-
-  const inputClass = clx(
-    "w-full px-4 py-3 rounded-lg border transition-all",
-    "bg-zinc-900 border-zinc-700 text-white placeholder-zinc-500",
-    "hover:border-cyan-500/50 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30",
-    disabled && "opacity-50 cursor-not-allowed"
-  )
 
   return (
-    <div className={clx("space-y-4", className)}>
-      <div className="p-6 rounded-xl bg-gradient-to-br from-zinc-800 to-zinc-900 border border-zinc-700">
-        <div className="flex items-center justify-between mb-6">
-          <CreditCard className="w-10 h-10 text-cyan-500" />
-          <Lock className="w-5 h-5 text-green-500" />
-        </div>
-        
-        <div className="mb-6">
-          <p className="text-zinc-500 text-xs mb-1">Card Number</p>
-          <p className="text-white text-xl font-mono tracking-wider">
-            {cardNumber || "---- ---- ---- ----"}
-          </p>
-        </div>
-        
-        <div className="flex justify-between">
-          <div>
-            <p className="text-zinc-500 text-xs mb-1">Card Holder</p>
-            <p className="text-white text-sm font-mono">
-              {name || "YOUR NAME"}
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-zinc-500 text-xs mb-1">Expires</p>
-            <p className="text-white text-sm font-mono">
-              {expiry || "MM/YY"}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-zinc-400 text-sm mb-2">Card Number</label>
-        <div className="relative">
+    <div className={className}>
+      <div
+        className={clx(
+          "bg-neutral-900 border border-neutral-700 rounded-xl p-4",
+          "focus-within:ring-2 focus-within:ring-cyan-500 focus-within:border-transparent",
+          "transition-all duration-200",
+          disabled && "opacity-50",
+          error && "border-red-500"
+        )}
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <CardBrandIcon brand={brand} />
           <input
             type="text"
             value={cardNumber}
-            onChange={handleCardNumberChange}
-            placeholder="1234 5678 9012 3456"
+            onChange={handleNumberChange}
+            placeholder="Card number"
             disabled={disabled}
-            className={clx(inputClass, "pr-16")}
+            inputMode="numeric"
+            autoComplete="cc-number"
+            className="flex-1 bg-transparent text-white placeholder-neutral-500 outline-none text-lg tracking-wider"
           />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2">
-            {getCardIcon()}
+        </div>
+        
+        <div className="flex gap-4">
+          <div className="flex-1">
+            <label className="block text-xs text-neutral-500 mb-1">Expiry</label>
+            <input
+              type="text"
+              value={expiry}
+              onChange={handleExpiryChange}
+              placeholder="MM/YY"
+              disabled={disabled}
+              inputMode="numeric"
+              autoComplete="cc-exp"
+              maxLength={5}
+              className="w-full bg-transparent text-white placeholder-neutral-500 outline-none"
+            />
+          </div>
+          
+          <div className="flex-1">
+            <label className="block text-xs text-neutral-500 mb-1">CVC</label>
+            <input
+              type="text"
+              value={cvc}
+              onChange={handleCvcChange}
+              placeholder="123"
+              disabled={disabled}
+              inputMode="numeric"
+              autoComplete="cc-csc"
+              maxLength={4}
+              className="w-full bg-transparent text-white placeholder-neutral-500 outline-none"
+            />
           </div>
         </div>
       </div>
 
-      <div>
-        <label className="block text-zinc-400 text-sm mb-2">Cardholder Name</label>
-        <input
-          type="text"
-          value={name}
-          onChange={handleNameChange}
-          placeholder="JOHN DOE"
-          disabled={disabled}
-          className={inputClass}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-zinc-400 text-sm mb-2">Expiry Date</label>
-          <input
-            type="text"
-            value={expiry}
-            onChange={handleExpiryChange}
-            placeholder="MM/YY"
-            disabled={disabled}
-            className={inputClass}
-          />
-        </div>
-        <div>
-          <label className="block text-zinc-400 text-sm mb-2">CVC</label>
-          <input
-            type="text"
-            value={cvc}
-            onChange={handleCvcChange}
-            placeholder={cardType === "amex" ? "1234" : "123"}
-            disabled={disabled}
-            className={inputClass}
-          />
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2 text-zinc-500 text-sm">
-        <Lock className="w-4 h-4" />
-        <span>Your payment info is secured with SSL encryption</span>
-      </div>
+      {error && (
+        <p className="mt-2 text-sm text-red-400">{error}</p>
+      )}
     </div>
   )
 }

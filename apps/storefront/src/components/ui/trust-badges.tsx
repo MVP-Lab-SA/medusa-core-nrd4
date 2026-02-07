@@ -1,178 +1,104 @@
-import * as React from "react"
-import { Shield, Truck, RefreshCw, CreditCard, Lock, Award, Headphones, CheckCircle } from "lucide-react"
 import { clx } from "@medusajs/ui"
-
-type BadgeType = 
-  | "secure-payment"
-  | "free-shipping"
-  | "money-back"
-  | "ssl-secure"
-  | "quality-guarantee"
-  | "24-7-support"
-  | "verified"
-  | "custom"
+import { LockClosedSolid, ArrowPath, CreditCard, ShieldCheck } from "@medusajs/icons"
 
 interface TrustBadge {
-  type: BadgeType
-  title?: string
+  icon: React.ReactNode
+  title: string
   description?: string
-  icon?: React.ReactNode
 }
 
 interface TrustBadgesProps {
-  badges: TrustBadge[]
-  variant?: "default" | "compact" | "detailed"
-  columns?: 2 | 3 | 4
+  variant?: "inline" | "grid" | "compact"
+  showDescriptions?: boolean
   className?: string
+  badges?: TrustBadge[]
 }
 
-const defaultBadges: Record<BadgeType, { icon: React.ReactNode; title: string; description: string }> = {
-  "secure-payment": {
-    icon: <CreditCard className="w-6 h-6" />,
-    title: "Secure Payment",
-    description: "All major credit cards accepted"
+const defaultBadges: TrustBadge[] = [
+  {
+    icon: <LockClosedSolid className="w-5 h-5" />,
+    title: "Secure Checkout",
+    description: "SSL encrypted payment",
   },
-  "free-shipping": {
-    icon: <Truck className="w-6 h-6" />,
-    title: "Free Shipping",
-    description: "On orders over $50"
+  {
+    icon: <ArrowPath className="w-5 h-5" />,
+    title: "Easy Returns",
+    description: "30-day return policy",
   },
-  "money-back": {
-    icon: <RefreshCw className="w-6 h-6" />,
-    title: "Money Back",
-    description: "30-day return policy"
+  {
+    icon: <CreditCard className="w-5 h-5" />,
+    title: "Safe Payment",
+    description: "Multiple payment options",
   },
-  "ssl-secure": {
-    icon: <Lock className="w-6 h-6" />,
-    title: "SSL Secured",
-    description: "Your data is protected"
+  {
+    icon: <ShieldCheck className="w-5 h-5" />,
+    title: "Buyer Protection",
+    description: "Full purchase protection",
   },
-  "quality-guarantee": {
-    icon: <Award className="w-6 h-6" />,
-    title: "Quality Guarantee",
-    description: "Premium products only"
-  },
-  "24-7-support": {
-    icon: <Headphones className="w-6 h-6" />,
-    title: "24/7 Support",
-    description: "Always here to help"
-  },
-  "verified": {
-    icon: <CheckCircle className="w-6 h-6" />,
-    title: "Verified Seller",
-    description: "Trusted by thousands"
-  },
-  "custom": {
-    icon: <Shield className="w-6 h-6" />,
-    title: "Custom",
-    description: ""
-  }
-}
+]
 
 export function TrustBadges({
-  badges,
-  variant = "default",
-  columns = 4,
-  className
+  variant = "inline",
+  showDescriptions = true,
+  className,
+  badges = defaultBadges,
 }: TrustBadgesProps) {
-  const gridCols = {
-    2: "grid-cols-2",
-    3: "grid-cols-3",
-    4: "grid-cols-2 md:grid-cols-4"
-  }
-
   if (variant === "compact") {
     return (
-      <div className={clx("flex flex-wrap items-center justify-center gap-4", className)}>
-        {badges.map((badge, index) => {
-          const config = defaultBadges[badge.type]
-          return (
-            <div
-              key={index}
-              className="flex items-center gap-2 text-zinc-400"
-            >
-              <span className="text-cyan-500">
-                {badge.icon || config.icon}
-              </span>
-              <span className="text-sm font-medium">
-                {badge.title || config.title}
-              </span>
-            </div>
-          )
-        })}
-      </div>
-    )
-  }
-
-  if (variant === "detailed") {
-    return (
-      <div className={clx("grid gap-4", gridCols[columns], className)}>
-        {badges.map((badge, index) => {
-          const config = defaultBadges[badge.type]
-          return (
-            <div
-              key={index}
-              className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-colors"
-            >
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-lg bg-cyan-500/10 text-cyan-500">
-                  {badge.icon || config.icon}
-                </div>
-                <div>
-                  <h3 className="text-white font-medium mb-1">
-                    {badge.title || config.title}
-                  </h3>
-                  <p className="text-zinc-500 text-sm">
-                    {badge.description || config.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-    )
-  }
-
-  return (
-    <div className={clx("grid gap-4", gridCols[columns], className)}>
-      {badges.map((badge, index) => {
-        const config = defaultBadges[badge.type]
-        return (
+      <div className={clx("flex flex-wrap items-center gap-4", className)}>
+        {badges.map((badge, index) => (
           <div
             key={index}
-            className="flex flex-col items-center text-center p-4"
+            className="flex items-center gap-2 text-neutral-400"
           >
-            <div className="p-3 rounded-full bg-zinc-800 text-cyan-500 mb-3">
-              {badge.icon || config.icon}
-            </div>
-            <h3 className="text-white font-medium text-sm mb-1">
-              {badge.title || config.title}
-            </h3>
-            <p className="text-zinc-500 text-xs">
-              {badge.description || config.description}
-            </p>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
-export function PaymentBadges({ className }: { className?: string }) {
-  return (
-    <div className={clx("flex items-center gap-3", className)}>
-      <span className="text-zinc-500 text-sm">We accept:</span>
-      <div className="flex items-center gap-2">
-        {["Visa", "MC", "Amex", "PayPal"].map((card) => (
-          <div
-            key={card}
-            className="px-2 py-1 rounded bg-zinc-800 text-zinc-400 text-xs font-medium"
-          >
-            {card}
+            <span className="text-cyan-400">{badge.icon}</span>
+            <span className="text-xs font-medium">{badge.title}</span>
           </div>
         ))}
       </div>
+    )
+  }
+
+  if (variant === "grid") {
+    return (
+      <div className={clx("grid grid-cols-2 md:grid-cols-4 gap-4", className)}>
+        {badges.map((badge, index) => (
+          <div
+            key={index}
+            className="flex flex-col items-center text-center p-4 bg-neutral-900 border border-neutral-800 rounded-xl"
+          >
+            <div className="w-12 h-12 flex items-center justify-center bg-cyan-500/10 rounded-full mb-3 text-cyan-400">
+              {badge.icon}
+            </div>
+            <h4 className="text-sm font-medium text-white mb-1">{badge.title}</h4>
+            {showDescriptions && badge.description && (
+              <p className="text-xs text-neutral-500">{badge.description}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  // Inline variant (default)
+  return (
+    <div className={clx("flex flex-wrap justify-center gap-6 md:gap-8", className)}>
+      {badges.map((badge, index) => (
+        <div
+          key={index}
+          className="flex items-center gap-3"
+        >
+          <div className="w-10 h-10 flex items-center justify-center bg-neutral-800 rounded-lg text-cyan-400">
+            {badge.icon}
+          </div>
+          <div>
+            <h4 className="text-sm font-medium text-white">{badge.title}</h4>
+            {showDescriptions && badge.description && (
+              <p className="text-xs text-neutral-500">{badge.description}</p>
+            )}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

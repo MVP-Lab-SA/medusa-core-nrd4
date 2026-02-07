@@ -1,164 +1,149 @@
-import * as React from "react"
-import { Users, ShoppingBag, Eye, Clock } from "lucide-react"
+import { useState, useEffect } from "react"
 import { clx } from "@medusajs/ui"
+import { ShoppingBag, Eye, Star } from "@medusajs/icons"
+
+interface SocialProofEvent {
+  id: string
+  type: "purchase" | "view" | "review"
+  productName: string
+  productImage?: string
+  location?: string
+  time: string
+  rating?: number
+}
 
 interface SocialProofProps {
-  type: "viewers" | "purchases" | "cart" | "stock"
-  count: number
-  productName?: string
-  timeframe?: string
-  animated?: boolean
+  events: SocialProofEvent[]
+  autoPlay?: boolean
+  interval?: number
+  position?: "bottom-left" | "bottom-right" | "top-left" | "top-right"
   className?: string
 }
 
 export function SocialProof({
-  type,
-  count,
-  productName,
-  timeframe = "in the last 24 hours",
-  animated = true,
-  className
-}: SocialProofProps) {
-  const [displayCount, setDisplayCount] = React.useState(animated ? 0 : count)
-
-  React.useEffect(() => {
-    if (!animated) return
-
-    const duration = 1000
-    const steps = 20
-    const increment = count / steps
-    let current = 0
-
-    const timer = setInterval(() => {
-      current += increment
-      if (current >= count) {
-        setDisplayCount(count)
-        clearInterval(timer)
-      } else {
-        setDisplayCount(Math.floor(current))
-      }
-    }, duration / steps)
-
-    return () => clearInterval(timer)
-  }, [count, animated])
-
-  const config = {
-    viewers: {
-      icon: <Eye className="w-4 h-4" />,
-      message: `${displayCount} people are viewing this right now`,
-      color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20"
-    },
-    purchases: {
-      icon: <ShoppingBag className="w-4 h-4" />,
-      message: `${displayCount} purchased ${timeframe}`,
-      color: "text-green-400 bg-green-500/10 border-green-500/20"
-    },
-    cart: {
-      icon: <Users className="w-4 h-4" />,
-      message: `${displayCount} people have this in their cart`,
-      color: "text-orange-400 bg-orange-500/10 border-orange-500/20"
-    },
-    stock: {
-      icon: <Clock className="w-4 h-4" />,
-      message: `Only ${displayCount} left in stock`,
-      color: "text-red-400 bg-red-500/10 border-red-500/20"
-    }
-  }
-
-  const { icon, message, color } = config[type]
-
-  return (
-    <div
-      className={clx(
-        "inline-flex items-center gap-2 px-3 py-2 rounded-lg border",
-        color,
-        className
-      )}
-    >
-      {icon}
-      <span className="text-sm font-medium">
-        {productName ? `${message} - ${productName}` : message}
-      </span>
-    </div>
-  )
-}
-
-interface SocialProofNotificationProps {
-  purchases: Array<{
-    name: string
-    location: string
-    product: string
-    image?: string
-    time: string
-  }>
-  interval?: number
-  duration?: number
-  className?: string
-}
-
-export function SocialProofNotification({
-  purchases,
+  events,
+  autoPlay = true,
   interval = 5000,
-  duration = 4000,
-  className
-}: SocialProofNotificationProps) {
-  const [currentIndex, setCurrentIndex] = React.useState(0)
-  const [isVisible, setIsVisible] = React.useState(false)
+  position = "bottom-left",
+  className,
+}: SocialProofProps) {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+  const [isDismissed, setIsDismissed] = useState(false)
 
-  React.useEffect(() => {
-    if (purchases.length === 0) return
+  useEffect(() => {
+    if (!autoPlay || events.length === 0 || isDismissed) return
 
     const showNotification = () => {
       setIsVisible(true)
       setTimeout(() => {
         setIsVisible(false)
         setTimeout(() => {
-          setCurrentIndex((prev) => (prev + 1) % purchases.length)
+          setCurrentIndex((prev) => (prev + 1) % events.length)
         }, 500)
-      }, duration)
+      }, interval - 1000)
     }
 
-    showNotification()
-    const timer = setInterval(showNotification, interval + duration + 500)
+    // Initial delay before showing first notification
+    const initialTimeout = setTimeout(showNotification, 3000)
 
-    return () => clearInterval(timer)
-  }, [purchases.length, interval, duration])
+    const timer = setInterval(showNotification, interval + 2000)
 
-  if (purchases.length === 0) return null
+    return () => {
+      clearTimeout(initialTimeout)
+      clearInterval(timer)
+    }
+  }, [autoPlay, events.length, interval, isDismissed])
 
-  const current = purchases[currentIndex]
+  if (events.length === 0 || isDismissed) return null
+
+  const currentEvent = events[currentIndex]
+
+  const positionClasses = {
+    "bottom-left": "bottom-4 left-4",
+    "bottom-right": "bottom-4 right-4",
+    "top-left": "top-4 left-4",
+    "top-right": "top-4 right-4",
+  }
+
+  const getIcon = () => {
+    switch (currentEvent.type) {
+      case "purchase":
+        return <ShoppingBag className="w-4 h-4 text-emerald-400" />
+      case "view":
+        return <Eye className="w-4 h-4 text-cyan-400" />
+      case "review":
+        return <Star className="w-4 h-4 text-amber-400" />
+    }
+  }
+
+  const getMessage = () => {
+    switch (currentEvent.type) {
+      case "purchase":
+        return "just purchased"
+      case "view":
+        return "is viewing"
+      case "review":
+        return "left a review for"
+    }
+  }
 
   return (
     <div
       className={clx(
-        "fixed bottom-24 left-4 z-40 max-w-sm transition-all duration-500",
+        "fixed z-40 transition-all duration-500",
+        positionClasses[position],
         isVisible
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-4 pointer-events-none",
         className
       )}
     >
-      <div className="flex items-center gap-3 p-4 rounded-xl bg-zinc-900 border border-zinc-700 shadow-xl">
-        {current.image ? (
+      <div className="flex items-start gap-3 p-4 bg-neutral-900 border border-neutral-700 rounded-xl shadow-2xl max-w-sm">
+        {currentEvent.productImage && (
           <img
-            src={current.image}
-            alt={current.product}
-            className="w-12 h-12 rounded-lg object-cover"
+            src={currentEvent.productImage}
+            alt={currentEvent.productName}
+            className="w-12 h-12 object-cover rounded-lg flex-shrink-0"
           />
-        ) : (
-          <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center">
-            <ShoppingBag className="w-6 h-6 text-zinc-500" />
-          </div>
         )}
         <div className="flex-1 min-w-0">
-          <p className="text-white text-sm font-medium truncate">
-            {current.name} from {current.location}
+          <div className="flex items-center gap-2 mb-1">
+            {getIcon()}
+            <span className="text-xs text-neutral-500">{currentEvent.time}</span>
+          </div>
+          <p className="text-sm text-neutral-300">
+            {currentEvent.location && (
+              <span className="text-white font-medium">
+                Someone in {currentEvent.location}
+              </span>
+            )}{" "}
+            {getMessage()}
           </p>
-          <p className="text-zinc-400 text-xs truncate">
-            purchased {current.product}
+          <p className="text-sm text-white font-medium truncate mt-0.5">
+            {currentEvent.productName}
           </p>
-          <p className="text-zinc-500 text-xs">{current.time}</p>
+          {currentEvent.type === "review" && currentEvent.rating && (
+            <div className="flex items-center gap-1 mt-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={clx(
+                    "w-3 h-3",
+                    i < currentEvent.rating! ? "text-amber-400" : "text-neutral-600"
+                  )}
+                />
+              ))}
+            </div>
+          )}
         </div>
+        <button
+          onClick={() => setIsDismissed(true)}
+          className="p-1 hover:bg-neutral-800 rounded transition-colors flex-shrink-0"
+          aria-label="Dismiss"
+        >
+          <span className="text-neutral-600 text-xs">x</span>
+        </button>
       </div>
     </div>
   )

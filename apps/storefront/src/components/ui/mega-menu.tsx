@@ -1,15 +1,29 @@
-import * as React from "react"
+import { useState, useRef, useEffect } from "react"
 import { Link } from "@tanstack/react-router"
-import { ChevronRight } from "lucide-react"
 import { clx } from "@medusajs/ui"
+import { ChevronDown } from "@medusajs/icons"
 
 interface MegaMenuItem {
   label: string
-  href: string
+  href?: string
   description?: string
   image?: string
-  children?: MegaMenuItem[]
-  featured?: boolean
+  children?: MegaMenuColumn[]
+  featured?: {
+    title: string
+    description: string
+    image: string
+    href: string
+  }
+}
+
+interface MegaMenuColumn {
+  title: string
+  items: {
+    label: string
+    href: string
+    badge?: string
+  }[]
 }
 
 interface MegaMenuProps {
@@ -18,106 +32,125 @@ interface MegaMenuProps {
 }
 
 export function MegaMenu({ items, className }: MegaMenuProps) {
-  const [activeItem, setActiveItem] = React.useState<string | null>(null)
-  const timeoutRef = React.useRef<NodeJS.Timeout>()
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
-  const handleMouseEnter = (label: string) => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    setActiveItem(label)
+  const handleMouseEnter = (index: number) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    setActiveIndex(index)
   }
 
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
-      setActiveItem(null)
+      setActiveIndex(null)
     }, 150)
   }
 
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
   return (
-    <nav className={clx("relative", className)}>
+    <nav ref={menuRef} className={clx("relative", className)}>
       <ul className="flex items-center gap-1">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <li
             key={item.label}
-            onMouseEnter={() => handleMouseEnter(item.label)}
+            onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
             className="relative"
           >
-            <Link
-              to={item.href}
-              className={clx(
-                "px-4 py-2 text-sm font-medium transition-colors rounded-lg",
-                activeItem === item.label
-                  ? "text-cyan-400 bg-zinc-800"
-                  : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"
-              )}
-            >
-              {item.label}
-            </Link>
-
-            {item.children && activeItem === item.label && (
-              <div
-                onMouseEnter={() => handleMouseEnter(item.label)}
-                onMouseLeave={handleMouseLeave}
-                className="absolute top-full left-0 mt-2 w-[800px] p-6 rounded-xl bg-zinc-900 border border-zinc-700 shadow-2xl z-50"
+            {item.children ? (
+              <button
+                className={clx(
+                  "flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg transition-colors",
+                  activeIndex === index
+                    ? "text-cyan-400 bg-neutral-800"
+                    : "text-neutral-300 hover:text-white hover:bg-neutral-800/50"
+                )}
               >
-                <div className="grid grid-cols-4 gap-6">
-                  <div className="col-span-3">
-                    <div className="grid grid-cols-3 gap-6">
-                      {item.children.filter(c => !c.featured).map((child) => (
-                        <div key={child.label}>
-                          <Link
-                            to={child.href}
-                            className="text-white font-medium hover:text-cyan-400 transition-colors"
-                          >
-                            {child.label}
-                          </Link>
-                          {child.children && (
-                            <ul className="mt-3 space-y-2">
-                              {child.children.map((subChild) => (
-                                <li key={subChild.label}>
-                                  <Link
-                                    to={subChild.href}
-                                    className="text-zinc-400 text-sm hover:text-cyan-400 transition-colors flex items-center gap-1 group"
-                                  >
-                                    {subChild.label}
-                                    <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
+                {item.label}
+                <ChevronDown
+                  className={clx(
+                    "w-4 h-4 transition-transform",
+                    activeIndex === index && "rotate-180"
+                  )}
+                />
+              </button>
+            ) : (
+              <Link
+                to={item.href || "#"}
+                className="px-4 py-2 text-sm font-medium text-neutral-300 hover:text-white rounded-lg hover:bg-neutral-800/50 transition-colors"
+              >
+                {item.label}
+              </Link>
+            )}
+
+            {item.children && activeIndex === index && (
+              <div
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
+                className="absolute left-0 top-full pt-2 z-50"
+              >
+                <div className="bg-neutral-900 border border-neutral-700 rounded-xl shadow-2xl p-6 min-w-[600px]">
+                  <div className="flex gap-8">
+                    <div className="flex-1 grid grid-cols-2 gap-8">
+                      {item.children.map((column) => (
+                        <div key={column.title}>
+                          <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">
+                            {column.title}
+                          </h3>
+                          <ul className="space-y-2">
+                            {column.items.map((subItem) => (
+                              <li key={subItem.label}>
+                                <Link
+                                  to={subItem.href}
+                                  className="flex items-center gap-2 text-sm text-neutral-300 hover:text-cyan-400 transition-colors"
+                                >
+                                  {subItem.label}
+                                  {subItem.badge && (
+                                    <span className="px-1.5 py-0.5 text-[10px] font-medium bg-cyan-500/20 text-cyan-400 rounded">
+                                      {subItem.badge}
+                                    </span>
+                                  )}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       ))}
                     </div>
-                  </div>
 
-                  <div className="col-span-1">
-                    {item.children.filter(c => c.featured).map((featured) => (
-                      <Link
-                        key={featured.label}
-                        to={featured.href}
-                        className="block group"
-                      >
-                        {featured.image && (
-                          <div className="relative rounded-lg overflow-hidden mb-3">
+                    {item.featured && (
+                      <div className="w-64">
+                        <Link
+                          to={item.featured.href}
+                          className="block group"
+                        >
+                          <div className="relative aspect-[4/3] rounded-lg overflow-hidden mb-3">
                             <img
-                              src={featured.image}
-                              alt={featured.label}
-                              className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                              src={item.featured.image}
+                              alt={item.featured.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                           </div>
-                        )}
-                        <p className="text-white font-medium group-hover:text-cyan-400 transition-colors">
-                          {featured.label}
-                        </p>
-                        {featured.description && (
-                          <p className="text-zinc-500 text-sm mt-1">
-                            {featured.description}
+                          <h4 className="font-medium text-white group-hover:text-cyan-400 transition-colors">
+                            {item.featured.title}
+                          </h4>
+                          <p className="text-sm text-neutral-400 mt-1">
+                            {item.featured.description}
                           </p>
-                        )}
-                      </Link>
-                    ))}
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -126,82 +159,5 @@ export function MegaMenu({ items, className }: MegaMenuProps) {
         ))}
       </ul>
     </nav>
-  )
-}
-
-interface MegaMenuMobileProps {
-  items: MegaMenuItem[]
-  isOpen: boolean
-  onClose: () => void
-}
-
-export function MegaMenuMobile({ items, isOpen, onClose }: MegaMenuMobileProps) {
-  const [expandedItems, setExpandedItems] = React.useState<string[]>([])
-
-  const toggleExpand = (label: string) => {
-    setExpandedItems((prev) =>
-      prev.includes(label)
-        ? prev.filter((item) => item !== label)
-        : [...prev, label]
-    )
-  }
-
-  if (!isOpen) return null
-
-  return (
-    <div className="fixed inset-0 z-50 lg:hidden">
-      <div className="absolute inset-0 bg-black/80" onClick={onClose} />
-      <div className="absolute inset-y-0 left-0 w-80 bg-zinc-900 border-r border-zinc-700 overflow-y-auto">
-        <div className="p-4 border-b border-zinc-800">
-          <h2 className="text-lg font-bold text-white">Menu</h2>
-        </div>
-        
-        <nav className="p-4">
-          {items.map((item) => (
-            <div key={item.label} className="mb-2">
-              {item.children ? (
-                <>
-                  <button
-                    onClick={() => toggleExpand(item.label)}
-                    className="w-full flex items-center justify-between p-3 rounded-lg text-white hover:bg-zinc-800 transition-colors"
-                  >
-                    {item.label}
-                    <ChevronRight
-                      className={clx(
-                        "w-5 h-5 transition-transform",
-                        expandedItems.includes(item.label) && "rotate-90"
-                      )}
-                    />
-                  </button>
-                  
-                  {expandedItems.includes(item.label) && (
-                    <div className="ml-4 mt-2 space-y-1">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          to={child.href}
-                          onClick={onClose}
-                          className="block p-2 rounded-lg text-zinc-400 hover:text-cyan-400 hover:bg-zinc-800/50 transition-colors"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <Link
-                  to={item.href}
-                  onClick={onClose}
-                  className="block p-3 rounded-lg text-white hover:bg-zinc-800 transition-colors"
-                >
-                  {item.label}
-                </Link>
-              )}
-            </div>
-          ))}
-        </nav>
-      </div>
-    </div>
   )
 }

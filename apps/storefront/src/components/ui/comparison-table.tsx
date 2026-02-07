@@ -1,167 +1,129 @@
-import * as React from "react"
-import { X, Check, Minus } from "lucide-react"
 import { clx } from "@medusajs/ui"
+import { Check, XMark } from "@medusajs/icons"
 
 interface Product {
   id: string
-  name: string
-  image?: string
+  title: string
+  thumbnail?: string
   price: string
-  rating?: number
-  specs: Record<string, string | boolean | number>
+  features: Record<string, string | boolean | number>
 }
 
 interface ComparisonTableProps {
   products: Product[]
-  specLabels: Record<string, string>
+  features: { key: string; label: string }[]
+  highlightBest?: boolean
   onRemove?: (productId: string) => void
-  onAddToCart?: (productId: string) => void
-  maxProducts?: number
   className?: string
 }
 
 export function ComparisonTable({
   products,
-  specLabels,
+  features,
+  highlightBest = true,
   onRemove,
-  onAddToCart,
-  maxProducts = 4,
-  className
+  className,
 }: ComparisonTableProps) {
-  const specs = Object.keys(specLabels)
-
-  const renderValue = (value: string | boolean | number | undefined) => {
-    if (value === undefined) {
-      return <Minus className="w-4 h-4 text-zinc-600" />
-    }
-    if (typeof value === "boolean") {
-      return value ? (
-        <Check className="w-5 h-5 text-green-500" />
-      ) : (
-        <X className="w-5 h-5 text-red-500" />
-      )
-    }
-    return <span className="text-white">{value}</span>
-  }
-
   if (products.length === 0) {
     return (
       <div className={clx("text-center py-12", className)}>
-        <p className="text-zinc-400">No products to compare</p>
-        <p className="text-zinc-500 text-sm mt-1">
-          Add products to start comparing
-        </p>
+        <p className="text-neutral-400">No products to compare</p>
       </div>
     )
   }
 
+  const renderValue = (value: string | boolean | number) => {
+    if (typeof value === "boolean") {
+      return value ? (
+        <Check className="w-5 h-5 text-emerald-500 mx-auto" />
+      ) : (
+        <XMark className="w-5 h-5 text-red-500 mx-auto" />
+      )
+    }
+    return <span className="text-neutral-300">{value}</span>
+  }
+
   return (
     <div className={clx("overflow-x-auto", className)}>
-      <table className="w-full min-w-[600px]">
+      <table className="w-full min-w-[640px]">
         <thead>
           <tr>
-            <th className="p-4 text-left text-zinc-400 font-medium w-40">
-              Product
-            </th>
-            {products.slice(0, maxProducts).map((product) => (
-              <th key={product.id} className="p-4 text-center">
+            <th className="text-left p-4 bg-neutral-900 rounded-tl-xl" />
+            {products.map((product, index) => (
+              <th
+                key={product.id}
+                className={clx(
+                  "p-4 bg-neutral-900 min-w-[200px]",
+                  index === products.length - 1 && "rounded-tr-xl"
+                )}
+              >
                 <div className="relative">
                   {onRemove && (
                     <button
                       onClick={() => onRemove(product.id)}
-                      className="absolute -top-2 -right-2 p-1 rounded-full bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
+                      className="absolute -top-1 -right-1 p-1 bg-neutral-800 hover:bg-neutral-700 rounded-full transition-colors"
+                      aria-label={`Remove ${product.title}`}
                     >
-                      <X className="w-4 h-4" />
+                      <XMark className="w-4 h-4 text-neutral-400" />
                     </button>
                   )}
-                  
-                  {product.image ? (
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-24 h-24 object-cover rounded-lg mx-auto mb-3"
-                    />
-                  ) : (
-                    <div className="w-24 h-24 bg-zinc-800 rounded-lg mx-auto mb-3" />
+                  {product.thumbnail && (
+                    <div className="w-24 h-24 mx-auto mb-3 rounded-lg overflow-hidden bg-neutral-800">
+                      <img
+                        src={product.thumbnail}
+                        alt={product.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                   )}
-                  
-                  <h3 className="text-white font-medium text-sm line-clamp-2">
-                    {product.name}
+                  <h3 className="text-white font-medium text-sm mb-1 line-clamp-2">
+                    {product.title}
                   </h3>
+                  <p className="text-cyan-400 font-bold">{product.price}</p>
                 </div>
               </th>
             ))}
           </tr>
         </thead>
-        
         <tbody>
-          {/* Price Row */}
-          <tr className="border-t border-zinc-800">
-            <td className="p-4 text-zinc-400 font-medium">Price</td>
-            {products.slice(0, maxProducts).map((product) => (
-              <td key={product.id} className="p-4 text-center">
-                <span className="text-cyan-400 font-bold text-lg">
-                  {product.price}
-                </span>
+          {features.map((feature, featureIndex) => (
+            <tr key={feature.key}>
+              <td
+                className={clx(
+                  "p-4 text-sm font-medium text-neutral-400 bg-neutral-900/50 border-t border-neutral-800",
+                  featureIndex === features.length - 1 && "rounded-bl-xl"
+                )}
+              >
+                {feature.label}
               </td>
-            ))}
-          </tr>
+              {products.map((product, productIndex) => {
+                const value = product.features[feature.key]
+                const isBest =
+                  highlightBest &&
+                  typeof value === "number" &&
+                  products.every(
+                    (p) =>
+                      typeof p.features[feature.key] !== "number" ||
+                      value >= (p.features[feature.key] as number)
+                  )
 
-          {/* Rating Row */}
-          {products.some(p => p.rating !== undefined) && (
-            <tr className="border-t border-zinc-800">
-              <td className="p-4 text-zinc-400 font-medium">Rating</td>
-              {products.slice(0, maxProducts).map((product) => (
-                <td key={product.id} className="p-4 text-center">
-                  {product.rating !== undefined ? (
-                    <div className="flex items-center justify-center gap-1">
-                      <span className="text-yellow-500">★</span>
-                      <span className="text-white">{product.rating}</span>
-                    </div>
-                  ) : (
-                    <Minus className="w-4 h-4 text-zinc-600 mx-auto" />
-                  )}
-                </td>
-              ))}
-            </tr>
-          )}
-
-          {/* Spec Rows */}
-          {specs.map((spec, index) => (
-            <tr
-              key={spec}
-              className={clx(
-                "border-t border-zinc-800",
-                index % 2 === 0 && "bg-zinc-800/20"
-              )}
-            >
-              <td className="p-4 text-zinc-400 font-medium">
-                {specLabels[spec]}
-              </td>
-              {products.slice(0, maxProducts).map((product) => (
-                <td key={product.id} className="p-4 text-center">
-                  {renderValue(product.specs[spec])}
-                </td>
-              ))}
+                return (
+                  <td
+                    key={product.id}
+                    className={clx(
+                      "p-4 text-center text-sm border-t border-neutral-800",
+                      isBest && "bg-cyan-500/10",
+                      featureIndex === features.length - 1 &&
+                        productIndex === products.length - 1 &&
+                        "rounded-br-xl"
+                    )}
+                  >
+                    {renderValue(value)}
+                  </td>
+                )
+              })}
             </tr>
           ))}
-
-          {/* Add to Cart Row */}
-          {onAddToCart && (
-            <tr className="border-t border-zinc-800">
-              <td className="p-4"></td>
-              {products.slice(0, maxProducts).map((product) => (
-                <td key={product.id} className="p-4 text-center">
-                  <button
-                    onClick={() => onAddToCart(product.id)}
-                    className="px-4 py-2 rounded-lg bg-cyan-500 text-black font-medium hover:bg-cyan-400 transition-colors"
-                  >
-                    Add to Cart
-                  </button>
-                </td>
-              ))}
-            </tr>
-          )}
         </tbody>
       </table>
     </div>

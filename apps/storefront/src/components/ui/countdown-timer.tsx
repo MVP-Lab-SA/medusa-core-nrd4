@@ -1,14 +1,13 @@
-import * as React from "react"
+import { useState, useEffect } from "react"
 import { clx } from "@medusajs/ui"
 
 interface CountdownTimerProps {
   targetDate: Date
   onComplete?: () => void
-  showDays?: boolean
+  variant?: "default" | "compact" | "large"
   showLabels?: boolean
-  size?: "sm" | "md" | "lg"
-  variant?: "default" | "compact" | "minimal"
   className?: string
+  label?: string
 }
 
 interface TimeLeft {
@@ -21,68 +20,93 @@ interface TimeLeft {
 export function CountdownTimer({
   targetDate,
   onComplete,
-  showDays = true,
-  showLabels = true,
-  size = "md",
   variant = "default",
-  className
+  showLabels = true,
+  className,
+  label,
 }: CountdownTimerProps) {
-  const [timeLeft, setTimeLeft] = React.useState<TimeLeft>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  })
-  const [isComplete, setIsComplete] = React.useState(false)
+  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null)
+  const [isComplete, setIsComplete] = useState(false)
 
-  React.useEffect(() => {
-    const calculateTimeLeft = () => {
+  useEffect(() => {
+    const calculateTimeLeft = (): TimeLeft | null => {
       const difference = targetDate.getTime() - new Date().getTime()
 
       if (difference <= 0) {
-        setIsComplete(true)
-        onComplete?.()
-        return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+        return null
       }
 
       return {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60)
+        seconds: Math.floor((difference / 1000) % 60),
       }
     }
 
-    setTimeLeft(calculateTimeLeft())
-
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft())
+      const newTimeLeft = calculateTimeLeft()
+      setTimeLeft(newTimeLeft)
+
+      if (!newTimeLeft && !isComplete) {
+        setIsComplete(true)
+        onComplete?.()
+        clearInterval(timer)
+      }
     }, 1000)
 
-    return () => clearInterval(timer)
-  }, [targetDate, onComplete])
+    setTimeLeft(calculateTimeLeft())
 
-  const sizeClasses = {
-    sm: { box: "w-12 h-12", number: "text-lg", label: "text-[10px]" },
-    md: { box: "w-16 h-16", number: "text-2xl", label: "text-xs" },
-    lg: { box: "w-20 h-20", number: "text-3xl", label: "text-sm" }
+    return () => clearInterval(timer)
+  }, [targetDate, onComplete, isComplete])
+
+  if (!timeLeft) {
+    return null
   }
 
   const formatNumber = (num: number) => num.toString().padStart(2, "0")
 
-  if (isComplete) {
-    return (
-      <div className={clx("text-center text-cyan-400 font-bold", className)}>
-        Sale Ended
-      </div>
-    )
-  }
+  const TimeUnit = ({ value, label: unitLabel }: { value: number; label: string }) => {
+    if (variant === "compact") {
+      return (
+        <span className="text-cyan-400 font-mono font-bold">
+          {formatNumber(value)}
+        </span>
+      )
+    }
 
-  if (variant === "minimal") {
+    if (variant === "large") {
+      return (
+        <div className="flex flex-col items-center">
+          <div className="relative">
+            <div className="w-20 h-24 bg-neutral-800 rounded-xl flex items-center justify-center border border-neutral-700">
+              <span className="text-4xl font-bold text-white font-mono">
+                {formatNumber(value)}
+              </span>
+            </div>
+            <div className="absolute inset-x-0 top-1/2 h-px bg-neutral-700" />
+          </div>
+          {showLabels && (
+            <span className="text-xs text-neutral-500 mt-2 uppercase tracking-wider">
+              {unitLabel}
+            </span>
+          )}
+        </div>
+      )
+    }
+
     return (
-      <div className={clx("font-mono text-white", className)}>
-        {showDays && `${formatNumber(timeLeft.days)}:`}
-        {formatNumber(timeLeft.hours)}:{formatNumber(timeLeft.minutes)}:{formatNumber(timeLeft.seconds)}
+      <div className="flex flex-col items-center">
+        <div className="w-14 h-14 bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-700">
+          <span className="text-xl font-bold text-white font-mono">
+            {formatNumber(value)}
+          </span>
+        </div>
+        {showLabels && (
+          <span className="text-[10px] text-neutral-500 mt-1 uppercase">
+            {unitLabel}
+          </span>
+        )}
       </div>
     )
   }
@@ -90,57 +114,46 @@ export function CountdownTimer({
   if (variant === "compact") {
     return (
       <div className={clx("flex items-center gap-1 font-mono", className)}>
-        {showDays && (
-          <>
-            <span className="text-white">{formatNumber(timeLeft.days)}</span>
-            <span className="text-zinc-500">d</span>
-          </>
-        )}
-        <span className="text-white">{formatNumber(timeLeft.hours)}</span>
-        <span className="text-zinc-500">h</span>
-        <span className="text-white">{formatNumber(timeLeft.minutes)}</span>
-        <span className="text-zinc-500">m</span>
-        <span className="text-white">{formatNumber(timeLeft.seconds)}</span>
-        <span className="text-zinc-500">s</span>
+        {label && <span className="text-neutral-400 mr-2">{label}</span>}
+        <TimeUnit value={timeLeft.days} label="d" />
+        <span className="text-neutral-600">:</span>
+        <TimeUnit value={timeLeft.hours} label="h" />
+        <span className="text-neutral-600">:</span>
+        <TimeUnit value={timeLeft.minutes} label="m" />
+        <span className="text-neutral-600">:</span>
+        <TimeUnit value={timeLeft.seconds} label="s" />
       </div>
     )
   }
 
-  const timeUnits = [
-    ...(showDays ? [{ value: timeLeft.days, label: "Days" }] : []),
-    { value: timeLeft.hours, label: "Hours" },
-    { value: timeLeft.minutes, label: "Mins" },
-    { value: timeLeft.seconds, label: "Secs" }
-  ]
-
   return (
-    <div className={clx("flex items-center gap-3", className)}>
-      {timeUnits.map((unit, index) => (
-        <React.Fragment key={unit.label}>
-          <div className="flex flex-col items-center">
-            <div
-              className={clx(
-                "flex items-center justify-center rounded-lg bg-zinc-800 border border-zinc-700",
-                sizeClasses[size].box
-              )}
-            >
-              <span className={clx("font-bold text-white font-mono", sizeClasses[size].number)}>
-                {formatNumber(unit.value)}
-              </span>
-            </div>
-            {showLabels && (
-              <span className={clx("mt-1 text-zinc-500 uppercase tracking-wider", sizeClasses[size].label)}>
-                {unit.label}
-              </span>
-            )}
-          </div>
-          {index < timeUnits.length - 1 && (
-            <span className={clx("text-cyan-500 font-bold self-start mt-3", sizeClasses[size].number)}>
-              :
-            </span>
-          )}
-        </React.Fragment>
-      ))}
+    <div className={className}>
+      {label && (
+        <p className="text-center text-neutral-400 mb-4 text-sm uppercase tracking-wider">
+          {label}
+        </p>
+      )}
+      <div className={clx(
+        "flex items-center justify-center",
+        variant === "large" ? "gap-4" : "gap-2"
+      )}>
+        <TimeUnit value={timeLeft.days} label="Days" />
+        <span className={clx(
+          "text-neutral-600 font-bold",
+          variant === "large" ? "text-3xl" : "text-xl"
+        )}>:</span>
+        <TimeUnit value={timeLeft.hours} label="Hours" />
+        <span className={clx(
+          "text-neutral-600 font-bold",
+          variant === "large" ? "text-3xl" : "text-xl"
+        )}>:</span>
+        <TimeUnit value={timeLeft.minutes} label="Minutes" />
+        <span className={clx(
+          "text-neutral-600 font-bold",
+          variant === "large" ? "text-3xl" : "text-xl"
+        )}>:</span>
+        <TimeUnit value={timeLeft.seconds} label="Seconds" />
+      </div>
     </div>
   )
 }

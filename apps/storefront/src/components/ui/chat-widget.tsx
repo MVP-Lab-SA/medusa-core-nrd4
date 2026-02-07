@@ -1,16 +1,16 @@
-import * as React from "react"
-import { MessageCircle, X, Send, Minimize2, Loader2 } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
 import { clx } from "@medusajs/ui"
+import { ChatBubble, XMark, PaperPlane } from "@medusajs/icons"
 
 interface Message {
   id: string
   content: string
-  sender: "user" | "agent" | "bot"
+  sender: "user" | "agent"
   timestamp: Date
 }
 
 interface ChatWidgetProps {
-  onSendMessage?: (message: string) => Promise<string | void>
+  onSendMessage?: (message: string) => void
   welcomeMessage?: string
   placeholder?: string
   agentName?: string
@@ -21,207 +21,171 @@ interface ChatWidgetProps {
 
 export function ChatWidget({
   onSendMessage,
-  welcomeMessage = "Hi there! How can we help you today?",
-  placeholder = "Type your message...",
+  welcomeMessage = "Hi! How can we help you today?",
+  placeholder = "Type a message...",
   agentName = "Support",
   agentAvatar,
   position = "bottom-right",
-  className
+  className,
 }: ChatWidgetProps) {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [isMinimized, setIsMinimized] = React.useState(false)
-  const [messages, setMessages] = React.useState<Message[]>([
-    {
-      id: "welcome",
-      content: welcomeMessage,
-      sender: "bot",
-      timestamp: new Date()
-    }
-  ])
-  const [input, setInput] = React.useState("")
-  const [isLoading, setIsLoading] = React.useState(false)
-  const messagesEndRef = React.useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [inputValue, setInputValue] = useState("")
+  const [isTyping, setIsTyping] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (isOpen && messages.length === 0 && welcomeMessage) {
+      setMessages([
+        {
+          id: "welcome",
+          content: welcomeMessage,
+          sender: "agent",
+          timestamp: new Date(),
+        },
+      ])
+    }
+  }, [isOpen, welcomeMessage, messages.length])
+
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return
+  const handleSend = () => {
+    if (!inputValue.trim()) return
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      content: input.trim(),
+      content: inputValue.trim(),
       sender: "user",
-      timestamp: new Date()
+      timestamp: new Date(),
     }
 
     setMessages((prev) => [...prev, userMessage])
-    setInput("")
-    setIsLoading(true)
+    onSendMessage?.(inputValue.trim())
+    setInputValue("")
 
-    try {
-      const response = await onSendMessage?.(input.trim())
-      if (response) {
-        const botMessage: Message = {
+    // Simulate typing indicator
+    setIsTyping(true)
+    setTimeout(() => {
+      setIsTyping(false)
+      setMessages((prev) => [
+        ...prev,
+        {
           id: (Date.now() + 1).toString(),
-          content: response,
-          sender: "bot",
-          timestamp: new Date()
-        }
-        setMessages((prev) => [...prev, botMessage])
-      }
-    } catch {
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: "Sorry, something went wrong. Please try again.",
-        sender: "bot",
-        timestamp: new Date()
-      }
-      setMessages((prev) => [...prev, errorMessage])
-    } finally {
-      setIsLoading(false)
-    }
+          content: "Thanks for your message! Our team will get back to you shortly.",
+          sender: "agent",
+          timestamp: new Date(),
+        },
+      ])
+    }, 1500)
   }
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true
-    })
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
   }
 
   const positionClasses = {
     "bottom-right": "bottom-4 right-4",
-    "bottom-left": "bottom-4 left-4"
+    "bottom-left": "bottom-4 left-4",
   }
 
   return (
     <div className={clx("fixed z-50", positionClasses[position], className)}>
       {/* Chat Window */}
       {isOpen && (
-        <div
-          className={clx(
-            "mb-4 w-80 sm:w-96 rounded-2xl overflow-hidden shadow-2xl",
-            "bg-zinc-900 border border-zinc-700",
-            isMinimized ? "h-14" : "h-[500px]"
-          )}
-        >
+        <div className="mb-4 w-80 sm:w-96 bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-cyan-500 to-cyan-600">
+          <div className="flex items-center justify-between px-4 py-3 bg-cyan-500">
             <div className="flex items-center gap-3">
               {agentAvatar ? (
                 <img
                   src={agentAvatar}
                   alt={agentName}
-                  className="w-10 h-10 rounded-full object-cover"
+                  className="w-8 h-8 rounded-full"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                  <MessageCircle className="w-5 h-5 text-white" />
+                <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center">
+                  <ChatBubble className="w-4 h-4 text-black" />
                 </div>
               )}
               <div>
-                <p className="text-white font-medium">{agentName}</p>
-                <p className="text-white/70 text-xs">Online</p>
+                <p className="text-black font-semibold text-sm">{agentName}</p>
+                <p className="text-black/70 text-xs">Online</p>
               </div>
             </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setIsMinimized(!isMinimized)}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-1.5 hover:bg-black/10 rounded-lg transition-colors"
+            >
+              <XMark className="w-5 h-5 text-black" />
+            </button>
+          </div>
+
+          {/* Messages */}
+          <div className="h-80 overflow-y-auto p-4 space-y-4">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={clx(
+                  "flex",
+                  message.sender === "user" ? "justify-end" : "justify-start"
+                )}
               >
-                <Minimize2 className="w-4 h-4 text-white" />
-              </button>
+                <div
+                  className={clx(
+                    "max-w-[80%] rounded-2xl px-4 py-2",
+                    message.sender === "user"
+                      ? "bg-cyan-500 text-black rounded-br-sm"
+                      : "bg-neutral-800 text-white rounded-bl-sm"
+                  )}
+                >
+                  <p className="text-sm">{message.content}</p>
+                  <p
+                    className={clx(
+                      "text-[10px] mt-1",
+                      message.sender === "user" ? "text-black/60" : "text-neutral-500"
+                    )}
+                  >
+                    {formatTime(message.timestamp)}
+                  </p>
+                </div>
+              </div>
+            ))}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="bg-neutral-800 rounded-2xl rounded-bl-sm px-4 py-3">
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 bg-neutral-500 rounded-full animate-bounce" />
+                    <span className="w-2 h-2 bg-neutral-500 rounded-full animate-bounce [animation-delay:0.1s]" />
+                    <span className="w-2 h-2 bg-neutral-500 rounded-full animate-bounce [animation-delay:0.2s]" />
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Input */}
+          <div className="p-4 border-t border-neutral-800">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                placeholder={placeholder}
+                className="flex-1 px-4 py-2.5 bg-neutral-800 border border-neutral-700 rounded-full text-white text-sm placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              />
               <button
-                onClick={() => setIsOpen(false)}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                onClick={handleSend}
+                disabled={!inputValue.trim()}
+                className="p-2.5 bg-cyan-500 hover:bg-cyan-400 text-black rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <X className="w-4 h-4 text-white" />
+                <PaperPlane className="w-5 h-5" />
               </button>
             </div>
           </div>
-
-          {!isMinimized && (
-            <>
-              {/* Messages */}
-              <div className="flex-1 h-[360px] overflow-y-auto p-4 space-y-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={clx(
-                      "flex",
-                      message.sender === "user" ? "justify-end" : "justify-start"
-                    )}
-                  >
-                    <div
-                      className={clx(
-                        "max-w-[80%] rounded-2xl px-4 py-2",
-                        message.sender === "user"
-                          ? "bg-cyan-500 text-black rounded-br-sm"
-                          : "bg-zinc-800 text-white rounded-bl-sm"
-                      )}
-                    >
-                      <p className="text-sm">{message.content}</p>
-                      <p
-                        className={clx(
-                          "text-xs mt-1",
-                          message.sender === "user"
-                            ? "text-black/60"
-                            : "text-zinc-500"
-                        )}
-                      >
-                        {formatTime(message.timestamp)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-                {isLoading && (
-                  <div className="flex justify-start">
-                    <div className="bg-zinc-800 text-white rounded-2xl rounded-bl-sm px-4 py-3">
-                      <div className="flex gap-1">
-                        <span className="w-2 h-2 rounded-full bg-zinc-500 animate-bounce" />
-                        <span className="w-2 h-2 rounded-full bg-zinc-500 animate-bounce [animation-delay:0.1s]" />
-                        <span className="w-2 h-2 rounded-full bg-zinc-500 animate-bounce [animation-delay:0.2s]" />
-                      </div>
-                    </div>
-                  </div>
-                )}
-                <div ref={messagesEndRef} />
-              </div>
-
-              {/* Input */}
-              <div className="p-4 border-t border-zinc-800">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                    placeholder={placeholder}
-                    className="flex-1 px-4 py-2 rounded-full bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-500 text-sm focus:outline-none focus:border-cyan-500"
-                  />
-                  <button
-                    onClick={handleSend}
-                    disabled={!input.trim() || isLoading}
-                    className={clx(
-                      "p-2 rounded-full transition-colors",
-                      input.trim() && !isLoading
-                        ? "bg-cyan-500 text-black hover:bg-cyan-400"
-                        : "bg-zinc-800 text-zinc-500"
-                    )}
-                  >
-                    {isLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <Send className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
         </div>
       )}
 
@@ -229,16 +193,16 @@ export function ChatWidget({
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={clx(
-          "p-4 rounded-full shadow-lg transition-all",
-          "bg-gradient-to-r from-cyan-500 to-cyan-600 text-white",
-          "hover:scale-110 hover:shadow-cyan-500/25",
-          isOpen && "rotate-90"
+          "w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all",
+          isOpen
+            ? "bg-neutral-800 hover:bg-neutral-700"
+            : "bg-cyan-500 hover:bg-cyan-400 hover:scale-105"
         )}
       >
         {isOpen ? (
-          <X className="w-6 h-6" />
+          <XMark className="w-6 h-6 text-white" />
         ) : (
-          <MessageCircle className="w-6 h-6" />
+          <ChatBubble className="w-6 h-6 text-black" />
         )}
       </button>
     </div>

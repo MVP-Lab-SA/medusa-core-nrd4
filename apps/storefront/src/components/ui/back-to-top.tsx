@@ -1,6 +1,6 @@
-import * as React from "react"
-import { ArrowUp } from "lucide-react"
+import { useState, useEffect } from "react"
 import { clx } from "@medusajs/ui"
+import { ArrowUpMini } from "@medusajs/icons"
 
 interface BackToTopProps {
   threshold?: number
@@ -11,11 +11,11 @@ interface BackToTopProps {
 export function BackToTop({
   threshold = 400,
   smooth = true,
-  className
+  className,
 }: BackToTopProps) {
-  const [isVisible, setIsVisible] = React.useState(false)
+  const [isVisible, setIsVisible] = useState(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
       setIsVisible(window.scrollY > threshold)
     }
@@ -29,26 +29,27 @@ export function BackToTop({
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: smooth ? "smooth" : "auto"
+      behavior: smooth ? "smooth" : "auto",
     })
   }
 
   return (
     <button
       onClick={scrollToTop}
+      aria-label="Back to top"
       className={clx(
-        "fixed bottom-24 right-6 z-30 p-3 rounded-full transition-all duration-300",
-        "bg-cyan-500 text-black shadow-lg shadow-cyan-500/25",
-        "hover:bg-cyan-400 hover:scale-110",
-        "focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-zinc-900",
+        "fixed bottom-24 right-6 z-40 md:bottom-8",
+        "w-12 h-12 flex items-center justify-center",
+        "bg-cyan-500 hover:bg-cyan-400 text-black rounded-full",
+        "shadow-lg shadow-cyan-500/25",
+        "transition-all duration-300",
         isVisible
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-4 pointer-events-none",
         className
       )}
-      aria-label="Back to top"
     >
-      <ArrowUp className="w-5 h-5" />
+      <ArrowUpMini className="w-5 h-5" />
     </button>
   )
 }

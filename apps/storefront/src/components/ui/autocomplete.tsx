@@ -1,6 +1,6 @@
-import * as React from "react"
-import { Search, X, Loader2 } from "lucide-react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { clx } from "@medusajs/ui"
+import { MagnifyingGlass, XMark } from "@medusajs/icons"
 
 interface AutocompleteOption {
   value: string
@@ -17,8 +17,13 @@ interface AutocompleteProps {
   placeholder?: string
   disabled?: boolean
   loading?: boolean
-  emptyMessage?: string
   className?: string
+  label?: string
+  error?: string
+  clearable?: boolean
+  showIcon?: boolean
+  emptyMessage?: string
+  filterFn?: (option: AutocompleteOption, query: string) => boolean
 }
 
 export function Autocomplete({
@@ -29,21 +34,27 @@ export function Autocomplete({
   placeholder = "Search...",
   disabled = false,
   loading = false,
+  className,
+  label,
+  error,
+  clearable = true,
+  showIcon = true,
   emptyMessage = "No results found",
-  className
+  filterFn,
 }: AutocompleteProps) {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [highlightedIndex, setHighlightedIndex] = React.useState(0)
-  const containerRef = React.useRef<HTMLDivElement>(null)
-  const inputRef = React.useRef<HTMLInputElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [inputValue, setInputValue] = useState(value)
+  const [highlightedIndex, setHighlightedIndex] = useState(-1)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const listRef = useRef<HTMLUListElement>(null)
 
-  const filteredOptions = options.filter((option) =>
-    option.label.toLowerCase().includes(value.toLowerCase()) ||
-    option.description?.toLowerCase().includes(value.toLowerCase())
-  )
+  useEffect(() => {
+    setInputValue(value)
+  }, [value])
 
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false)
       }
@@ -52,32 +63,55 @@ export function Autocomplete({
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  React.useEffect(() => {
-    setHighlightedIndex(0)
-  }, [value])
+  const defaultFilterFn = useCallback((option: AutocompleteOption, query: string) => {
+    const searchTerm = query.toLowerCase()
+    return (
+      option.label.toLowerCase().includes(searchTerm) ||
+      option.value.toLowerCase().includes(searchTerm) ||
+      (option.description?.toLowerCase().includes(searchTerm) ?? false)
+    )
+  }, [])
+
+  const filteredOptions = options.filter(option =>
+    (filterFn || defaultFilterFn)(option, inputValue)
+  )
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    setInputValue(newValue)
+    onChange?.(newValue)
+    setIsOpen(true)
+    setHighlightedIndex(-1)
+  }
+
+  const handleSelect = (option: AutocompleteOption) => {
+    setInputValue(option.label)
+    onChange?.(option.value)
+    onSelect?.(option)
+    setIsOpen(false)
+  }
+
+  const handleClear = () => {
+    setInputValue("")
+    onChange?.("")
+    inputRef.current?.focus()
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isOpen) {
-      if (e.key === "ArrowDown" || e.key === "Enter") {
-        setIsOpen(true)
-      }
-      return
-    }
-
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault()
-        setHighlightedIndex((prev) => 
+        setHighlightedIndex(prev =>
           prev < filteredOptions.length - 1 ? prev + 1 : prev
         )
         break
       case "ArrowUp":
         e.preventDefault()
-        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : prev))
+        setHighlightedIndex(prev => (prev > 0 ? prev - 1 : prev))
         break
       case "Enter":
         e.preventDefault()
-        if (filteredOptions[highlightedIndex]) {
+        if (highlightedIndex >= 0 && filteredOptions[highlightedIndex]) {
           handleSelect(filteredOptions[highlightedIndex])
         }
         break
@@ -87,93 +121,93 @@ export function Autocomplete({
     }
   }
 
-  const handleSelect = (option: AutocompleteOption) => {
-    onChange?.(option.label)
-    onSelect?.(option)
-    setIsOpen(false)
-  }
-
-  const handleClear = () => {
-    onChange?.("")
-    inputRef.current?.focus()
-  }
+  useEffect(() => {
+    if (highlightedIndex >= 0 && listRef.current) {
+      const item = listRef.current.children[highlightedIndex] as HTMLElement
+      item?.scrollIntoView({ block: "nearest" })
+    }
+  }, [highlightedIndex])
 
   return (
     <div ref={containerRef} className={clx("relative", className)}>
+      {label && (
+        <label className="block text-sm font-medium text-neutral-300 mb-1.5">
+          {label}
+        </label>
+      )}
+      
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+        {showIcon && (
+          <MagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+        )}
         <input
           ref={inputRef}
           type="text"
-          value={value}
-          onChange={(e) => {
-            onChange?.(e.target.value)
-            setIsOpen(true)
-          }}
+          value={inputValue}
+          onChange={handleInputChange}
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
           className={clx(
-            "w-full pl-12 pr-12 py-3 rounded-lg border transition-all",
-            "bg-zinc-900 border-zinc-700 text-white placeholder-zinc-500",
-            "hover:border-cyan-500/50 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30",
-            disabled && "opacity-50 cursor-not-allowed"
+            "w-full py-3 bg-neutral-900 border border-neutral-700 rounded-lg",
+            "text-white placeholder-neutral-500",
+            "focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent",
+            "transition-all duration-200",
+            showIcon ? "pl-11 pr-10" : "px-4",
+            disabled && "opacity-50 cursor-not-allowed",
+            error && "border-red-500"
           )}
         />
-        {loading ? (
-          <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 animate-spin" />
-        ) : value && (
+        {clearable && inputValue && (
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-neutral-800 rounded transition-colors"
           >
-            <X className="w-5 h-5" />
+            <XMark className="w-4 h-4 text-neutral-500" />
           </button>
         )}
       </div>
 
+      {error && (
+        <p className="mt-1 text-sm text-red-400">{error}</p>
+      )}
+
       {isOpen && (
-        <div className="absolute z-50 w-full mt-2 rounded-xl bg-zinc-900 border border-zinc-700 shadow-xl overflow-hidden">
+        <ul
+          ref={listRef}
+          className="absolute z-50 w-full mt-2 py-2 bg-neutral-900 border border-neutral-700 rounded-xl shadow-2xl max-h-64 overflow-y-auto"
+        >
           {loading ? (
-            <div className="p-4 text-center text-zinc-500">
-              <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
-              Loading...
-            </div>
+            <li className="px-4 py-3 text-neutral-500 text-sm">Loading...</li>
           ) : filteredOptions.length === 0 ? (
-            <div className="p-4 text-center text-zinc-500">
-              {emptyMessage}
-            </div>
+            <li className="px-4 py-3 text-neutral-500 text-sm">{emptyMessage}</li>
           ) : (
-            <div className="max-h-64 overflow-y-auto">
-              {filteredOptions.map((option, index) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => handleSelect(option)}
-                  onMouseEnter={() => setHighlightedIndex(index)}
-                  className={clx(
-                    "w-full px-4 py-3 text-left flex items-center gap-3 transition-colors",
-                    highlightedIndex === index
-                      ? "bg-zinc-800"
-                      : "hover:bg-zinc-800/50"
-                  )}
-                >
-                  {option.icon && (
-                    <span className="text-zinc-400">{option.icon}</span>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white truncate">{option.label}</p>
+            filteredOptions.map((option, index) => (
+              <li
+                key={option.value}
+                onClick={() => handleSelect(option)}
+                className={clx(
+                  "px-4 py-3 cursor-pointer transition-colors",
+                  highlightedIndex === index
+                    ? "bg-cyan-500/20"
+                    : "hover:bg-neutral-800"
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  {option.icon}
+                  <div>
+                    <p className="text-white text-sm">{option.label}</p>
                     {option.description && (
-                      <p className="text-zinc-500 text-sm truncate">{option.description}</p>
+                      <p className="text-xs text-neutral-500">{option.description}</p>
                     )}
                   </div>
-                </button>
-              ))}
-            </div>
+                </div>
+              </li>
+            ))
           )}
-        </div>
+        </ul>
       )}
     </div>
   )
