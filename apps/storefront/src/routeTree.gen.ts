@@ -26,6 +26,7 @@ import { Route as CountryCodeStoreRouteImport } from './routes/$countryCode/stor
 import { Route as CountryCodeReturnsRouteImport } from './routes/$countryCode/returns'
 import { Route as CountryCodeReferralsRouteImport } from './routes/$countryCode/referrals'
 import { Route as CountryCodePrivacyRouteImport } from './routes/$countryCode/privacy'
+import { Route as CountryCodePlatformRouteImport } from './routes/$countryCode/platform'
 import { Route as CountryCodeLoyaltyRouteImport } from './routes/$countryCode/loyalty'
 import { Route as CountryCodeLookbookRouteImport } from './routes/$countryCode/lookbook'
 import { Route as CountryCodeHelpRouteImport } from './routes/$countryCode/help'
@@ -195,6 +196,11 @@ const CountryCodeReferralsRoute = CountryCodeReferralsRouteImport.update({
 const CountryCodePrivacyRoute = CountryCodePrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const CountryCodePlatformRoute = CountryCodePlatformRouteImport.update({
+  id: '/platform',
+  path: '/platform',
   getParentRoute: () => CountryCodeRoute,
 } as any)
 const CountryCodeLoyaltyRoute = CountryCodeLoyaltyRouteImport.update({
@@ -692,6 +698,7 @@ export interface FileRoutesByFullPath {
   '/$countryCode/help': typeof CountryCodeHelpRouteWithChildren
   '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
   '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
+  '/$countryCode/platform': typeof CountryCodePlatformRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/referrals': typeof CountryCodeReferralsRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRouteWithChildren
@@ -793,6 +800,7 @@ export interface FileRoutesByTo {
   '/$countryCode/help': typeof CountryCodeHelpRouteWithChildren
   '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
   '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
+  '/$countryCode/platform': typeof CountryCodePlatformRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/referrals': typeof CountryCodeReferralsRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
@@ -896,6 +904,7 @@ export interface FileRoutesById {
   '/$countryCode/help': typeof CountryCodeHelpRouteWithChildren
   '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
   '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
+  '/$countryCode/platform': typeof CountryCodePlatformRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/referrals': typeof CountryCodeReferralsRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRouteWithChildren
@@ -1001,6 +1010,7 @@ export interface FileRouteTypes {
     | '/$countryCode/help'
     | '/$countryCode/lookbook'
     | '/$countryCode/loyalty'
+    | '/$countryCode/platform'
     | '/$countryCode/privacy'
     | '/$countryCode/referrals'
     | '/$countryCode/returns'
@@ -1102,6 +1112,7 @@ export interface FileRouteTypes {
     | '/$countryCode/help'
     | '/$countryCode/lookbook'
     | '/$countryCode/loyalty'
+    | '/$countryCode/platform'
     | '/$countryCode/privacy'
     | '/$countryCode/referrals'
     | '/$countryCode/store'
@@ -1204,6 +1215,7 @@ export interface FileRouteTypes {
     | '/$countryCode/help'
     | '/$countryCode/lookbook'
     | '/$countryCode/loyalty'
+    | '/$countryCode/platform'
     | '/$countryCode/privacy'
     | '/$countryCode/referrals'
     | '/$countryCode/returns'
@@ -1414,6 +1426,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/$countryCode/privacy'
       preLoaderRoute: typeof CountryCodePrivacyRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/platform': {
+      id: '/$countryCode/platform'
+      path: '/platform'
+      fullPath: '/$countryCode/platform'
+      preLoaderRoute: typeof CountryCodePlatformRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/loyalty': {
@@ -2175,6 +2194,7 @@ interface CountryCodeRouteChildren {
   CountryCodeHelpRoute: typeof CountryCodeHelpRouteWithChildren
   CountryCodeLookbookRoute: typeof CountryCodeLookbookRoute
   CountryCodeLoyaltyRoute: typeof CountryCodeLoyaltyRoute
+  CountryCodePlatformRoute: typeof CountryCodePlatformRoute
   CountryCodePrivacyRoute: typeof CountryCodePrivacyRoute
   CountryCodeReferralsRoute: typeof CountryCodeReferralsRoute
   CountryCodeReturnsRoute: typeof CountryCodeReturnsRouteWithChildren
@@ -2257,6 +2277,7 @@ const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodeHelpRoute: CountryCodeHelpRouteWithChildren,
   CountryCodeLookbookRoute: CountryCodeLookbookRoute,
   CountryCodeLoyaltyRoute: CountryCodeLoyaltyRoute,
+  CountryCodePlatformRoute: CountryCodePlatformRoute,
   CountryCodePrivacyRoute: CountryCodePrivacyRoute,
   CountryCodeReferralsRoute: CountryCodeReferralsRoute,
   CountryCodeReturnsRoute: CountryCodeReturnsRouteWithChildren,

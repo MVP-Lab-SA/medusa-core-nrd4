@@ -29,7 +29,7 @@ const Footer = () => {
       <div className="content-container flex flex-col w-full">
         <div className="flex flex-col gap-y-12 lg:flex-row items-start justify-between py-16">
           {/* Brand column */}
-          <div className="lg:w-1/3 flex flex-col gap-y-6">
+          <div className="lg:w-1/4 flex flex-col gap-y-6">
             <Link
               to="/$countryCode"
               params={{ countryCode }}
@@ -44,11 +44,11 @@ const Footer = () => {
           </div>
 
           {/* Links columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            {/* Products */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-6">
+            {/* Shop */}
             <div className="flex flex-col gap-y-4">
               <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
-                Products
+                Shop
               </h3>
               <ul className="space-y-3">
                 <li>
@@ -58,6 +58,42 @@ const Footer = () => {
                     className="text-city-gray hover:text-city-cyan transition-colors text-sm"
                   >
                     All Products
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/vendors"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Vendors
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/flash-sales"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Flash Sales
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/bundles"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Bundles
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/subscriptions"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Subscriptions
                   </Link>
                 </li>
                 {categories?.map((category) => (
@@ -71,6 +107,159 @@ const Footer = () => {
                     </Link>
                   </li>
                 ))}
+              </ul>
+            </div>
+
+            {/* Services & Business */}
+            <div className="flex flex-col gap-y-4">
+              <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                Services
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link
+                    to="/$countryCode/services"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    All Services
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/providers"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Service Providers
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/business"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    B2B Portal
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/referrals"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Referral Program
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Account */}
+            <div className="flex flex-col gap-y-4">
+              <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                Account
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link
+                    to="/$countryCode/account/login"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Sign In
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/account"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    My Account
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/account/wishlists"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Wishlists
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/account/subscriptions"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Subscriptions
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/account/loyalty"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Rewards
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Support */}
+            <div className="flex flex-col gap-y-4">
+              <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                Support
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link
+                    to="/$countryCode/help"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Help Center
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/track"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Track Order
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/returns"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Returns
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/delivery-slots"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Delivery Slots
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/verify"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Verification
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -100,11 +289,29 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/$countryCode/stores"
+                    to="/$countryCode/events"
                     params={{ countryCode }}
                     className="text-city-gray hover:text-city-cyan transition-colors text-sm"
                   >
-                    Find a Store
+                    Events
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/venues"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Venues
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/$countryCode/announcements"
+                    params={{ countryCode }}
+                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
+                  >
+                    Announcements
                   </Link>
                 </li>
                 <li>
@@ -118,102 +325,12 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-
-            {/* Account */}
-            <div className="flex flex-col gap-y-4">
-              <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
-                Account
-              </h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link
-                    to="/$countryCode/account/login"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
-                  >
-                    Sign In
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/$countryCode/account"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
-                  >
-                    My Orders
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/$countryCode/wishlist"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
-                  >
-                    Wishlist
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/$countryCode/loyalty"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
-                  >
-                    Rewards
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Resources */}
-            <div className="flex flex-col gap-y-4">
-              <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
-                Resources
-              </h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link
-                    to="/$countryCode/faq"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
-                  >
-                    FAQ
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/$countryCode/returns"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
-                  >
-                    Returns
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/$countryCode/gift-cards"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
-                  >
-                    Gift Cards
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/$countryCode/lookbook"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors text-sm"
-                  >
-                    Lookbook
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Newsletter */}
-            <div className="sm:col-span-2 lg:col-span-1">
-              <Newsletter variant="inline" />
-            </div>
           </div>
+        </div>
+
+        {/* Newsletter */}
+        <div className="border-t border-city-steel/30 py-8">
+          <Newsletter variant="inline" />
         </div>
 
         {/* Bottom bar */}
