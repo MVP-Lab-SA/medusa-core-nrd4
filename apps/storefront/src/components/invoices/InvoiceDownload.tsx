@@ -1,4 +1,4 @@
-import { Download, FileText, Printer } from "lucide-react"
+import { ArrowDownTray, DocumentText, Swatch } from "@medusajs/icons"
 
 interface InvoiceDownloadProps {
   invoiceId: string
@@ -9,13 +9,13 @@ interface InvoiceDownloadProps {
 
 export function InvoiceDownload({ invoiceId, onDownloadPDF, onDownloadCSV, onPrint }: InvoiceDownloadProps) {
   return (
-    <div className="bg-white border rounded-xl p-6">
+    <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-          <FileText className="w-6 h-6 text-blue-600" />
+        <div className="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+          <DocumentText className="w-6 h-6 text-cyan-400" />
         </div>
         <div>
-          <h3 className="font-semibold">Invoice {invoiceId}</h3>
+          <h3 className="font-semibold text-white">Invoice {invoiceId}</h3>
           <p className="text-sm text-gray-500">Download or print your invoice</p>
         </div>
       </div>
@@ -23,33 +23,33 @@ export function InvoiceDownload({ invoiceId, onDownloadPDF, onDownloadCSV, onPri
       <div className="space-y-2">
         <button 
           onClick={onDownloadPDF}
-          className="w-full flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+          className="w-full flex items-center gap-3 p-3 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
         >
-          <Download className="w-5 h-5 text-gray-500" />
+          <ArrowDownTray className="w-5 h-5 text-gray-400" />
           <div className="text-left">
-            <p className="font-medium">Download PDF</p>
+            <p className="font-medium text-white">Download PDF</p>
             <p className="text-sm text-gray-500">Full invoice document</p>
           </div>
         </button>
 
         <button 
           onClick={onDownloadCSV}
-          className="w-full flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+          className="w-full flex items-center gap-3 p-3 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
         >
-          <Download className="w-5 h-5 text-gray-500" />
+          <ArrowDownTray className="w-5 h-5 text-gray-400" />
           <div className="text-left">
-            <p className="font-medium">Download CSV</p>
+            <p className="font-medium text-white">Download CSV</p>
             <p className="text-sm text-gray-500">Line items for accounting</p>
           </div>
         </button>
 
         <button 
           onClick={onPrint}
-          className="w-full flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+          className="w-full flex items-center gap-3 p-3 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
         >
-          <Printer className="w-5 h-5 text-gray-500" />
+          <Swatch className="w-5 h-5 text-gray-400" />
           <div className="text-left">
-            <p className="font-medium">Print Invoice</p>
+            <p className="font-medium text-white">Print Invoice</p>
             <p className="text-sm text-gray-500">Print directly from browser</p>
           </div>
         </button>

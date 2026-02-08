@@ -3,7 +3,7 @@
  * Back-Office ERP System
  */
 
-import { generateId, mockDelay, pastDate, futureDate } from "./index"
+import { generateId, mockDelay, pastDate, futureDate } from "./helpers"
 
 // Types
 export interface CreditNote {

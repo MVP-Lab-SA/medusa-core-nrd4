@@ -5,26 +5,23 @@ import {
   Heart,
   CreditCard,
   MapPin,
-  Bell,
-  Settings,
-  Download,
+  CogSixTooth,
+  ArrowDownTray,
   Key,
   Calendar,
-  RefreshCw,
+  ArrowPath,
   Star,
   Gift,
-  Truck,
-  Wallet,
-  Receipt,
-  AlertCircle,
-  Shield,
-  FileText,
-  TrendingUp,
-  Award,
+  BuildingStorefront,
+  DocumentText,
+  ExclamationCircle,
+  ShieldCheck,
   Clock,
   ChevronRight,
-} from "lucide-react"
-import { cn } from "../../lib/util/cn"
+  Sparkles,
+  CurrencyDollar,
+} from "@medusajs/icons"
+import { clsx } from "clsx"
 
 interface NavSection {
   title: string
@@ -46,7 +43,7 @@ export function AccountSidebar({ currentPath }: { currentPath?: string }) {
       title: "Overview",
       items: [
         { label: "Dashboard", href: `/${countryCode}/account`, icon: <User className="w-4 h-4" /> },
-        { label: "Settings", href: `/${countryCode}/account/settings`, icon: <Settings className="w-4 h-4" /> },
+        { label: "Settings", href: `/${countryCode}/account/settings`, icon: <CogSixTooth className="w-4 h-4" /> },
       ],
     },
     {
@@ -61,47 +58,47 @@ export function AccountSidebar({ currentPath }: { currentPath?: string }) {
     {
       title: "Subscriptions & Bookings",
       items: [
-        { label: "Subscriptions", href: `/${countryCode}/account/subscriptions`, icon: <RefreshCw className="w-4 h-4" /> },
+        { label: "Subscriptions", href: `/${countryCode}/account/subscriptions`, icon: <ArrowPath className="w-4 h-4" /> },
         { label: "Bookings", href: `/${countryCode}/account/bookings`, icon: <Calendar className="w-4 h-4" /> },
       ],
     },
     {
       title: "Digital Products",
       items: [
-        { label: "Downloads", href: `/${countryCode}/account/downloads`, icon: <Download className="w-4 h-4" /> },
+        { label: "Downloads", href: `/${countryCode}/account/downloads`, icon: <ArrowDownTray className="w-4 h-4" /> },
         { label: "Licenses", href: `/${countryCode}/account/licenses`, icon: <Key className="w-4 h-4" /> },
       ],
     },
     {
       title: "Delivery & Returns",
       items: [
-        { label: "Deliveries", href: `/${countryCode}/account/deliveries`, icon: <Truck className="w-4 h-4" /> },
+        { label: "Deliveries", href: `/${countryCode}/account/deliveries`, icon: <BuildingStorefront className="w-4 h-4" /> },
       ],
     },
     {
       title: "Payments & Wallet",
       items: [
         { label: "Payment Methods", href: `/${countryCode}/account/payment-methods`, icon: <CreditCard className="w-4 h-4" /> },
-        { label: "Wallet", href: `/${countryCode}/account/wallet`, icon: <Wallet className="w-4 h-4" /> },
-        { label: "Transactions", href: `/${countryCode}/account/transactions`, icon: <Receipt className="w-4 h-4" /> },
+        { label: "Wallet", href: `/${countryCode}/account/wallet`, icon: <CurrencyDollar className="w-4 h-4" /> },
+        { label: "Transactions", href: `/${countryCode}/account/transactions`, icon: <DocumentText className="w-4 h-4" /> },
         { label: "Installments", href: `/${countryCode}/account/installments`, icon: <Clock className="w-4 h-4" /> },
-        { label: "Disputes", href: `/${countryCode}/account/disputes`, icon: <AlertCircle className="w-4 h-4" /> },
-        { label: "Loyalty Points", href: `/${countryCode}/account/loyalty`, icon: <Award className="w-4 h-4" /> },
-        { label: "Store Credits", href: `/${countryCode}/account/credits`, icon: <TrendingUp className="w-4 h-4" /> },
+        { label: "Disputes", href: `/${countryCode}/account/disputes`, icon: <ExclamationCircle className="w-4 h-4" /> },
+        { label: "Loyalty Points", href: `/${countryCode}/account/loyalty`, icon: <Sparkles className="w-4 h-4" /> },
+        { label: "Store Credits", href: `/${countryCode}/account/credits`, icon: <CurrencyDollar className="w-4 h-4" /> },
       ],
     },
     {
       title: "Identity & Security",
       items: [
-        { label: "Credentials", href: `/${countryCode}/account/credentials`, icon: <Shield className="w-4 h-4" /> },
-        { label: "Consents", href: `/${countryCode}/account/consents`, icon: <FileText className="w-4 h-4" /> },
+        { label: "Credentials", href: `/${countryCode}/account/credentials`, icon: <ShieldCheck className="w-4 h-4" /> },
+        { label: "Consents", href: `/${countryCode}/account/consents`, icon: <DocumentText className="w-4 h-4" /> },
       ],
     },
     {
       title: "Finance",
       items: [
-        { label: "Statements", href: `/${countryCode}/account/statements`, icon: <FileText className="w-4 h-4" /> },
-        { label: "Tax Certificates", href: `/${countryCode}/account/tax-certificates`, icon: <FileText className="w-4 h-4" /> },
+        { label: "Statements", href: `/${countryCode}/account/statements`, icon: <DocumentText className="w-4 h-4" /> },
+        { label: "Tax Certificates", href: `/${countryCode}/account/tax-certificates`, icon: <DocumentText className="w-4 h-4" /> },
       ],
     },
   ]
@@ -122,8 +119,8 @@ export function AccountSidebar({ currentPath }: { currentPath?: string }) {
                   return (
                     <li key={item.href}>
                       <Link
-                        to={item.href}
-                        className={cn(
+                        to={item.href as any}
+                        className={clsx(
                           "flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors",
                           isActive
                             ? "bg-cyan-500/10 text-cyan-400"

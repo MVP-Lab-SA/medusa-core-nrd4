@@ -3,7 +3,7 @@
  * Logistics & Fulfillment System
  */
 
-import { generateId, mockDelay, futureDate, pastDate } from "./index"
+import { generateId, mockDelay, futureDate, pastDate } from "./helpers"
 
 // Types
 export interface DeliveryZone {

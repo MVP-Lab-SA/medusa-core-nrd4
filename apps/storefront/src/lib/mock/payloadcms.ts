@@ -3,7 +3,7 @@
  * Content & Configuration Management
  */
 
-import { generateId, mockDelay, pastDate, futureDate } from "./index"
+import { generateId, mockDelay, pastDate, futureDate } from "./helpers"
 
 // Types
 export interface Page {

@@ -3,7 +3,7 @@
  * Stripe / Tap / HyperPay integration mock
  */
 
-import { generateId, mockDelay, pastDate, futureDate } from "./index"
+import { generateId, mockDelay, pastDate, futureDate } from "./helpers"
 
 // Types
 export interface PaymentMethod {

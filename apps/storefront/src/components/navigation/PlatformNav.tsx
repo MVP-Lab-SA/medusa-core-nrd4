@@ -1,22 +1,15 @@
 import { Link, useParams } from "@tanstack/react-router"
 import {
-  Store,
-  Building2,
+  BuildingStorefront,
+  Buildings,
   Calendar,
-  Package,
-  Truck,
-  Shield,
-  CreditCard,
-  FileText,
-  Newspaper,
-  HelpCircle,
-  Gift,
-  Zap,
-  Users,
+  ShoppingBag,
   MapPin,
-  Tag,
+  ShieldCheck,
   ChevronRight,
-} from "lucide-react"
+  Sparkles,
+  CircleStack,
+} from "@medusajs/icons"
 
 interface NavCategory {
   title: string
@@ -33,7 +26,7 @@ export function PlatformNav() {
     {
       title: "Marketplace",
       description: "Shop from vendors and businesses",
-      icon: <Store className="w-6 h-6" />,
+      icon: <BuildingStorefront className="w-6 h-6" />,
       color: "cyan",
       links: [
         { label: "All Vendors", href: `/${countryCode}/vendors`, description: "Browse marketplace vendors" },
@@ -45,7 +38,7 @@ export function PlatformNav() {
     {
       title: "Business Portal",
       description: "B2B purchasing & management",
-      icon: <Building2 className="w-6 h-6" />,
+      icon: <Buildings className="w-6 h-6" />,
       color: "blue",
       links: [
         { label: "Business Home", href: `/${countryCode}/business`, description: "B2B landing page" },
@@ -66,7 +59,7 @@ export function PlatformNav() {
     {
       title: "Subscriptions",
       description: "Recurring delivery plans",
-      icon: <Package className="w-6 h-6" />,
+      icon: <ShoppingBag className="w-6 h-6" />,
       color: "green",
       links: [
         { label: "Subscription Plans", href: `/${countryCode}/subscriptions`, description: "View all plans" },
@@ -75,7 +68,7 @@ export function PlatformNav() {
     {
       title: "Delivery & Tracking",
       description: "Track orders & manage returns",
-      icon: <Truck className="w-6 h-6" />,
+      icon: <CircleStack className="w-6 h-6" />,
       color: "orange",
       links: [
         { label: "Track Order", href: `/${countryCode}/track`, description: "Track your delivery" },
@@ -86,7 +79,7 @@ export function PlatformNav() {
     {
       title: "Identity & Verification",
       description: "Verify your identity",
-      icon: <Shield className="w-6 h-6" />,
+      icon: <ShieldCheck className="w-6 h-6" />,
       color: "red",
       links: [
         { label: "Verification Hub", href: `/${countryCode}/verify`, description: "Identity verification" },
@@ -107,7 +100,7 @@ export function PlatformNav() {
     {
       title: "Content & Help",
       description: "Resources and support",
-      icon: <HelpCircle className="w-6 h-6" />,
+      icon: <Sparkles className="w-6 h-6" />,
       color: "yellow",
       links: [
         { label: "Blog", href: `/${countryCode}/blog`, description: "Latest articles" },
@@ -148,7 +141,7 @@ export function PlatformNav() {
               {category.links.map((link) => (
                 <li key={link.href}>
                   <Link
-                    to={link.href}
+                    to={link.href as any}
                     className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors group"
                   >
                     <span>{link.label}</span>
@@ -174,11 +167,11 @@ export function HeaderMegaMenu() {
       <div>
         <h3 className="text-sm font-semibold text-white mb-3">Shop</h3>
         <ul className="space-y-2">
-          <li><Link to={`/${countryCode}/store`} className="text-sm text-gray-400 hover:text-white">All Products</Link></li>
-          <li><Link to={`/${countryCode}/vendors`} className="text-sm text-gray-400 hover:text-white">Vendors</Link></li>
-          <li><Link to={`/${countryCode}/flash-sales`} className="text-sm text-gray-400 hover:text-white">Flash Sales</Link></li>
-          <li><Link to={`/${countryCode}/bundles`} className="text-sm text-gray-400 hover:text-white">Bundles</Link></li>
-          <li><Link to={`/${countryCode}/subscriptions`} className="text-sm text-gray-400 hover:text-white">Subscriptions</Link></li>
+          <li><Link to={`/${countryCode}/store` as any} className="text-sm text-gray-400 hover:text-white">All Products</Link></li>
+          <li><Link to={`/${countryCode}/vendors` as any} className="text-sm text-gray-400 hover:text-white">Vendors</Link></li>
+          <li><Link to={`/${countryCode}/flash-sales` as any} className="text-sm text-gray-400 hover:text-white">Flash Sales</Link></li>
+          <li><Link to={`/${countryCode}/bundles` as any} className="text-sm text-gray-400 hover:text-white">Bundles</Link></li>
+          <li><Link to={`/${countryCode}/subscriptions` as any} className="text-sm text-gray-400 hover:text-white">Subscriptions</Link></li>
         </ul>
       </div>
 
@@ -186,10 +179,10 @@ export function HeaderMegaMenu() {
       <div>
         <h3 className="text-sm font-semibold text-white mb-3">Services</h3>
         <ul className="space-y-2">
-          <li><Link to={`/${countryCode}/services`} className="text-sm text-gray-400 hover:text-white">All Services</Link></li>
-          <li><Link to={`/${countryCode}/providers`} className="text-sm text-gray-400 hover:text-white">Providers</Link></li>
-          <li><Link to={`/${countryCode}/events`} className="text-sm text-gray-400 hover:text-white">Events</Link></li>
-          <li><Link to={`/${countryCode}/venues`} className="text-sm text-gray-400 hover:text-white">Venues</Link></li>
+          <li><Link to={`/${countryCode}/services` as any} className="text-sm text-gray-400 hover:text-white">All Services</Link></li>
+          <li><Link to={`/${countryCode}/providers` as any} className="text-sm text-gray-400 hover:text-white">Providers</Link></li>
+          <li><Link to={`/${countryCode}/events` as any} className="text-sm text-gray-400 hover:text-white">Events</Link></li>
+          <li><Link to={`/${countryCode}/venues` as any} className="text-sm text-gray-400 hover:text-white">Venues</Link></li>
         </ul>
       </div>
 
@@ -197,9 +190,9 @@ export function HeaderMegaMenu() {
       <div>
         <h3 className="text-sm font-semibold text-white mb-3">Business</h3>
         <ul className="space-y-2">
-          <li><Link to={`/${countryCode}/business`} className="text-sm text-gray-400 hover:text-white">B2B Portal</Link></li>
-          <li><Link to={`/${countryCode}/business/register`} className="text-sm text-gray-400 hover:text-white">Register Business</Link></li>
-          <li><Link to={`/${countryCode}/referrals`} className="text-sm text-gray-400 hover:text-white">Referral Program</Link></li>
+          <li><Link to={`/${countryCode}/business` as any} className="text-sm text-gray-400 hover:text-white">B2B Portal</Link></li>
+          <li><Link to={`/${countryCode}/business/register` as any} className="text-sm text-gray-400 hover:text-white">Register Business</Link></li>
+          <li><Link to={`/${countryCode}/referrals` as any} className="text-sm text-gray-400 hover:text-white">Referral Program</Link></li>
         </ul>
       </div>
 
@@ -207,10 +200,10 @@ export function HeaderMegaMenu() {
       <div>
         <h3 className="text-sm font-semibold text-white mb-3">Support</h3>
         <ul className="space-y-2">
-          <li><Link to={`/${countryCode}/track`} className="text-sm text-gray-400 hover:text-white">Track Order</Link></li>
-          <li><Link to={`/${countryCode}/returns`} className="text-sm text-gray-400 hover:text-white">Returns</Link></li>
-          <li><Link to={`/${countryCode}/help`} className="text-sm text-gray-400 hover:text-white">Help Center</Link></li>
-          <li><Link to={`/${countryCode}/blog`} className="text-sm text-gray-400 hover:text-white">Blog</Link></li>
+          <li><Link to={`/${countryCode}/track` as any} className="text-sm text-gray-400 hover:text-white">Track Order</Link></li>
+          <li><Link to={`/${countryCode}/returns` as any} className="text-sm text-gray-400 hover:text-white">Returns</Link></li>
+          <li><Link to={`/${countryCode}/help` as any} className="text-sm text-gray-400 hover:text-white">Help Center</Link></li>
+          <li><Link to={`/${countryCode}/blog` as any} className="text-sm text-gray-400 hover:text-white">Blog</Link></li>
         </ul>
       </div>
     </div>

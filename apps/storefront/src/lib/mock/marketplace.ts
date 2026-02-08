@@ -4,7 +4,7 @@
  * (Medusa extensions that aren't built-in)
  */
 
-import { generateId, mockDelay, pastDate, futureDate } from "./index"
+import { generateId, mockDelay, pastDate, futureDate } from "./helpers"
 
 // ==================== VENDOR / MARKETPLACE ====================
 

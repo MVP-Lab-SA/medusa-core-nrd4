@@ -1,4 +1,4 @@
-import { CheckCircle, Clock, AlertCircle, XCircle } from "lucide-react"
+import { CheckCircle, Clock, ExclamationCircle, XMark } from "@medusajs/icons"
 
 interface PaymentStatusBadgeProps {
   status: "paid" | "pending" | "overdue" | "failed"
@@ -7,10 +7,10 @@ interface PaymentStatusBadgeProps {
 
 export function PaymentStatusBadge({ status, size = "md" }: PaymentStatusBadgeProps) {
   const config = {
-    paid: { label: "Paid", color: "bg-green-100 text-green-700", icon: CheckCircle },
-    pending: { label: "Pending", color: "bg-amber-100 text-amber-700", icon: Clock },
-    overdue: { label: "Overdue", color: "bg-red-100 text-red-700", icon: AlertCircle },
-    failed: { label: "Failed", color: "bg-red-100 text-red-700", icon: XCircle },
+    paid: { label: "Paid", color: "bg-green-500/20 text-green-400", icon: CheckCircle },
+    pending: { label: "Pending", color: "bg-amber-500/20 text-amber-400", icon: Clock },
+    overdue: { label: "Overdue", color: "bg-red-500/20 text-red-400", icon: ExclamationCircle },
+    failed: { label: "Failed", color: "bg-red-500/20 text-red-400", icon: XMark },
   }
 
   const sizeClasses = {
