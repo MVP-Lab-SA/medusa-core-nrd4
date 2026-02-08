@@ -460,3 +460,20 @@ export function useReferrals(customerId: string) {
     enabled: !!customerId,
   })
 }
+
+// ==================== PROVIDERS ====================
+
+export function useProviders() {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "providers"] as const,
+    queryFn: () => marketplaceService.getProviders(),
+  })
+}
+
+export function useProvider(id: string) {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "provider", id] as const,
+    queryFn: () => marketplaceService.getProvider(id),
+    enabled: !!id,
+  })
+}
