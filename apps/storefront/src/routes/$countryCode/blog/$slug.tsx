@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { Calendar, User, Clock, ArrowLeft, Share2, Tag } from "lucide-react"
+import { Calendar, Clock, ArrowLeft, Tag, Link as ShareIcon } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/blog/$slug")({
   component: BlogPostPage,
@@ -111,7 +111,7 @@ function BlogPostPage() {
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl mb-8">
           <p className="font-medium">Found this article helpful?</p>
           <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            <Share2 className="w-4 h-4" />
+            <ShareIcon className="w-4 h-4" />
             Share Article
           </button>
         </div>
