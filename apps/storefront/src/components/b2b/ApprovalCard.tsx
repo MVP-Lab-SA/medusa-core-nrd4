@@ -1,5 +1,16 @@
 import { CheckCircle, XCircle, Clock } from "@medusajs/icons"
-import type { ApprovalRequest } from "../../lib/mock/marketplace"
+
+interface ApprovalRequest {
+  id: string
+  type: 'purchase_order' | 'quote' | 'return' | 'credit' | 'user_access'
+  title: string
+  description: string
+  status: 'pending' | 'approved' | 'rejected'
+  requestedBy: string
+  createdAt: string
+  amount?: number
+  currency?: string
+}
 
 interface ApprovalCardProps {
   request: ApprovalRequest
@@ -8,11 +19,12 @@ interface ApprovalCardProps {
   canAction?: boolean
 }
 
-const typeLabels = {
+const typeLabels: Record<string, string> = {
   purchase_order: "Purchase Order",
   quote: "Quote Request",
   return: "Return Request",
   credit: "Credit Request",
+  user_access: "User Access",
 }
 
 export function ApprovalCard({ request, onApprove, onReject, canAction = true }: ApprovalCardProps) {
@@ -21,7 +33,7 @@ export function ApprovalCard({ request, onApprove, onReject, canAction = true }:
       <div className="flex items-start justify-between mb-3">
         <div>
           <span className="text-xs font-medium text-gray-500 uppercase">
-            {typeLabels[request.type]}
+            {typeLabels[request.type] || request.type}
           </span>
           <h4 className="font-medium text-gray-900">{request.title}</h4>
         </div>

@@ -1,5 +1,14 @@
-import { ArrowDownTray, Document, Clock } from "@medusajs/icons"
-import type { DigitalAsset } from "../../lib/mock/marketplace"
+import { ArrowDownTray, DocumentText, Clock } from "@medusajs/icons"
+
+interface DigitalAsset {
+  id: string
+  name: string
+  fileType: string
+  fileSize: string
+  downloadCount: number
+  downloadLimit?: number
+  expiresAt?: string
+}
 
 interface DownloadCardProps {
   asset: DigitalAsset
@@ -14,7 +23,7 @@ export function DownloadCard({ asset, onDownload }: DownloadCardProps) {
     <div className="bg-white border border-gray-200 rounded-lg p-4">
       <div className="flex items-start gap-4">
         <div className="p-3 bg-gray-100 rounded-lg">
-          <Document className="w-6 h-6 text-gray-600" />
+          <DocumentText className="w-6 h-6 text-gray-600" />
         </div>
         <div className="flex-1 min-w-0">
           <h4 className="font-medium text-gray-900 truncate">{asset.name}</h4>

@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, ReceiptPercent } from "@medusajs/icons"
+import { ArrowUpRightOnBox, ArrowDownTray, ReceiptPercent } from "@medusajs/icons"
 
 interface CreditTransaction {
   id: string
@@ -20,9 +20,9 @@ export function CreditHistory({ transactions, onViewOrder }: CreditHistoryProps)
     switch (type) {
       case 'earned':
       case 'refund':
-        return <ArrowDown className="w-4 h-4 text-green-500" />
+        return <ArrowDownTray className="w-4 h-4 text-green-500" />
       case 'used':
-        return <ArrowUp className="w-4 h-4 text-red-500" />
+        return <ArrowUpRightOnBox className="w-4 h-4 text-red-500" />
       case 'expired':
         return <ReceiptPercent className="w-4 h-4 text-gray-400" />
     }

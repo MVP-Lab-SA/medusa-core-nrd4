@@ -1,4 +1,4 @@
-import { CheckCircle, Clock, TruckFast, Cube } from "@medusajs/icons"
+import { CheckCircle, Clock, TruckFast, ShoppingBag } from "@medusajs/icons"
 import type { DeliveryOrder } from "../../lib/mock/fleetbase"
 
 interface DeliveryTrackerProps {
@@ -6,15 +6,17 @@ interface DeliveryTrackerProps {
 }
 
 const steps = [
-  { key: "pending", label: "Order Placed", icon: Cube },
+  { key: "pending", label: "Order Placed", icon: ShoppingBag },
   { key: "processing", label: "Processing", icon: Clock },
   { key: "in_transit", label: "In Transit", icon: TruckFast },
   { key: "delivered", label: "Delivered", icon: CheckCircle },
 ]
 
-const statusIndex = {
+const statusIndex: Record<string, number> = {
   pending: 0,
   processing: 1,
+  assigned: 1,
+  picked_up: 2,
   in_transit: 2,
   out_for_delivery: 2,
   delivered: 3,

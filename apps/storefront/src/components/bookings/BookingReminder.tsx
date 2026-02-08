@@ -1,4 +1,4 @@
-import { Calendar, Clock, MapPin, Bell } from "@medusajs/icons"
+import { Calendar, Clock, MapPin, InformationCircle } from "@medusajs/icons"
 
 interface BookingReminderProps {
   booking: {
@@ -37,7 +37,7 @@ export function BookingReminder({ booking, onAddToCalendar, onReschedule, onCanc
     }`}>
       {isUpcoming && (
         <div className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-800 text-sm">
-          <Bell className="w-4 h-4" />
+          <InformationCircle className="w-4 h-4" />
           <span>Coming up in {getTimeUntilText()}</span>
         </div>
       )}

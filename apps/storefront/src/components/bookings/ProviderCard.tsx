@@ -1,6 +1,16 @@
 import { Link } from "@tanstack/react-router"
 import { Star, CheckCircle } from "@medusajs/icons"
-import type { ServiceProvider } from "../../lib/mock/marketplace"
+
+interface ServiceProvider {
+  id: string
+  name: string
+  avatar?: string
+  rating: number
+  reviewCount: number
+  verified?: boolean
+  specialty?: string
+  bio?: string
+}
 
 interface ProviderCardProps {
   provider: ServiceProvider
@@ -10,7 +20,8 @@ interface ProviderCardProps {
 export function ProviderCard({ provider, countryCode }: ProviderCardProps) {
   return (
     <Link
-      to={`/${countryCode}/providers/${provider.id}`}
+      to={"/$countryCode/providers/$providerId" as any}
+      params={{ countryCode, providerId: provider.id } as any}
       className="group block bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
     >
       <div className="flex items-start gap-4">
@@ -30,7 +41,9 @@ export function ProviderCard({ provider, countryCode }: ProviderCardProps) {
             </h4>
             {provider.verified && <CheckCircle className="w-4 h-4 text-blue-500 flex-shrink-0" />}
           </div>
-          <p className="text-sm text-gray-500 mb-2">{provider.specialty}</p>
+          {provider.specialty && (
+            <p className="text-sm text-gray-500 mb-2">{provider.specialty}</p>
+          )}
           <div className="flex items-center gap-1">
             <Star className="w-4 h-4 text-yellow-400 fill-current" />
             <span className="text-sm font-medium">{provider.rating.toFixed(1)}</span>

@@ -1,5 +1,12 @@
 import { User, Trash } from "@medusajs/icons"
-import type { CompanyUser } from "../../lib/mock/marketplace"
+
+interface CompanyUser {
+  id: string
+  name: string
+  email: string
+  role: 'owner' | 'admin' | 'buyer' | 'viewer' | 'approver'
+  joinedAt: string
+}
 
 interface TeamMemberTableProps {
   members: CompanyUser[]
@@ -8,18 +15,20 @@ interface TeamMemberTableProps {
   currentUserId?: string
 }
 
-const roleLabels = {
+const roleLabels: Record<string, string> = {
   owner: "Owner",
   admin: "Administrator",
   buyer: "Buyer",
   viewer: "Viewer",
+  approver: "Approver",
 }
 
-const roleBadgeColors = {
+const roleBadgeColors: Record<string, string> = {
   owner: "bg-purple-100 text-purple-700",
   admin: "bg-blue-100 text-blue-700",
   buyer: "bg-green-100 text-green-700",
   viewer: "bg-gray-100 text-gray-700",
+  approver: "bg-yellow-100 text-yellow-700",
 }
 
 export function TeamMemberTable({ members, onRemove, onRoleChange, currentUserId }: TeamMemberTableProps) {
@@ -48,7 +57,7 @@ export function TeamMemberTable({ members, onRemove, onRoleChange, currentUserId
               </td>
               <td className="py-3 px-4 text-gray-600">{member.email}</td>
               <td className="py-3 px-4">
-                {onRoleChange && member.id !== currentUserId ? (
+                {onRoleChange && member.id !== currentUserId && member.role !== 'owner' ? (
                   <select
                     value={member.role}
                     onChange={(e) => onRoleChange(member.id, e.target.value as CompanyUser["role"])}
@@ -57,15 +66,16 @@ export function TeamMemberTable({ members, onRemove, onRoleChange, currentUserId
                     <option value="admin">Administrator</option>
                     <option value="buyer">Buyer</option>
                     <option value="viewer">Viewer</option>
+                    <option value="approver">Approver</option>
                   </select>
                 ) : (
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${roleBadgeColors[member.role]}`}>
-                    {roleLabels[member.role]}
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${roleBadgeColors[member.role] || 'bg-gray-100 text-gray-700'}`}>
+                    {roleLabels[member.role] || member.role}
                   </span>
                 )}
               </td>
               <td className="py-3 px-4 text-gray-600">
-                {new Date(member.joinedAt).toLocaleDateString()}
+                {member.joinedAt ? new Date(member.joinedAt).toLocaleDateString() : 'N/A'}
               </td>
               <td className="py-3 px-4 text-right">
                 {onRemove && member.id !== currentUserId && member.role !== "owner" && (

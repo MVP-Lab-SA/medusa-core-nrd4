@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ArrowDownTray, Printer, EnvelopeSolid, Check } from "@medusajs/icons"
+import { ArrowDownTray, DocumentText, EnvelopeSolid, Check } from "@medusajs/icons"
 
 interface ReturnLabelGeneratorProps {
   orderId: string
@@ -88,7 +88,7 @@ export function ReturnLabelGenerator({ orderId, onGenerateLabel }: ReturnLabelGe
             onClick={handlePrint}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
           >
-            <Printer className="w-4 h-4" />
+            <DocumentText className="w-4 h-4" />
             Print
           </button>
           <button

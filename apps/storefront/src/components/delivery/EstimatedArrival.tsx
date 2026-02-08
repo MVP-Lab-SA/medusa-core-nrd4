@@ -1,4 +1,4 @@
-import { Clock, Truck } from "@medusajs/icons"
+import { Clock, TruckFast } from "@medusajs/icons"
 
 interface EstimatedArrivalProps {
   estimatedDate: string
@@ -23,7 +23,7 @@ export function EstimatedArrival({ estimatedDate, estimatedTimeWindow, isLive, u
       <div className="flex items-start gap-3">
         <div className={`p-2 rounded-full ${isLive ? 'bg-blue-100' : 'bg-gray-200'}`}>
           {isLive ? (
-            <Truck className="w-5 h-5 text-blue-600" />
+            <TruckFast className="w-5 h-5 text-blue-600" />
           ) : (
             <Clock className="w-5 h-5 text-gray-500" />
           )}

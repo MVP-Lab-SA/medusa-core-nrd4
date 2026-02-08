@@ -1,4 +1,4 @@
-import { Package, Check, Truck, MapPin, ExclamationCircle } from "@medusajs/icons"
+import { ShoppingBag, Check, TruckFast, MapPin, ExclamationCircle } from "@medusajs/icons"
 
 type StatusType = 'pending' | 'processing' | 'shipped' | 'in_transit' | 'out_for_delivery' | 'delivered' | 'exception'
 
@@ -16,25 +16,25 @@ const statusConfig: Record<StatusType, {
 }> = {
   pending: {
     label: 'Pending',
-    icon: Package,
+    icon: ShoppingBag,
     color: 'text-gray-600',
     bgColor: 'bg-gray-100'
   },
   processing: {
     label: 'Processing',
-    icon: Package,
+    icon: ShoppingBag,
     color: 'text-blue-600',
     bgColor: 'bg-blue-100'
   },
   shipped: {
     label: 'Shipped',
-    icon: Truck,
+    icon: TruckFast,
     color: 'text-purple-600',
     bgColor: 'bg-purple-100'
   },
   in_transit: {
     label: 'In Transit',
-    icon: Truck,
+    icon: TruckFast,
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-100'
   },

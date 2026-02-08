@@ -1,5 +1,16 @@
 import { CheckCircle, Calendar, Clock, MapPin, User } from "@medusajs/icons"
-import type { Booking } from "../../lib/mock/marketplace"
+
+interface Booking {
+  id: string
+  serviceName: string
+  providerName?: string
+  date: string
+  time: string
+  duration: number
+  location?: string
+  total: number
+  currency: string
+}
 
 interface BookingConfirmationProps {
   booking: Booking

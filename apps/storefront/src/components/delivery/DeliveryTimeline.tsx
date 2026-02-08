@@ -1,4 +1,4 @@
-import { Check, Package, Truck, MapPin, Home } from "@medusajs/icons"
+import { Check, ShoppingBag, TruckFast, MapPin, Buildings } from "@medusajs/icons"
 
 interface TimelineEvent {
   id: string
@@ -16,11 +16,11 @@ interface DeliveryTimelineProps {
 
 const statusIcons: Record<string, typeof Check> = {
   'order_placed': Check,
-  'processing': Package,
-  'shipped': Truck,
-  'in_transit': Truck,
+  'processing': ShoppingBag,
+  'shipped': TruckFast,
+  'in_transit': TruckFast,
   'out_for_delivery': MapPin,
-  'delivered': Home,
+  'delivered': Buildings,
 }
 
 export function DeliveryTimeline({ events }: DeliveryTimelineProps) {

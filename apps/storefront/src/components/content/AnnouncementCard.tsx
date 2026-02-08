@@ -1,4 +1,4 @@
-import { Megaphone, ArrowRight, ExclamationCircle, InformationCircle } from "@medusajs/icons"
+import { ArrowRight, ExclamationCircle, InformationCircle, Sparkles } from "@medusajs/icons"
 
 interface AnnouncementCardProps {
   announcement: {
@@ -30,7 +30,7 @@ export function AnnouncementCard({ announcement, onClick }: AnnouncementCardProp
       titleColor: 'text-yellow-900'
     },
     promo: {
-      icon: Megaphone,
+      icon: Sparkles,
       bg: 'bg-purple-50',
       border: 'border-purple-200',
       iconColor: 'text-purple-500',

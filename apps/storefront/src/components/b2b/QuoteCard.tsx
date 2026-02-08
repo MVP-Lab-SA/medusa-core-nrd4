@@ -1,25 +1,39 @@
 import { Link } from "@tanstack/react-router"
 import { DocumentText } from "@medusajs/icons"
-import type { Quote } from "../../lib/mock/marketplace"
+
+interface Quote {
+  id: string
+  status: 'draft' | 'pending' | 'approved' | 'rejected' | 'expired' | 'converted' | 'submitted' | 'reviewing' | 'quoted' | 'accepted'
+  items: Array<{ id: string }>
+  total: number
+  currency: string
+  createdAt: string
+  expiresAt?: string
+}
 
 interface QuoteCardProps {
   quote: Quote
   countryCode: string
 }
 
-const statusColors = {
+const statusColors: Record<string, string> = {
   draft: "bg-gray-100 text-gray-700",
   pending: "bg-yellow-100 text-yellow-700",
   approved: "bg-green-100 text-green-700",
   rejected: "bg-red-100 text-red-700",
   expired: "bg-gray-100 text-gray-500",
   converted: "bg-blue-100 text-blue-700",
+  submitted: "bg-yellow-100 text-yellow-700",
+  reviewing: "bg-blue-100 text-blue-700",
+  quoted: "bg-purple-100 text-purple-700",
+  accepted: "bg-green-100 text-green-700",
 }
 
 export function QuoteCard({ quote, countryCode }: QuoteCardProps) {
   return (
     <Link
-      to={`/${countryCode}/business/quotes/${quote.id}`}
+      to={"/$countryCode/business/quotes/$quoteId" as any}
+      params={{ countryCode, quoteId: quote.id } as any}
       className="block bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
     >
       <div className="flex items-start justify-between mb-3">
@@ -34,7 +48,7 @@ export function QuoteCard({ quote, countryCode }: QuoteCardProps) {
             </p>
           </div>
         </div>
-        <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColors[quote.status]}`}>
+        <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColors[quote.status] || 'bg-gray-100 text-gray-700'}`}>
           {quote.status.charAt(0).toUpperCase() + quote.status.slice(1)}
         </span>
       </div>

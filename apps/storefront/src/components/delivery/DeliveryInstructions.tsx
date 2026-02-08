@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Home, Building, MapPin, Check } from "@medusajs/icons"
+import { Buildings, MapPin, Check } from "@medusajs/icons"
 
 interface DeliveryInstructionsProps {
   currentInstructions?: string
@@ -8,11 +8,11 @@ interface DeliveryInstructionsProps {
 }
 
 const locationOptions = [
-  { id: 'front_door', label: 'Front Door', icon: Home },
-  { id: 'back_door', label: 'Back Door', icon: Home },
-  { id: 'side_door', label: 'Side Door', icon: Home },
-  { id: 'mailroom', label: 'Mailroom/Lobby', icon: Building },
-  { id: 'concierge', label: 'With Concierge', icon: Building },
+  { id: 'front_door', label: 'Front Door', icon: Buildings },
+  { id: 'back_door', label: 'Back Door', icon: Buildings },
+  { id: 'side_door', label: 'Side Door', icon: Buildings },
+  { id: 'mailroom', label: 'Mailroom/Lobby', icon: Buildings },
+  { id: 'concierge', label: 'With Concierge', icon: Buildings },
   { id: 'neighbor', label: 'With Neighbor', icon: MapPin },
   { id: 'safe_place', label: 'Safe Place', icon: MapPin },
 ]

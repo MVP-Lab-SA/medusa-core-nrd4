@@ -1,13 +1,27 @@
 import { useState } from "react"
-import { XMark, InformationCircle, ExclamationCircle, CheckCircle } from "@medusajs/icons"
-import type { Announcement } from "../../lib/mock/payloadcms"
+import { XMark, InformationCircle, ExclamationCircle, CheckCircle, Sparkles } from "@medusajs/icons"
+
+interface Announcement {
+  id: string
+  title: string
+  content: string
+  type: 'info' | 'warning' | 'success' | 'error' | 'promo'
+  link?: string
+  dismissible?: boolean
+}
 
 interface AnnouncementBannerProps {
   announcement: Announcement
   onDismiss?: (id: string) => void
 }
 
-const typeConfig = {
+const typeConfig: Record<string, {
+  bg: string
+  border: string
+  text: string
+  icon: typeof InformationCircle
+  iconColor: string
+}> = {
   info: {
     bg: "bg-blue-50",
     border: "border-blue-200",
@@ -36,11 +50,18 @@ const typeConfig = {
     icon: ExclamationCircle,
     iconColor: "text-red-500",
   },
+  promo: {
+    bg: "bg-purple-50",
+    border: "border-purple-200",
+    text: "text-purple-800",
+    icon: Sparkles,
+    iconColor: "text-purple-500",
+  },
 }
 
 export function AnnouncementBanner({ announcement, onDismiss }: AnnouncementBannerProps) {
   const [isDismissed, setIsDismissed] = useState(false)
-  const config = typeConfig[announcement.type]
+  const config = typeConfig[announcement.type] || typeConfig.info
   const Icon = config.icon
 
   if (isDismissed) return null

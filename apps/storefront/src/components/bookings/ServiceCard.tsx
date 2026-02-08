@@ -1,6 +1,17 @@
 import { Link } from "@tanstack/react-router"
 import { Clock, MapPin } from "@medusajs/icons"
-import type { ServiceProduct } from "../../lib/mock/marketplace"
+
+interface ServiceProduct {
+  id: string
+  title: string
+  handle: string
+  description: string
+  duration: number
+  price: number
+  currency: string
+  images?: string[]
+  location?: string
+}
 
 interface ServiceCardProps {
   service: ServiceProduct
@@ -8,16 +19,19 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ service, countryCode }: ServiceCardProps) {
+  const thumbnail = service.images?.[0]
+  
   return (
     <Link
-      to={`/${countryCode}/services/${service.handle}`}
+      to={"/$countryCode/services/$handle" as any}
+      params={{ countryCode, handle: service.handle } as any}
       className="group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
     >
       <div className="aspect-[16/9] bg-gray-100 overflow-hidden">
-        {service.thumbnail ? (
+        {thumbnail ? (
           <img
-            src={service.thumbnail}
-            alt={service.name}
+            src={thumbnail}
+            alt={service.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
@@ -26,7 +40,7 @@ export function ServiceCard({ service, countryCode }: ServiceCardProps) {
       </div>
       <div className="p-4">
         <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
-          {service.name}
+          {service.title}
         </h3>
         <p className="text-sm text-gray-600 line-clamp-2 mb-3">{service.description}</p>
         <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mb-3">
