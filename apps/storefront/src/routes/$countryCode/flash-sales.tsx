@@ -53,7 +53,7 @@ function FlashSalesPage() {
                       <p className="text-white/80 mb-4">{sale.description}</p>
                       <div className="mb-4">
                         <p className="text-sm text-white/70 mb-2">Ends in:</p>
-                        <CountdownTimer endDate={sale.endDate} variant="light" />
+                        <CountdownTimer endDate={sale.endTime} variant="light" />
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-3xl font-bold">Up to {sale.discountPercent}% OFF</span>
@@ -83,7 +83,7 @@ function FlashSalesPage() {
                       <h3 className="text-xl font-bold mb-2">{sale.name}</h3>
                       <p className="text-gray-400 mb-4">{sale.description}</p>
                       <p className="text-sm text-gray-500">
-                        Starts: {new Date(sale.startDate).toLocaleDateString()}
+                        Starts: {new Date(sale.startTime).toLocaleDateString()}
                       </p>
                     </div>
                   ))}

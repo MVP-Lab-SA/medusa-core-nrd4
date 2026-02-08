@@ -307,6 +307,81 @@ export interface WishlistItem {
   inStock: boolean
 }
 
+export interface Bundle {
+  id: string
+  handle: string
+  name: string
+  description: string
+  image: string
+  products: BundleProduct[]
+  originalPrice: number
+  bundlePrice: number
+  savings: number
+  savingsPercent: number
+  currency: string
+  stock: number
+  featured: boolean
+}
+
+export interface BundleProduct {
+  id: string
+  productId: string
+  title: string
+  image: string
+  quantity: number
+  price: number
+}
+
+export interface FlashSale {
+  id: string
+  name: string
+  description: string
+  image: string
+  startTime: string
+  endTime: string
+  discountPercent: number
+  products: FlashSaleProduct[]
+  status: "upcoming" | "active" | "ended"
+}
+
+export interface FlashSaleProduct {
+  id: string
+  productId: string
+  title: string
+  image: string
+  originalPrice: number
+  salePrice: number
+  stock: number
+  sold: number
+  limit: number
+}
+
+export interface ReferralProgram {
+  id: string
+  name: string
+  description: string
+  rewardType: "credit" | "discount" | "points"
+  referrerReward: number
+  refereeReward: number
+  currency: string
+  termsUrl: string
+  active: boolean
+}
+
+export interface Referral {
+  id: string
+  referrerId: string
+  refereeId: string
+  refereeName: string
+  refereeEmail: string
+  status: "pending" | "signed_up" | "first_purchase" | "rewarded"
+  rewardAmount: number
+  rewardCurrency: string
+  createdAt: string
+  convertedAt?: string
+  rewardedAt?: string
+}
+
 // ==================== SEEDED DATA ====================
 
 // Generated Images
@@ -342,6 +417,7 @@ const IMAGES = {
     smartHome: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KGYZR55S15ZZQWJ14CBPW7H6-01KGYZR55SWDFM62K7WG0M0FGC.jpeg",
     security: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KGYZR68BGBJN6KH7C2R68ZN7-01KGYZR68B3CX8JXKR27NWTXAS.jpeg",
   },
+  flashSale: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KGYZR7KVXP1TMCA9CHCWABGW-01KGYZR7KVNKMVKKZV70DVX6N3.jpeg",
   flashSale: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KGYZR7KVXP1TMCA9CHCWABGW-01KGYZR7KVNKMVKKZV70DVX6N3.jpeg",
   products: {
     enviroSense: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KGWY7QZZSD11Q6YGTGT7HG8J-01KGWY7QZZS6Y8V88D8RXX6FHT.jpeg",
@@ -532,6 +608,149 @@ const mockSubscriptionPlans: SubscriptionPlan[] = [
     discount: 35,
     active: true,
     image: IMAGES.bundles.security,
+  },
+]
+
+// Bundles
+const mockBundles: Bundle[] = [
+  {
+    id: "bundle_1",
+    handle: "smart-home-starter-kit",
+    name: "Smart Home Starter Kit",
+    description: "Everything you need to get started with home automation. Perfect for beginners looking to make their home smarter.",
+    image: IMAGES.bundles.smartHome,
+    products: [
+      { id: "bp_1", productId: "prod_01KGWY8KH87T32KHV2W3NSG4Y6", title: "EnviroSense Pro X1", image: IMAGES.products.enviroSense, quantity: 2, price: 129.99 },
+      { id: "bp_2", productId: "prod_01KGWY8KH8SQ4PVHC0SCKKFRHZ", title: "LumiGrid Panel", image: IMAGES.products.lumiGrid, quantity: 4, price: 79.99 },
+    ],
+    originalPrice: 579.94,
+    bundlePrice: 449.99,
+    savings: 129.95,
+    savingsPercent: 22,
+    currency: "USD",
+    stock: 50,
+    featured: true,
+  },
+  {
+    id: "bundle_2",
+    handle: "security-essentials-pack",
+    name: "Security Essentials Pack",
+    description: "Complete home security solution with professional-grade cameras and sensors to keep your family safe.",
+    image: IMAGES.bundles.security,
+    products: [
+      { id: "bp_3", productId: "prod_01KGWY8KH89M5P8FTGKKVGT9RN", title: "SecureDome 360", image: IMAGES.products.secureDome, quantity: 2, price: 249.99 },
+      { id: "bp_4", productId: "prod_01KGWY8KH87T32KHV2W3NSG4Y6", title: "EnviroSense Pro X1", image: IMAGES.products.enviroSense, quantity: 3, price: 129.99 },
+    ],
+    originalPrice: 889.95,
+    bundlePrice: 699.99,
+    savings: 189.96,
+    savingsPercent: 21,
+    currency: "USD",
+    stock: 30,
+    featured: true,
+  },
+  {
+    id: "bundle_3",
+    handle: "whole-home-automation",
+    name: "Whole Home Automation",
+    description: "The complete smart home experience. Control lighting, security, and environment from anywhere.",
+    image: IMAGES.services.installation,
+    products: [
+      { id: "bp_5", productId: "prod_01KGWY8KH87T32KHV2W3NSG4Y6", title: "EnviroSense Pro X1", image: IMAGES.products.enviroSense, quantity: 4, price: 129.99 },
+      { id: "bp_6", productId: "prod_01KGWY8KH8SQ4PVHC0SCKKFRHZ", title: "LumiGrid Panel", image: IMAGES.products.lumiGrid, quantity: 8, price: 79.99 },
+      { id: "bp_7", productId: "prod_01KGWY8KH89M5P8FTGKKVGT9RN", title: "SecureDome 360", image: IMAGES.products.secureDome, quantity: 2, price: 249.99 },
+    ],
+    originalPrice: 1659.86,
+    bundlePrice: 1299.99,
+    savings: 359.87,
+    savingsPercent: 22,
+    currency: "USD",
+    stock: 15,
+    featured: false,
+  },
+]
+
+// Flash Sales
+const mockFlashSales: FlashSale[] = [
+  {
+    id: "flash_1",
+    name: "Weekend Smart Home Blitz",
+    description: "48-hour flash sale on our most popular smart home devices. Don't miss these incredible deals!",
+    image: IMAGES.flashSale,
+    startTime: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+    endTime: new Date(Date.now() + 36 * 60 * 60 * 1000).toISOString(),
+    discountPercent: 30,
+    products: [
+      { id: "fsp_1", productId: "prod_01KGWY8KH87T32KHV2W3NSG4Y6", title: "EnviroSense Pro X1", image: IMAGES.products.enviroSense, originalPrice: 129.99, salePrice: 90.99, stock: 100, sold: 67, limit: 2 },
+      { id: "fsp_2", productId: "prod_01KGWY8KH8SQ4PVHC0SCKKFRHZ", title: "LumiGrid Panel", image: IMAGES.products.lumiGrid, originalPrice: 79.99, salePrice: 55.99, stock: 200, sold: 145, limit: 5 },
+    ],
+    status: "active",
+  },
+  {
+    id: "flash_2",
+    name: "Security Camera Clearance",
+    description: "Limited time offer on security cameras. Protect your home for less!",
+    image: IMAGES.bundles.security,
+    startTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    endTime: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+    discountPercent: 25,
+    products: [
+      { id: "fsp_3", productId: "prod_01KGWY8KH89M5P8FTGKKVGT9RN", title: "SecureDome 360", image: IMAGES.products.secureDome, originalPrice: 249.99, salePrice: 187.49, stock: 50, sold: 0, limit: 2 },
+    ],
+    status: "upcoming",
+  },
+]
+
+// Referral Program
+const mockReferralProgram: ReferralProgram = {
+  id: "ref_program_1",
+  name: "Smart Friends Rewards",
+  description: "Share the smart home love! Give your friends $25 off their first order and earn $25 in store credit when they make a purchase.",
+  rewardType: "credit",
+  referrerReward: 25,
+  refereeReward: 25,
+  currency: "USD",
+  termsUrl: "/terms/referral-program",
+  active: true,
+}
+
+// Referrals
+const mockReferrals: Referral[] = [
+  {
+    id: "ref_1",
+    referrerId: "cust_demo",
+    refereeId: "cust_friend_1",
+    refereeName: "Alex Johnson",
+    refereeEmail: "alex.j@example.com",
+    status: "rewarded",
+    rewardAmount: 25,
+    rewardCurrency: "USD",
+    createdAt: pastDate(30).toISOString(),
+    convertedAt: pastDate(28).toISOString(),
+    rewardedAt: pastDate(25).toISOString(),
+  },
+  {
+    id: "ref_2",
+    referrerId: "cust_demo",
+    refereeId: "cust_friend_2",
+    refereeName: "Maria Garcia",
+    refereeEmail: "maria.g@example.com",
+    status: "first_purchase",
+    rewardAmount: 25,
+    rewardCurrency: "USD",
+    createdAt: pastDate(14).toISOString(),
+    convertedAt: pastDate(10).toISOString(),
+  },
+  {
+    id: "ref_3",
+    referrerId: "cust_demo",
+    refereeId: "",
+    refereeName: "",
+    refereeEmail: "pending@example.com",
+    status: "pending",
+    rewardAmount: 25,
+    rewardCurrency: "USD",
+    createdAt: pastDate(3).toISOString(),
   },
 ]
 
@@ -1383,5 +1602,41 @@ export const marketplaceService = {
     }
 
     return null
+  },
+
+  // ==================== BUNDLES ====================
+
+  async getBundles(): Promise<Bundle[]> {
+    await mockDelay(300)
+    return mockBundles
+  },
+
+  async getBundle(handle: string): Promise<Bundle | null> {
+    await mockDelay(200)
+    return mockBundles.find((b) => b.handle === handle) || null
+  },
+
+  // ==================== FLASH SALES ====================
+
+  async getFlashSales(): Promise<FlashSale[]> {
+    await mockDelay(300)
+    return mockFlashSales
+  },
+
+  async getFlashSale(id: string): Promise<FlashSale | null> {
+    await mockDelay(200)
+    return mockFlashSales.find((s) => s.id === id) || null
+  },
+
+  // ==================== REFERRALS ====================
+
+  async getReferralProgram(): Promise<ReferralProgram> {
+    await mockDelay(200)
+    return mockReferralProgram
+  },
+
+  async getReferrals(customerId: string): Promise<Referral[]> {
+    await mockDelay(300)
+    return mockReferrals.filter((r) => r.referrerId === customerId)
   },
 }

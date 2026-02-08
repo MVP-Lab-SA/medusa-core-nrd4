@@ -409,3 +409,54 @@ export function useSharedWishlist(shareToken: string) {
     enabled: !!shareToken,
   })
 }
+
+// ==================== BUNDLES ====================
+
+export function useBundles() {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "bundles"] as const,
+    queryFn: () => marketplaceService.getBundles(),
+  })
+}
+
+export function useBundle(handle: string) {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "bundle", handle] as const,
+    queryFn: () => marketplaceService.getBundle(handle),
+    enabled: !!handle,
+  })
+}
+
+// ==================== FLASH SALES ====================
+
+export function useFlashSales() {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "flash-sales"] as const,
+    queryFn: () => marketplaceService.getFlashSales(),
+  })
+}
+
+export function useFlashSale(id: string) {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "flash-sale", id] as const,
+    queryFn: () => marketplaceService.getFlashSale(id),
+    enabled: !!id,
+  })
+}
+
+// ==================== REFERRALS ====================
+
+export function useReferralProgram() {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "referral-program"] as const,
+    queryFn: () => marketplaceService.getReferralProgram(),
+  })
+}
+
+export function useReferrals(customerId: string) {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "referrals", customerId] as const,
+    queryFn: () => marketplaceService.getReferrals(customerId),
+    enabled: !!customerId,
+  })
+}
