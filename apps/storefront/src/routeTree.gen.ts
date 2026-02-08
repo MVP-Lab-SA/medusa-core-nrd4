@@ -24,11 +24,13 @@ import { Route as CountryCodeSubscriptionsRouteImport } from './routes/$countryC
 import { Route as CountryCodeStoresRouteImport } from './routes/$countryCode/stores'
 import { Route as CountryCodeStoreRouteImport } from './routes/$countryCode/store'
 import { Route as CountryCodeReturnsRouteImport } from './routes/$countryCode/returns'
+import { Route as CountryCodeReferralsRouteImport } from './routes/$countryCode/referrals'
 import { Route as CountryCodePrivacyRouteImport } from './routes/$countryCode/privacy'
 import { Route as CountryCodeLoyaltyRouteImport } from './routes/$countryCode/loyalty'
 import { Route as CountryCodeLookbookRouteImport } from './routes/$countryCode/lookbook'
 import { Route as CountryCodeHelpRouteImport } from './routes/$countryCode/help'
 import { Route as CountryCodeGiftCardsRouteImport } from './routes/$countryCode/gift-cards'
+import { Route as CountryCodeFlashSalesRouteImport } from './routes/$countryCode/flash-sales'
 import { Route as CountryCodeFaqRouteImport } from './routes/$countryCode/faq'
 import { Route as CountryCodeContactRouteImport } from './routes/$countryCode/contact'
 import { Route as CountryCodeCompareRouteImport } from './routes/$countryCode/compare'
@@ -36,23 +38,43 @@ import { Route as CountryCodeCheckoutRouteImport } from './routes/$countryCode/c
 import { Route as CountryCodeCartRouteImport } from './routes/$countryCode/cart'
 import { Route as CountryCodeBlogRouteImport } from './routes/$countryCode/blog'
 import { Route as CountryCodeAboutRouteImport } from './routes/$countryCode/about'
+import { Route as CountryCodeVerifyIndexRouteImport } from './routes/$countryCode/verify/index'
+import { Route as CountryCodeVenuesIndexRouteImport } from './routes/$countryCode/venues/index'
 import { Route as CountryCodeVendorsIndexRouteImport } from './routes/$countryCode/vendors/index'
 import { Route as CountryCodeServicesIndexRouteImport } from './routes/$countryCode/services/index'
+import { Route as CountryCodeProvidersIndexRouteImport } from './routes/$countryCode/providers/index'
+import { Route as CountryCodeEventsIndexRouteImport } from './routes/$countryCode/events/index'
+import { Route as CountryCodeBusinessIndexRouteImport } from './routes/$countryCode/business/index'
+import { Route as CountryCodeBundlesIndexRouteImport } from './routes/$countryCode/bundles/index'
 import { Route as CountryCodeBlogIndexRouteImport } from './routes/$countryCode/blog/index'
 import { Route as CountryCodeAccountIndexRouteImport } from './routes/$countryCode/account/index'
+import { Route as CountryCodeVerifyKycRouteImport } from './routes/$countryCode/verify/kyc'
 import { Route as CountryCodeVendorsHandleRouteImport } from './routes/$countryCode/vendors/$handle'
 import { Route as CountryCodeServicesHandleRouteImport } from './routes/$countryCode/services/$handle'
 import { Route as CountryCodeProductsHandleRouteImport } from './routes/$countryCode/products/$handle'
 import { Route as CountryCodeOrdersOrderIdRouteImport } from './routes/$countryCode/orders/$orderId'
 import { Route as CountryCodeCategoriesHandleRouteImport } from './routes/$countryCode/categories/$handle'
+import { Route as CountryCodeBusinessRegisterRouteImport } from './routes/$countryCode/business/register'
+import { Route as CountryCodeAccountWishlistsRouteImport } from './routes/$countryCode/account/wishlists'
 import { Route as CountryCodeAccountWalletRouteImport } from './routes/$countryCode/account/wallet'
+import { Route as CountryCodeAccountTransactionsRouteImport } from './routes/$countryCode/account/transactions'
+import { Route as CountryCodeAccountTaxCertificatesRouteImport } from './routes/$countryCode/account/tax-certificates'
+import { Route as CountryCodeAccountSubscriptionsRouteImport } from './routes/$countryCode/account/subscriptions'
+import { Route as CountryCodeAccountStatementsRouteImport } from './routes/$countryCode/account/statements'
 import { Route as CountryCodeAccountSettingsRouteImport } from './routes/$countryCode/account/settings'
 import { Route as CountryCodeAccountRegisterRouteImport } from './routes/$countryCode/account/register'
+import { Route as CountryCodeAccountReferralsRouteImport } from './routes/$countryCode/account/referrals'
+import { Route as CountryCodeAccountPaymentMethodsRouteImport } from './routes/$countryCode/account/payment-methods'
 import { Route as CountryCodeAccountLoyaltyRouteImport } from './routes/$countryCode/account/loyalty'
 import { Route as CountryCodeAccountLoginRouteImport } from './routes/$countryCode/account/login'
+import { Route as CountryCodeAccountLicensesRouteImport } from './routes/$countryCode/account/licenses'
+import { Route as CountryCodeAccountInstallmentsRouteImport } from './routes/$countryCode/account/installments'
 import { Route as CountryCodeAccountIdentityRouteImport } from './routes/$countryCode/account/identity'
+import { Route as CountryCodeAccountDownloadsRouteImport } from './routes/$countryCode/account/downloads'
+import { Route as CountryCodeAccountDeliveriesRouteImport } from './routes/$countryCode/account/deliveries'
 import { Route as CountryCodeAccountCreditsRouteImport } from './routes/$countryCode/account/credits'
 import { Route as CountryCodeAccountBusinessRouteImport } from './routes/$countryCode/account/business'
+import { Route as CountryCodeAccountBookingsRouteImport } from './routes/$countryCode/account/bookings'
 import { Route as CountryCodeOrderOrderIdConfirmedRouteImport } from './routes/$countryCode/order/$orderId/confirmed'
 
 const StoreRoute = StoreRouteImport.update({
@@ -131,6 +153,11 @@ const CountryCodeReturnsRoute = CountryCodeReturnsRouteImport.update({
   path: '/returns',
   getParentRoute: () => CountryCodeRoute,
 } as any)
+const CountryCodeReferralsRoute = CountryCodeReferralsRouteImport.update({
+  id: '/referrals',
+  path: '/referrals',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
 const CountryCodePrivacyRoute = CountryCodePrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -154,6 +181,11 @@ const CountryCodeHelpRoute = CountryCodeHelpRouteImport.update({
 const CountryCodeGiftCardsRoute = CountryCodeGiftCardsRouteImport.update({
   id: '/gift-cards',
   path: '/gift-cards',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const CountryCodeFlashSalesRoute = CountryCodeFlashSalesRouteImport.update({
+  id: '/flash-sales',
+  path: '/flash-sales',
   getParentRoute: () => CountryCodeRoute,
 } as any)
 const CountryCodeFaqRoute = CountryCodeFaqRouteImport.update({
@@ -191,6 +223,16 @@ const CountryCodeAboutRoute = CountryCodeAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => CountryCodeRoute,
 } as any)
+const CountryCodeVerifyIndexRoute = CountryCodeVerifyIndexRouteImport.update({
+  id: '/verify/',
+  path: '/verify/',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const CountryCodeVenuesIndexRoute = CountryCodeVenuesIndexRouteImport.update({
+  id: '/venues/',
+  path: '/venues/',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
 const CountryCodeVendorsIndexRoute = CountryCodeVendorsIndexRouteImport.update({
   id: '/vendors/',
   path: '/vendors/',
@@ -202,6 +244,28 @@ const CountryCodeServicesIndexRoute =
     path: '/services/',
     getParentRoute: () => CountryCodeRoute,
   } as any)
+const CountryCodeProvidersIndexRoute =
+  CountryCodeProvidersIndexRouteImport.update({
+    id: '/providers/',
+    path: '/providers/',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeEventsIndexRoute = CountryCodeEventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const CountryCodeBusinessIndexRoute =
+  CountryCodeBusinessIndexRouteImport.update({
+    id: '/business/',
+    path: '/business/',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeBundlesIndexRoute = CountryCodeBundlesIndexRouteImport.update({
+  id: '/bundles/',
+  path: '/bundles/',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
 const CountryCodeBlogIndexRoute = CountryCodeBlogIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -210,6 +274,11 @@ const CountryCodeBlogIndexRoute = CountryCodeBlogIndexRouteImport.update({
 const CountryCodeAccountIndexRoute = CountryCodeAccountIndexRouteImport.update({
   id: '/account/',
   path: '/account/',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const CountryCodeVerifyKycRoute = CountryCodeVerifyKycRouteImport.update({
+  id: '/verify/kyc',
+  path: '/verify/kyc',
   getParentRoute: () => CountryCodeRoute,
 } as any)
 const CountryCodeVendorsHandleRoute =
@@ -242,10 +311,46 @@ const CountryCodeCategoriesHandleRoute =
     path: '/categories/$handle',
     getParentRoute: () => CountryCodeRoute,
   } as any)
+const CountryCodeBusinessRegisterRoute =
+  CountryCodeBusinessRegisterRouteImport.update({
+    id: '/business/register',
+    path: '/business/register',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeAccountWishlistsRoute =
+  CountryCodeAccountWishlistsRouteImport.update({
+    id: '/account/wishlists',
+    path: '/account/wishlists',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
 const CountryCodeAccountWalletRoute =
   CountryCodeAccountWalletRouteImport.update({
     id: '/account/wallet',
     path: '/account/wallet',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeAccountTransactionsRoute =
+  CountryCodeAccountTransactionsRouteImport.update({
+    id: '/account/transactions',
+    path: '/account/transactions',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeAccountTaxCertificatesRoute =
+  CountryCodeAccountTaxCertificatesRouteImport.update({
+    id: '/account/tax-certificates',
+    path: '/account/tax-certificates',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeAccountSubscriptionsRoute =
+  CountryCodeAccountSubscriptionsRouteImport.update({
+    id: '/account/subscriptions',
+    path: '/account/subscriptions',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeAccountStatementsRoute =
+  CountryCodeAccountStatementsRouteImport.update({
+    id: '/account/statements',
+    path: '/account/statements',
     getParentRoute: () => CountryCodeRoute,
   } as any)
 const CountryCodeAccountSettingsRoute =
@@ -260,6 +365,18 @@ const CountryCodeAccountRegisterRoute =
     path: '/account/register',
     getParentRoute: () => CountryCodeRoute,
   } as any)
+const CountryCodeAccountReferralsRoute =
+  CountryCodeAccountReferralsRouteImport.update({
+    id: '/account/referrals',
+    path: '/account/referrals',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeAccountPaymentMethodsRoute =
+  CountryCodeAccountPaymentMethodsRouteImport.update({
+    id: '/account/payment-methods',
+    path: '/account/payment-methods',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
 const CountryCodeAccountLoyaltyRoute =
   CountryCodeAccountLoyaltyRouteImport.update({
     id: '/account/loyalty',
@@ -271,10 +388,34 @@ const CountryCodeAccountLoginRoute = CountryCodeAccountLoginRouteImport.update({
   path: '/account/login',
   getParentRoute: () => CountryCodeRoute,
 } as any)
+const CountryCodeAccountLicensesRoute =
+  CountryCodeAccountLicensesRouteImport.update({
+    id: '/account/licenses',
+    path: '/account/licenses',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeAccountInstallmentsRoute =
+  CountryCodeAccountInstallmentsRouteImport.update({
+    id: '/account/installments',
+    path: '/account/installments',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
 const CountryCodeAccountIdentityRoute =
   CountryCodeAccountIdentityRouteImport.update({
     id: '/account/identity',
     path: '/account/identity',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeAccountDownloadsRoute =
+  CountryCodeAccountDownloadsRouteImport.update({
+    id: '/account/downloads',
+    path: '/account/downloads',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeAccountDeliveriesRoute =
+  CountryCodeAccountDeliveriesRouteImport.update({
+    id: '/account/deliveries',
+    path: '/account/deliveries',
     getParentRoute: () => CountryCodeRoute,
   } as any)
 const CountryCodeAccountCreditsRoute =
@@ -287,6 +428,12 @@ const CountryCodeAccountBusinessRoute =
   CountryCodeAccountBusinessRouteImport.update({
     id: '/account/business',
     path: '/account/business',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeAccountBookingsRoute =
+  CountryCodeAccountBookingsRouteImport.update({
+    id: '/account/bookings',
+    path: '/account/bookings',
     getParentRoute: () => CountryCodeRoute,
   } as any)
 const CountryCodeOrderOrderIdConfirmedRoute =
@@ -311,11 +458,13 @@ export interface FileRoutesByFullPath {
   '/$countryCode/compare': typeof CountryCodeCompareRoute
   '/$countryCode/contact': typeof CountryCodeContactRoute
   '/$countryCode/faq': typeof CountryCodeFaqRoute
+  '/$countryCode/flash-sales': typeof CountryCodeFlashSalesRoute
   '/$countryCode/gift-cards': typeof CountryCodeGiftCardsRoute
   '/$countryCode/help': typeof CountryCodeHelpRoute
   '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
   '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
+  '/$countryCode/referrals': typeof CountryCodeReferralsRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
   '/$countryCode/stores': typeof CountryCodeStoresRoute
@@ -324,23 +473,43 @@ export interface FileRoutesByFullPath {
   '/$countryCode/track': typeof CountryCodeTrackRoute
   '/$countryCode/wishlist': typeof CountryCodeWishlistRoute
   '/$countryCode/': typeof CountryCodeIndexRoute
+  '/$countryCode/account/bookings': typeof CountryCodeAccountBookingsRoute
   '/$countryCode/account/business': typeof CountryCodeAccountBusinessRoute
   '/$countryCode/account/credits': typeof CountryCodeAccountCreditsRoute
+  '/$countryCode/account/deliveries': typeof CountryCodeAccountDeliveriesRoute
+  '/$countryCode/account/downloads': typeof CountryCodeAccountDownloadsRoute
   '/$countryCode/account/identity': typeof CountryCodeAccountIdentityRoute
+  '/$countryCode/account/installments': typeof CountryCodeAccountInstallmentsRoute
+  '/$countryCode/account/licenses': typeof CountryCodeAccountLicensesRoute
   '/$countryCode/account/login': typeof CountryCodeAccountLoginRoute
   '/$countryCode/account/loyalty': typeof CountryCodeAccountLoyaltyRoute
+  '/$countryCode/account/payment-methods': typeof CountryCodeAccountPaymentMethodsRoute
+  '/$countryCode/account/referrals': typeof CountryCodeAccountReferralsRoute
   '/$countryCode/account/register': typeof CountryCodeAccountRegisterRoute
   '/$countryCode/account/settings': typeof CountryCodeAccountSettingsRoute
+  '/$countryCode/account/statements': typeof CountryCodeAccountStatementsRoute
+  '/$countryCode/account/subscriptions': typeof CountryCodeAccountSubscriptionsRoute
+  '/$countryCode/account/tax-certificates': typeof CountryCodeAccountTaxCertificatesRoute
+  '/$countryCode/account/transactions': typeof CountryCodeAccountTransactionsRoute
   '/$countryCode/account/wallet': typeof CountryCodeAccountWalletRoute
+  '/$countryCode/account/wishlists': typeof CountryCodeAccountWishlistsRoute
+  '/$countryCode/business/register': typeof CountryCodeBusinessRegisterRoute
   '/$countryCode/categories/$handle': typeof CountryCodeCategoriesHandleRoute
   '/$countryCode/orders/$orderId': typeof CountryCodeOrdersOrderIdRoute
   '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRoute
   '/$countryCode/services/$handle': typeof CountryCodeServicesHandleRoute
   '/$countryCode/vendors/$handle': typeof CountryCodeVendorsHandleRoute
+  '/$countryCode/verify/kyc': typeof CountryCodeVerifyKycRoute
   '/$countryCode/account/': typeof CountryCodeAccountIndexRoute
   '/$countryCode/blog/': typeof CountryCodeBlogIndexRoute
+  '/$countryCode/bundles/': typeof CountryCodeBundlesIndexRoute
+  '/$countryCode/business/': typeof CountryCodeBusinessIndexRoute
+  '/$countryCode/events/': typeof CountryCodeEventsIndexRoute
+  '/$countryCode/providers/': typeof CountryCodeProvidersIndexRoute
   '/$countryCode/services/': typeof CountryCodeServicesIndexRoute
   '/$countryCode/vendors/': typeof CountryCodeVendorsIndexRoute
+  '/$countryCode/venues/': typeof CountryCodeVenuesIndexRoute
+  '/$countryCode/verify/': typeof CountryCodeVerifyIndexRoute
   '/$countryCode/order/$orderId/confirmed': typeof CountryCodeOrderOrderIdConfirmedRoute
 }
 export interface FileRoutesByTo {
@@ -356,11 +525,13 @@ export interface FileRoutesByTo {
   '/$countryCode/compare': typeof CountryCodeCompareRoute
   '/$countryCode/contact': typeof CountryCodeContactRoute
   '/$countryCode/faq': typeof CountryCodeFaqRoute
+  '/$countryCode/flash-sales': typeof CountryCodeFlashSalesRoute
   '/$countryCode/gift-cards': typeof CountryCodeGiftCardsRoute
   '/$countryCode/help': typeof CountryCodeHelpRoute
   '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
   '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
+  '/$countryCode/referrals': typeof CountryCodeReferralsRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
   '/$countryCode/stores': typeof CountryCodeStoresRoute
@@ -369,23 +540,43 @@ export interface FileRoutesByTo {
   '/$countryCode/track': typeof CountryCodeTrackRoute
   '/$countryCode/wishlist': typeof CountryCodeWishlistRoute
   '/$countryCode': typeof CountryCodeIndexRoute
+  '/$countryCode/account/bookings': typeof CountryCodeAccountBookingsRoute
   '/$countryCode/account/business': typeof CountryCodeAccountBusinessRoute
   '/$countryCode/account/credits': typeof CountryCodeAccountCreditsRoute
+  '/$countryCode/account/deliveries': typeof CountryCodeAccountDeliveriesRoute
+  '/$countryCode/account/downloads': typeof CountryCodeAccountDownloadsRoute
   '/$countryCode/account/identity': typeof CountryCodeAccountIdentityRoute
+  '/$countryCode/account/installments': typeof CountryCodeAccountInstallmentsRoute
+  '/$countryCode/account/licenses': typeof CountryCodeAccountLicensesRoute
   '/$countryCode/account/login': typeof CountryCodeAccountLoginRoute
   '/$countryCode/account/loyalty': typeof CountryCodeAccountLoyaltyRoute
+  '/$countryCode/account/payment-methods': typeof CountryCodeAccountPaymentMethodsRoute
+  '/$countryCode/account/referrals': typeof CountryCodeAccountReferralsRoute
   '/$countryCode/account/register': typeof CountryCodeAccountRegisterRoute
   '/$countryCode/account/settings': typeof CountryCodeAccountSettingsRoute
+  '/$countryCode/account/statements': typeof CountryCodeAccountStatementsRoute
+  '/$countryCode/account/subscriptions': typeof CountryCodeAccountSubscriptionsRoute
+  '/$countryCode/account/tax-certificates': typeof CountryCodeAccountTaxCertificatesRoute
+  '/$countryCode/account/transactions': typeof CountryCodeAccountTransactionsRoute
   '/$countryCode/account/wallet': typeof CountryCodeAccountWalletRoute
+  '/$countryCode/account/wishlists': typeof CountryCodeAccountWishlistsRoute
+  '/$countryCode/business/register': typeof CountryCodeBusinessRegisterRoute
   '/$countryCode/categories/$handle': typeof CountryCodeCategoriesHandleRoute
   '/$countryCode/orders/$orderId': typeof CountryCodeOrdersOrderIdRoute
   '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRoute
   '/$countryCode/services/$handle': typeof CountryCodeServicesHandleRoute
   '/$countryCode/vendors/$handle': typeof CountryCodeVendorsHandleRoute
+  '/$countryCode/verify/kyc': typeof CountryCodeVerifyKycRoute
   '/$countryCode/account': typeof CountryCodeAccountIndexRoute
   '/$countryCode/blog': typeof CountryCodeBlogIndexRoute
+  '/$countryCode/bundles': typeof CountryCodeBundlesIndexRoute
+  '/$countryCode/business': typeof CountryCodeBusinessIndexRoute
+  '/$countryCode/events': typeof CountryCodeEventsIndexRoute
+  '/$countryCode/providers': typeof CountryCodeProvidersIndexRoute
   '/$countryCode/services': typeof CountryCodeServicesIndexRoute
   '/$countryCode/vendors': typeof CountryCodeVendorsIndexRoute
+  '/$countryCode/venues': typeof CountryCodeVenuesIndexRoute
+  '/$countryCode/verify': typeof CountryCodeVerifyIndexRoute
   '/$countryCode/order/$orderId/confirmed': typeof CountryCodeOrderOrderIdConfirmedRoute
 }
 export interface FileRoutesById {
@@ -404,11 +595,13 @@ export interface FileRoutesById {
   '/$countryCode/compare': typeof CountryCodeCompareRoute
   '/$countryCode/contact': typeof CountryCodeContactRoute
   '/$countryCode/faq': typeof CountryCodeFaqRoute
+  '/$countryCode/flash-sales': typeof CountryCodeFlashSalesRoute
   '/$countryCode/gift-cards': typeof CountryCodeGiftCardsRoute
   '/$countryCode/help': typeof CountryCodeHelpRoute
   '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
   '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
+  '/$countryCode/referrals': typeof CountryCodeReferralsRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
   '/$countryCode/stores': typeof CountryCodeStoresRoute
@@ -417,23 +610,43 @@ export interface FileRoutesById {
   '/$countryCode/track': typeof CountryCodeTrackRoute
   '/$countryCode/wishlist': typeof CountryCodeWishlistRoute
   '/$countryCode/': typeof CountryCodeIndexRoute
+  '/$countryCode/account/bookings': typeof CountryCodeAccountBookingsRoute
   '/$countryCode/account/business': typeof CountryCodeAccountBusinessRoute
   '/$countryCode/account/credits': typeof CountryCodeAccountCreditsRoute
+  '/$countryCode/account/deliveries': typeof CountryCodeAccountDeliveriesRoute
+  '/$countryCode/account/downloads': typeof CountryCodeAccountDownloadsRoute
   '/$countryCode/account/identity': typeof CountryCodeAccountIdentityRoute
+  '/$countryCode/account/installments': typeof CountryCodeAccountInstallmentsRoute
+  '/$countryCode/account/licenses': typeof CountryCodeAccountLicensesRoute
   '/$countryCode/account/login': typeof CountryCodeAccountLoginRoute
   '/$countryCode/account/loyalty': typeof CountryCodeAccountLoyaltyRoute
+  '/$countryCode/account/payment-methods': typeof CountryCodeAccountPaymentMethodsRoute
+  '/$countryCode/account/referrals': typeof CountryCodeAccountReferralsRoute
   '/$countryCode/account/register': typeof CountryCodeAccountRegisterRoute
   '/$countryCode/account/settings': typeof CountryCodeAccountSettingsRoute
+  '/$countryCode/account/statements': typeof CountryCodeAccountStatementsRoute
+  '/$countryCode/account/subscriptions': typeof CountryCodeAccountSubscriptionsRoute
+  '/$countryCode/account/tax-certificates': typeof CountryCodeAccountTaxCertificatesRoute
+  '/$countryCode/account/transactions': typeof CountryCodeAccountTransactionsRoute
   '/$countryCode/account/wallet': typeof CountryCodeAccountWalletRoute
+  '/$countryCode/account/wishlists': typeof CountryCodeAccountWishlistsRoute
+  '/$countryCode/business/register': typeof CountryCodeBusinessRegisterRoute
   '/$countryCode/categories/$handle': typeof CountryCodeCategoriesHandleRoute
   '/$countryCode/orders/$orderId': typeof CountryCodeOrdersOrderIdRoute
   '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRoute
   '/$countryCode/services/$handle': typeof CountryCodeServicesHandleRoute
   '/$countryCode/vendors/$handle': typeof CountryCodeVendorsHandleRoute
+  '/$countryCode/verify/kyc': typeof CountryCodeVerifyKycRoute
   '/$countryCode/account/': typeof CountryCodeAccountIndexRoute
   '/$countryCode/blog/': typeof CountryCodeBlogIndexRoute
+  '/$countryCode/bundles/': typeof CountryCodeBundlesIndexRoute
+  '/$countryCode/business/': typeof CountryCodeBusinessIndexRoute
+  '/$countryCode/events/': typeof CountryCodeEventsIndexRoute
+  '/$countryCode/providers/': typeof CountryCodeProvidersIndexRoute
   '/$countryCode/services/': typeof CountryCodeServicesIndexRoute
   '/$countryCode/vendors/': typeof CountryCodeVendorsIndexRoute
+  '/$countryCode/venues/': typeof CountryCodeVenuesIndexRoute
+  '/$countryCode/verify/': typeof CountryCodeVerifyIndexRoute
   '/$countryCode/order/$orderId/confirmed': typeof CountryCodeOrderOrderIdConfirmedRoute
 }
 export interface FileRouteTypes {
@@ -453,11 +666,13 @@ export interface FileRouteTypes {
     | '/$countryCode/compare'
     | '/$countryCode/contact'
     | '/$countryCode/faq'
+    | '/$countryCode/flash-sales'
     | '/$countryCode/gift-cards'
     | '/$countryCode/help'
     | '/$countryCode/lookbook'
     | '/$countryCode/loyalty'
     | '/$countryCode/privacy'
+    | '/$countryCode/referrals'
     | '/$countryCode/returns'
     | '/$countryCode/store'
     | '/$countryCode/stores'
@@ -466,23 +681,43 @@ export interface FileRouteTypes {
     | '/$countryCode/track'
     | '/$countryCode/wishlist'
     | '/$countryCode/'
+    | '/$countryCode/account/bookings'
     | '/$countryCode/account/business'
     | '/$countryCode/account/credits'
+    | '/$countryCode/account/deliveries'
+    | '/$countryCode/account/downloads'
     | '/$countryCode/account/identity'
+    | '/$countryCode/account/installments'
+    | '/$countryCode/account/licenses'
     | '/$countryCode/account/login'
     | '/$countryCode/account/loyalty'
+    | '/$countryCode/account/payment-methods'
+    | '/$countryCode/account/referrals'
     | '/$countryCode/account/register'
     | '/$countryCode/account/settings'
+    | '/$countryCode/account/statements'
+    | '/$countryCode/account/subscriptions'
+    | '/$countryCode/account/tax-certificates'
+    | '/$countryCode/account/transactions'
     | '/$countryCode/account/wallet'
+    | '/$countryCode/account/wishlists'
+    | '/$countryCode/business/register'
     | '/$countryCode/categories/$handle'
     | '/$countryCode/orders/$orderId'
     | '/$countryCode/products/$handle'
     | '/$countryCode/services/$handle'
     | '/$countryCode/vendors/$handle'
+    | '/$countryCode/verify/kyc'
     | '/$countryCode/account/'
     | '/$countryCode/blog/'
+    | '/$countryCode/bundles/'
+    | '/$countryCode/business/'
+    | '/$countryCode/events/'
+    | '/$countryCode/providers/'
     | '/$countryCode/services/'
     | '/$countryCode/vendors/'
+    | '/$countryCode/venues/'
+    | '/$countryCode/verify/'
     | '/$countryCode/order/$orderId/confirmed'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -498,11 +733,13 @@ export interface FileRouteTypes {
     | '/$countryCode/compare'
     | '/$countryCode/contact'
     | '/$countryCode/faq'
+    | '/$countryCode/flash-sales'
     | '/$countryCode/gift-cards'
     | '/$countryCode/help'
     | '/$countryCode/lookbook'
     | '/$countryCode/loyalty'
     | '/$countryCode/privacy'
+    | '/$countryCode/referrals'
     | '/$countryCode/returns'
     | '/$countryCode/store'
     | '/$countryCode/stores'
@@ -511,23 +748,43 @@ export interface FileRouteTypes {
     | '/$countryCode/track'
     | '/$countryCode/wishlist'
     | '/$countryCode'
+    | '/$countryCode/account/bookings'
     | '/$countryCode/account/business'
     | '/$countryCode/account/credits'
+    | '/$countryCode/account/deliveries'
+    | '/$countryCode/account/downloads'
     | '/$countryCode/account/identity'
+    | '/$countryCode/account/installments'
+    | '/$countryCode/account/licenses'
     | '/$countryCode/account/login'
     | '/$countryCode/account/loyalty'
+    | '/$countryCode/account/payment-methods'
+    | '/$countryCode/account/referrals'
     | '/$countryCode/account/register'
     | '/$countryCode/account/settings'
+    | '/$countryCode/account/statements'
+    | '/$countryCode/account/subscriptions'
+    | '/$countryCode/account/tax-certificates'
+    | '/$countryCode/account/transactions'
     | '/$countryCode/account/wallet'
+    | '/$countryCode/account/wishlists'
+    | '/$countryCode/business/register'
     | '/$countryCode/categories/$handle'
     | '/$countryCode/orders/$orderId'
     | '/$countryCode/products/$handle'
     | '/$countryCode/services/$handle'
     | '/$countryCode/vendors/$handle'
+    | '/$countryCode/verify/kyc'
     | '/$countryCode/account'
     | '/$countryCode/blog'
+    | '/$countryCode/bundles'
+    | '/$countryCode/business'
+    | '/$countryCode/events'
+    | '/$countryCode/providers'
     | '/$countryCode/services'
     | '/$countryCode/vendors'
+    | '/$countryCode/venues'
+    | '/$countryCode/verify'
     | '/$countryCode/order/$orderId/confirmed'
   id:
     | '__root__'
@@ -545,11 +802,13 @@ export interface FileRouteTypes {
     | '/$countryCode/compare'
     | '/$countryCode/contact'
     | '/$countryCode/faq'
+    | '/$countryCode/flash-sales'
     | '/$countryCode/gift-cards'
     | '/$countryCode/help'
     | '/$countryCode/lookbook'
     | '/$countryCode/loyalty'
     | '/$countryCode/privacy'
+    | '/$countryCode/referrals'
     | '/$countryCode/returns'
     | '/$countryCode/store'
     | '/$countryCode/stores'
@@ -558,23 +817,43 @@ export interface FileRouteTypes {
     | '/$countryCode/track'
     | '/$countryCode/wishlist'
     | '/$countryCode/'
+    | '/$countryCode/account/bookings'
     | '/$countryCode/account/business'
     | '/$countryCode/account/credits'
+    | '/$countryCode/account/deliveries'
+    | '/$countryCode/account/downloads'
     | '/$countryCode/account/identity'
+    | '/$countryCode/account/installments'
+    | '/$countryCode/account/licenses'
     | '/$countryCode/account/login'
     | '/$countryCode/account/loyalty'
+    | '/$countryCode/account/payment-methods'
+    | '/$countryCode/account/referrals'
     | '/$countryCode/account/register'
     | '/$countryCode/account/settings'
+    | '/$countryCode/account/statements'
+    | '/$countryCode/account/subscriptions'
+    | '/$countryCode/account/tax-certificates'
+    | '/$countryCode/account/transactions'
     | '/$countryCode/account/wallet'
+    | '/$countryCode/account/wishlists'
+    | '/$countryCode/business/register'
     | '/$countryCode/categories/$handle'
     | '/$countryCode/orders/$orderId'
     | '/$countryCode/products/$handle'
     | '/$countryCode/services/$handle'
     | '/$countryCode/vendors/$handle'
+    | '/$countryCode/verify/kyc'
     | '/$countryCode/account/'
     | '/$countryCode/blog/'
+    | '/$countryCode/bundles/'
+    | '/$countryCode/business/'
+    | '/$countryCode/events/'
+    | '/$countryCode/providers/'
     | '/$countryCode/services/'
     | '/$countryCode/vendors/'
+    | '/$countryCode/venues/'
+    | '/$countryCode/verify/'
     | '/$countryCode/order/$orderId/confirmed'
   fileRoutesById: FileRoutesById
 }
@@ -695,6 +974,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeReturnsRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/referrals': {
+      id: '/$countryCode/referrals'
+      path: '/referrals'
+      fullPath: '/$countryCode/referrals'
+      preLoaderRoute: typeof CountryCodeReferralsRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/privacy': {
       id: '/$countryCode/privacy'
       path: '/privacy'
@@ -728,6 +1014,13 @@ declare module '@tanstack/react-router' {
       path: '/gift-cards'
       fullPath: '/$countryCode/gift-cards'
       preLoaderRoute: typeof CountryCodeGiftCardsRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/flash-sales': {
+      id: '/$countryCode/flash-sales'
+      path: '/flash-sales'
+      fullPath: '/$countryCode/flash-sales'
+      preLoaderRoute: typeof CountryCodeFlashSalesRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/faq': {
@@ -779,6 +1072,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeAboutRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/verify/': {
+      id: '/$countryCode/verify/'
+      path: '/verify'
+      fullPath: '/$countryCode/verify/'
+      preLoaderRoute: typeof CountryCodeVerifyIndexRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/venues/': {
+      id: '/$countryCode/venues/'
+      path: '/venues'
+      fullPath: '/$countryCode/venues/'
+      preLoaderRoute: typeof CountryCodeVenuesIndexRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/vendors/': {
       id: '/$countryCode/vendors/'
       path: '/vendors'
@@ -793,6 +1100,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeServicesIndexRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/providers/': {
+      id: '/$countryCode/providers/'
+      path: '/providers'
+      fullPath: '/$countryCode/providers/'
+      preLoaderRoute: typeof CountryCodeProvidersIndexRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/events/': {
+      id: '/$countryCode/events/'
+      path: '/events'
+      fullPath: '/$countryCode/events/'
+      preLoaderRoute: typeof CountryCodeEventsIndexRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/business/': {
+      id: '/$countryCode/business/'
+      path: '/business'
+      fullPath: '/$countryCode/business/'
+      preLoaderRoute: typeof CountryCodeBusinessIndexRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/bundles/': {
+      id: '/$countryCode/bundles/'
+      path: '/bundles'
+      fullPath: '/$countryCode/bundles/'
+      preLoaderRoute: typeof CountryCodeBundlesIndexRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/blog/': {
       id: '/$countryCode/blog/'
       path: '/'
@@ -805,6 +1140,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/$countryCode/account/'
       preLoaderRoute: typeof CountryCodeAccountIndexRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/verify/kyc': {
+      id: '/$countryCode/verify/kyc'
+      path: '/verify/kyc'
+      fullPath: '/$countryCode/verify/kyc'
+      preLoaderRoute: typeof CountryCodeVerifyKycRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/vendors/$handle': {
@@ -842,11 +1184,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeCategoriesHandleRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/business/register': {
+      id: '/$countryCode/business/register'
+      path: '/business/register'
+      fullPath: '/$countryCode/business/register'
+      preLoaderRoute: typeof CountryCodeBusinessRegisterRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/account/wishlists': {
+      id: '/$countryCode/account/wishlists'
+      path: '/account/wishlists'
+      fullPath: '/$countryCode/account/wishlists'
+      preLoaderRoute: typeof CountryCodeAccountWishlistsRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/account/wallet': {
       id: '/$countryCode/account/wallet'
       path: '/account/wallet'
       fullPath: '/$countryCode/account/wallet'
       preLoaderRoute: typeof CountryCodeAccountWalletRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/account/transactions': {
+      id: '/$countryCode/account/transactions'
+      path: '/account/transactions'
+      fullPath: '/$countryCode/account/transactions'
+      preLoaderRoute: typeof CountryCodeAccountTransactionsRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/account/tax-certificates': {
+      id: '/$countryCode/account/tax-certificates'
+      path: '/account/tax-certificates'
+      fullPath: '/$countryCode/account/tax-certificates'
+      preLoaderRoute: typeof CountryCodeAccountTaxCertificatesRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/account/subscriptions': {
+      id: '/$countryCode/account/subscriptions'
+      path: '/account/subscriptions'
+      fullPath: '/$countryCode/account/subscriptions'
+      preLoaderRoute: typeof CountryCodeAccountSubscriptionsRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/account/statements': {
+      id: '/$countryCode/account/statements'
+      path: '/account/statements'
+      fullPath: '/$countryCode/account/statements'
+      preLoaderRoute: typeof CountryCodeAccountStatementsRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/account/settings': {
@@ -863,6 +1247,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeAccountRegisterRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/account/referrals': {
+      id: '/$countryCode/account/referrals'
+      path: '/account/referrals'
+      fullPath: '/$countryCode/account/referrals'
+      preLoaderRoute: typeof CountryCodeAccountReferralsRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/account/payment-methods': {
+      id: '/$countryCode/account/payment-methods'
+      path: '/account/payment-methods'
+      fullPath: '/$countryCode/account/payment-methods'
+      preLoaderRoute: typeof CountryCodeAccountPaymentMethodsRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/account/loyalty': {
       id: '/$countryCode/account/loyalty'
       path: '/account/loyalty'
@@ -877,11 +1275,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeAccountLoginRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/account/licenses': {
+      id: '/$countryCode/account/licenses'
+      path: '/account/licenses'
+      fullPath: '/$countryCode/account/licenses'
+      preLoaderRoute: typeof CountryCodeAccountLicensesRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/account/installments': {
+      id: '/$countryCode/account/installments'
+      path: '/account/installments'
+      fullPath: '/$countryCode/account/installments'
+      preLoaderRoute: typeof CountryCodeAccountInstallmentsRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/account/identity': {
       id: '/$countryCode/account/identity'
       path: '/account/identity'
       fullPath: '/$countryCode/account/identity'
       preLoaderRoute: typeof CountryCodeAccountIdentityRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/account/downloads': {
+      id: '/$countryCode/account/downloads'
+      path: '/account/downloads'
+      fullPath: '/$countryCode/account/downloads'
+      preLoaderRoute: typeof CountryCodeAccountDownloadsRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/account/deliveries': {
+      id: '/$countryCode/account/deliveries'
+      path: '/account/deliveries'
+      fullPath: '/$countryCode/account/deliveries'
+      preLoaderRoute: typeof CountryCodeAccountDeliveriesRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/account/credits': {
@@ -896,6 +1322,13 @@ declare module '@tanstack/react-router' {
       path: '/account/business'
       fullPath: '/$countryCode/account/business'
       preLoaderRoute: typeof CountryCodeAccountBusinessRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/account/bookings': {
+      id: '/$countryCode/account/bookings'
+      path: '/account/bookings'
+      fullPath: '/$countryCode/account/bookings'
+      preLoaderRoute: typeof CountryCodeAccountBookingsRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/order/$orderId/confirmed': {
@@ -928,11 +1361,13 @@ interface CountryCodeRouteChildren {
   CountryCodeCompareRoute: typeof CountryCodeCompareRoute
   CountryCodeContactRoute: typeof CountryCodeContactRoute
   CountryCodeFaqRoute: typeof CountryCodeFaqRoute
+  CountryCodeFlashSalesRoute: typeof CountryCodeFlashSalesRoute
   CountryCodeGiftCardsRoute: typeof CountryCodeGiftCardsRoute
   CountryCodeHelpRoute: typeof CountryCodeHelpRoute
   CountryCodeLookbookRoute: typeof CountryCodeLookbookRoute
   CountryCodeLoyaltyRoute: typeof CountryCodeLoyaltyRoute
   CountryCodePrivacyRoute: typeof CountryCodePrivacyRoute
+  CountryCodeReferralsRoute: typeof CountryCodeReferralsRoute
   CountryCodeReturnsRoute: typeof CountryCodeReturnsRoute
   CountryCodeStoreRoute: typeof CountryCodeStoreRoute
   CountryCodeStoresRoute: typeof CountryCodeStoresRoute
@@ -941,22 +1376,42 @@ interface CountryCodeRouteChildren {
   CountryCodeTrackRoute: typeof CountryCodeTrackRoute
   CountryCodeWishlistRoute: typeof CountryCodeWishlistRoute
   CountryCodeIndexRoute: typeof CountryCodeIndexRoute
+  CountryCodeAccountBookingsRoute: typeof CountryCodeAccountBookingsRoute
   CountryCodeAccountBusinessRoute: typeof CountryCodeAccountBusinessRoute
   CountryCodeAccountCreditsRoute: typeof CountryCodeAccountCreditsRoute
+  CountryCodeAccountDeliveriesRoute: typeof CountryCodeAccountDeliveriesRoute
+  CountryCodeAccountDownloadsRoute: typeof CountryCodeAccountDownloadsRoute
   CountryCodeAccountIdentityRoute: typeof CountryCodeAccountIdentityRoute
+  CountryCodeAccountInstallmentsRoute: typeof CountryCodeAccountInstallmentsRoute
+  CountryCodeAccountLicensesRoute: typeof CountryCodeAccountLicensesRoute
   CountryCodeAccountLoginRoute: typeof CountryCodeAccountLoginRoute
   CountryCodeAccountLoyaltyRoute: typeof CountryCodeAccountLoyaltyRoute
+  CountryCodeAccountPaymentMethodsRoute: typeof CountryCodeAccountPaymentMethodsRoute
+  CountryCodeAccountReferralsRoute: typeof CountryCodeAccountReferralsRoute
   CountryCodeAccountRegisterRoute: typeof CountryCodeAccountRegisterRoute
   CountryCodeAccountSettingsRoute: typeof CountryCodeAccountSettingsRoute
+  CountryCodeAccountStatementsRoute: typeof CountryCodeAccountStatementsRoute
+  CountryCodeAccountSubscriptionsRoute: typeof CountryCodeAccountSubscriptionsRoute
+  CountryCodeAccountTaxCertificatesRoute: typeof CountryCodeAccountTaxCertificatesRoute
+  CountryCodeAccountTransactionsRoute: typeof CountryCodeAccountTransactionsRoute
   CountryCodeAccountWalletRoute: typeof CountryCodeAccountWalletRoute
+  CountryCodeAccountWishlistsRoute: typeof CountryCodeAccountWishlistsRoute
+  CountryCodeBusinessRegisterRoute: typeof CountryCodeBusinessRegisterRoute
   CountryCodeCategoriesHandleRoute: typeof CountryCodeCategoriesHandleRoute
   CountryCodeOrdersOrderIdRoute: typeof CountryCodeOrdersOrderIdRoute
   CountryCodeProductsHandleRoute: typeof CountryCodeProductsHandleRoute
   CountryCodeServicesHandleRoute: typeof CountryCodeServicesHandleRoute
   CountryCodeVendorsHandleRoute: typeof CountryCodeVendorsHandleRoute
+  CountryCodeVerifyKycRoute: typeof CountryCodeVerifyKycRoute
   CountryCodeAccountIndexRoute: typeof CountryCodeAccountIndexRoute
+  CountryCodeBundlesIndexRoute: typeof CountryCodeBundlesIndexRoute
+  CountryCodeBusinessIndexRoute: typeof CountryCodeBusinessIndexRoute
+  CountryCodeEventsIndexRoute: typeof CountryCodeEventsIndexRoute
+  CountryCodeProvidersIndexRoute: typeof CountryCodeProvidersIndexRoute
   CountryCodeServicesIndexRoute: typeof CountryCodeServicesIndexRoute
   CountryCodeVendorsIndexRoute: typeof CountryCodeVendorsIndexRoute
+  CountryCodeVenuesIndexRoute: typeof CountryCodeVenuesIndexRoute
+  CountryCodeVerifyIndexRoute: typeof CountryCodeVerifyIndexRoute
   CountryCodeOrderOrderIdConfirmedRoute: typeof CountryCodeOrderOrderIdConfirmedRoute
 }
 
@@ -968,11 +1423,13 @@ const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodeCompareRoute: CountryCodeCompareRoute,
   CountryCodeContactRoute: CountryCodeContactRoute,
   CountryCodeFaqRoute: CountryCodeFaqRoute,
+  CountryCodeFlashSalesRoute: CountryCodeFlashSalesRoute,
   CountryCodeGiftCardsRoute: CountryCodeGiftCardsRoute,
   CountryCodeHelpRoute: CountryCodeHelpRoute,
   CountryCodeLookbookRoute: CountryCodeLookbookRoute,
   CountryCodeLoyaltyRoute: CountryCodeLoyaltyRoute,
   CountryCodePrivacyRoute: CountryCodePrivacyRoute,
+  CountryCodeReferralsRoute: CountryCodeReferralsRoute,
   CountryCodeReturnsRoute: CountryCodeReturnsRoute,
   CountryCodeStoreRoute: CountryCodeStoreRoute,
   CountryCodeStoresRoute: CountryCodeStoresRoute,
@@ -981,22 +1438,43 @@ const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodeTrackRoute: CountryCodeTrackRoute,
   CountryCodeWishlistRoute: CountryCodeWishlistRoute,
   CountryCodeIndexRoute: CountryCodeIndexRoute,
+  CountryCodeAccountBookingsRoute: CountryCodeAccountBookingsRoute,
   CountryCodeAccountBusinessRoute: CountryCodeAccountBusinessRoute,
   CountryCodeAccountCreditsRoute: CountryCodeAccountCreditsRoute,
+  CountryCodeAccountDeliveriesRoute: CountryCodeAccountDeliveriesRoute,
+  CountryCodeAccountDownloadsRoute: CountryCodeAccountDownloadsRoute,
   CountryCodeAccountIdentityRoute: CountryCodeAccountIdentityRoute,
+  CountryCodeAccountInstallmentsRoute: CountryCodeAccountInstallmentsRoute,
+  CountryCodeAccountLicensesRoute: CountryCodeAccountLicensesRoute,
   CountryCodeAccountLoginRoute: CountryCodeAccountLoginRoute,
   CountryCodeAccountLoyaltyRoute: CountryCodeAccountLoyaltyRoute,
+  CountryCodeAccountPaymentMethodsRoute: CountryCodeAccountPaymentMethodsRoute,
+  CountryCodeAccountReferralsRoute: CountryCodeAccountReferralsRoute,
   CountryCodeAccountRegisterRoute: CountryCodeAccountRegisterRoute,
   CountryCodeAccountSettingsRoute: CountryCodeAccountSettingsRoute,
+  CountryCodeAccountStatementsRoute: CountryCodeAccountStatementsRoute,
+  CountryCodeAccountSubscriptionsRoute: CountryCodeAccountSubscriptionsRoute,
+  CountryCodeAccountTaxCertificatesRoute:
+    CountryCodeAccountTaxCertificatesRoute,
+  CountryCodeAccountTransactionsRoute: CountryCodeAccountTransactionsRoute,
   CountryCodeAccountWalletRoute: CountryCodeAccountWalletRoute,
+  CountryCodeAccountWishlistsRoute: CountryCodeAccountWishlistsRoute,
+  CountryCodeBusinessRegisterRoute: CountryCodeBusinessRegisterRoute,
   CountryCodeCategoriesHandleRoute: CountryCodeCategoriesHandleRoute,
   CountryCodeOrdersOrderIdRoute: CountryCodeOrdersOrderIdRoute,
   CountryCodeProductsHandleRoute: CountryCodeProductsHandleRoute,
   CountryCodeServicesHandleRoute: CountryCodeServicesHandleRoute,
   CountryCodeVendorsHandleRoute: CountryCodeVendorsHandleRoute,
+  CountryCodeVerifyKycRoute: CountryCodeVerifyKycRoute,
   CountryCodeAccountIndexRoute: CountryCodeAccountIndexRoute,
+  CountryCodeBundlesIndexRoute: CountryCodeBundlesIndexRoute,
+  CountryCodeBusinessIndexRoute: CountryCodeBusinessIndexRoute,
+  CountryCodeEventsIndexRoute: CountryCodeEventsIndexRoute,
+  CountryCodeProvidersIndexRoute: CountryCodeProvidersIndexRoute,
   CountryCodeServicesIndexRoute: CountryCodeServicesIndexRoute,
   CountryCodeVendorsIndexRoute: CountryCodeVendorsIndexRoute,
+  CountryCodeVenuesIndexRoute: CountryCodeVenuesIndexRoute,
+  CountryCodeVerifyIndexRoute: CountryCodeVerifyIndexRoute,
   CountryCodeOrderOrderIdConfirmedRoute: CountryCodeOrderOrderIdConfirmedRoute,
 }
 
