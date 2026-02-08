@@ -1,6 +1,16 @@
 import { useState } from "react"
 import { Eye, EyeSlash, SquareTwoStack } from "@medusajs/icons"
-import type { LicenseKey } from "../../lib/mock/marketplace"
+
+interface LicenseKey {
+  id: string
+  key: string
+  productName: string
+  status: "active" | "expired" | "revoked"
+  purchasedAt: string
+  expiresAt?: string
+  activations?: number
+  maxActivations?: number
+}
 
 interface LicenseKeyDisplayProps {
   license: LicenseKey

@@ -20,8 +20,10 @@ export interface DeliverySlot {
   date: string
   startTime: string
   endTime: string
+  timeWindow: string
   available: boolean
   price: number
+  currency: string
 }
 
 export interface DeliveryOrder {
@@ -50,7 +52,9 @@ export interface Driver {
   name: string
   phone: string
   photo: string
+  avatar: string
   rating: number
+  totalDeliveries: number
   vehicleType: string
   vehiclePlate: string
 }
@@ -95,7 +99,9 @@ const mockDrivers: Driver[] = [
     name: "Ahmed Hassan",
     phone: "+966501234567",
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=ahmed",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=ahmed",
     rating: 4.9,
+    totalDeliveries: 1247,
     vehicleType: "Van",
     vehiclePlate: "ABC 1234",
   },
@@ -104,7 +110,9 @@ const mockDrivers: Driver[] = [
     name: "Mohammed Ali",
     phone: "+966502345678",
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=mohammed",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=mohammed",
     rating: 4.7,
+    totalDeliveries: 892,
     vehicleType: "Motorcycle",
     vehiclePlate: "XYZ 5678",
   },
@@ -113,7 +121,9 @@ const mockDrivers: Driver[] = [
     name: "Sara Ahmed",
     phone: "+966503456789",
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=sara",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sara",
     rating: 4.8,
+    totalDeliveries: 1563,
     vehicleType: "Car",
     vehiclePlate: "DEF 9012",
   },
@@ -178,10 +188,10 @@ export const fleetbaseService = {
       const dateStr = slotDate.toISOString().split("T")[0]
 
       slots.push(
-        { id: `slot_${d}_1`, date: dateStr, startTime: "09:00", endTime: "12:00", available: Math.random() > 0.3, price: 0 },
-        { id: `slot_${d}_2`, date: dateStr, startTime: "12:00", endTime: "15:00", available: Math.random() > 0.3, price: 0 },
-        { id: `slot_${d}_3`, date: dateStr, startTime: "15:00", endTime: "18:00", available: Math.random() > 0.3, price: 0 },
-        { id: `slot_${d}_4`, date: dateStr, startTime: "18:00", endTime: "21:00", available: Math.random() > 0.2, price: 5 }
+        { id: `slot_${d}_1`, date: dateStr, startTime: "09:00", endTime: "12:00", timeWindow: "9:00 AM - 12:00 PM", available: Math.random() > 0.3, price: 0, currency: "USD" },
+        { id: `slot_${d}_2`, date: dateStr, startTime: "12:00", endTime: "15:00", timeWindow: "12:00 PM - 3:00 PM", available: Math.random() > 0.3, price: 0, currency: "USD" },
+        { id: `slot_${d}_3`, date: dateStr, startTime: "15:00", endTime: "18:00", timeWindow: "3:00 PM - 6:00 PM", available: Math.random() > 0.3, price: 0, currency: "USD" },
+        { id: `slot_${d}_4`, date: dateStr, startTime: "18:00", endTime: "21:00", timeWindow: "6:00 PM - 9:00 PM", available: Math.random() > 0.2, price: 5, currency: "USD" }
       )
     }
 

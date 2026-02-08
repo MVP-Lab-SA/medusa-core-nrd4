@@ -1,5 +1,19 @@
 import { CheckCircle, Clock, XCircle } from "@medusajs/icons"
-import type { InstallmentPlan as InstallmentPlanType } from "../../lib/mock/payments"
+
+interface Installment {
+  id: string
+  amount: number
+  dueDate: string
+  status: "paid" | "pending" | "overdue"
+}
+
+interface InstallmentPlanType {
+  id: string
+  productName: string
+  currency: string
+  status: "active" | "completed" | "defaulted"
+  installments: Installment[]
+}
 
 interface InstallmentPlanProps {
   plan: InstallmentPlanType

@@ -1,5 +1,13 @@
 import { ArrowUpTray, ArrowDownTray, ArrowPath } from "@medusajs/icons"
-import type { WalletTransaction } from "../../lib/mock/payments"
+
+interface WalletTransaction {
+  id: string
+  type: "credit" | "debit" | "transfer"
+  amount: number
+  description: string
+  createdAt: string
+  status: "completed" | "pending" | "failed"
+}
 
 interface TransactionHistoryProps {
   transactions: WalletTransaction[]

@@ -1,4 +1,4 @@
-import { Star, GiftSolid, ArrowTrendingUp } from "@medusajs/icons"
+import { Star, GiftSolid, ArrowUpRightMini } from "@medusajs/icons"
 import { Button } from "./button"
 
 interface LoyaltyPointsProps {
@@ -78,7 +78,7 @@ export function LoyaltyPoints({
         </div>
       )}
 
-      <Button variant="outline" className="w-full bg-white/20 border-white/40 text-white hover:bg-white/30">
+      <Button variant="secondary" className="w-full bg-white/20 border-white/40 text-white hover:bg-white/30">
         <GiftSolid className="w-4 h-4 mr-2" />
         Redeem Points
       </Button>

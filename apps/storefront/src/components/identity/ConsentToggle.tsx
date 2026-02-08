@@ -1,4 +1,10 @@
-import type { ConsentRecord } from "../../lib/mock/waltid"
+interface ConsentRecord {
+  id: string
+  purpose: string
+  description: string
+  granted: boolean
+  grantedAt?: string
+}
 
 interface ConsentToggleProps {
   consent: ConsentRecord

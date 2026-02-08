@@ -1,8 +1,15 @@
 import { CurrencyDollar, Plus } from "@medusajs/icons"
-import type { StoreCredit } from "../../lib/mock/erpnext"
+
+interface StoreCreditItem {
+  id: string
+  balance: number
+  status: "active" | "expired" | "used"
+  reason: string
+  expiresAt?: string
+}
 
 interface CreditBalanceProps {
-  credits: StoreCredit[]
+  credits: StoreCreditItem[]
   currency: string
   onApplyCredit?: () => void
 }

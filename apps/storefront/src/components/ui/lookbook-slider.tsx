@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
 import { ChevronLeft, ChevronRight, ShoppingBag } from "@medusajs/icons"
-import { Thumbnail } from "./thumbnail"
 
 interface Product {
   id: string
@@ -71,15 +70,19 @@ export function LookbookSlider({ slides, className = "" }: LookbookSliderProps) 
             {activeProduct === product.id && (
               <div className="absolute z-10 w-48 bg-white rounded-lg shadow-xl p-3 mt-2 -ml-20">
                 <Link
-                  to={`/us/products/${product.handle}`}
+                  to={`/us/products/${product.handle}` as any}
                   className="flex items-center gap-3"
                 >
                   <div className="w-12 h-12 bg-gray-100 rounded overflow-hidden flex-shrink-0">
-                    <Thumbnail
-                      src={product.thumbnail}
-                      alt={product.title}
-                      className="w-full h-full object-cover"
-                    />
+                    {product.thumbnail ? (
+                      <img
+                        src={product.thumbnail}
+                        alt={product.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">
@@ -133,15 +136,19 @@ export function LookbookSlider({ slides, className = "" }: LookbookSliderProps) 
           {slide.products.map(product => (
             <Link
               key={product.id}
-              to={`/us/products/${product.handle}`}
+              to={`/us/products/${product.handle}` as any}
               className="flex-shrink-0 w-24"
             >
               <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-1">
-                <Thumbnail
-                  src={product.thumbnail}
-                  alt={product.title}
-                  className="w-full h-full object-cover"
-                />
+                {product.thumbnail ? (
+                  <img
+                    src={product.thumbnail}
+                    alt={product.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200" />
+                )}
               </div>
               <p className="text-xs font-medium text-gray-900 truncate">{product.title}</p>
               <p className="text-xs text-cyan-600">{product.price}</p>

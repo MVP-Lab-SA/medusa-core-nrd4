@@ -1,5 +1,10 @@
 import { CurrencyDollar, Plus, ArrowPath } from "@medusajs/icons"
-import type { Wallet } from "../../lib/mock/payments"
+
+interface Wallet {
+  balance: number
+  pendingBalance: number
+  currency: string
+}
 
 interface WalletBalanceProps {
   wallet: Wallet

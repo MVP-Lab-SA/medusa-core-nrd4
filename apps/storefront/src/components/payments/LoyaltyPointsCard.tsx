@@ -1,5 +1,13 @@
 import { Sparkles, Gift, ArrowRight } from "@medusajs/icons"
-import type { LoyaltyAccount } from "../../lib/mock/payments"
+
+interface LoyaltyAccount {
+  points: number
+  tierName: string
+  nextTierName?: string
+  nextTierPoints?: number
+  currency: string
+  pointsValue: number
+}
 
 interface LoyaltyPointsCardProps {
   account: LoyaltyAccount

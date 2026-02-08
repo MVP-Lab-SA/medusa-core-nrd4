@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { MapPin, Phone, Clock, Navigation } from "@medusajs/icons"
+import { MapPin, Phone, Clock, ArrowRightMini } from "@medusajs/icons"
 import { Button } from "./button"
 
 interface Store {
@@ -116,8 +116,7 @@ export function StoreLocator({ stores, onSearch, className = "" }: StoreLocatorP
           <p className="text-sm text-gray-600">{selectedStore.address}</p>
           <div className="flex gap-2 mt-3">
             <Button
-              variant="outline"
-              size="sm"
+              variant="secondary"
               className="flex-1"
               onClick={() => window.open(`tel:${selectedStore.phone}`)}
             >
@@ -125,11 +124,10 @@ export function StoreLocator({ stores, onSearch, className = "" }: StoreLocatorP
               Call
             </Button>
             <Button
-              size="sm"
               className="flex-1"
               onClick={() => window.open(`https://maps.google.com/?q=${selectedStore.lat},${selectedStore.lng}`)}
             >
-              <Navigation className="w-4 h-4 mr-1" />
+              <ArrowRightMini className="w-4 h-4 mr-1" />
               Directions
             </Button>
           </div>

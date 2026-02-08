@@ -1,6 +1,12 @@
 import { useState } from "react"
 import { ArrowUpTray, DocumentText, CheckCircle, Clock, XCircle } from "@medusajs/icons"
-import type { TaxCertificate } from "../../lib/mock/erpnext"
+
+interface TaxCertificate {
+  id: string
+  type: string
+  status: "pending" | "approved" | "rejected" | "expired"
+  expiryDate: string
+}
 
 interface TaxCertificateUploadProps {
   certificates: TaxCertificate[]

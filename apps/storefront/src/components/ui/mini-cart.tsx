@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Link } from "@tanstack/react-router"
 import { ShoppingBag, XMark, Trash } from "@medusajs/icons"
 import { Button } from "./button"
-import { Thumbnail } from "./thumbnail"
 
 interface CartItem {
   id: string
@@ -85,7 +84,7 @@ export function MiniCart({
               <ShoppingBag className="w-12 h-12 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500">Your cart is empty</p>
               <Link
-                to="/us/store"
+                to={"/us/store" as any}
                 onClick={() => setIsOpen(false)}
                 className="text-cyan-600 hover:text-cyan-700 text-sm font-medium mt-2 inline-block"
               >
@@ -126,15 +125,19 @@ export function MiniCart({
                 {items.map(item => (
                   <div key={item.id} className="flex gap-3">
                     <Link
-                      to={`/us/products/${item.productHandle}`}
+                      to={`/us/products/${item.productHandle}` as any}
                       onClick={() => setIsOpen(false)}
                       className="w-16 h-16 bg-gray-100 rounded overflow-hidden flex-shrink-0"
                     >
-                      <Thumbnail src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" />
+                      {item.thumbnail ? (
+                        <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200" />
+                      )}
                     </Link>
                     <div className="flex-1 min-w-0">
                       <Link
-                        to={`/us/products/${item.productHandle}`}
+                        to={`/us/products/${item.productHandle}` as any}
                         onClick={() => setIsOpen(false)}
                         className="text-sm font-medium text-gray-900 hover:text-cyan-600 line-clamp-1"
                       >
@@ -169,7 +172,7 @@ export function MiniCart({
                     Checkout
                   </Button>
                   <Link
-                    to="/us/cart"
+                    to={"/us/cart" as any}
                     onClick={() => setIsOpen(false)}
                     className="block w-full text-center text-sm text-gray-600 hover:text-gray-900"
                   >

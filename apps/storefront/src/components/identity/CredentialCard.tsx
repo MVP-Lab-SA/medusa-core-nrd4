@@ -1,9 +1,20 @@
 import { CheckCircleSolid, Clock, XCircle } from "@medusajs/icons"
-import type { VerifiableCredential } from "../../lib/mock/waltid"
+
+interface VerifiableCredential {
+  id: string
+  type: string
+  issuer: string
+  issuedAt: string
+  expiresAt?: string
+  status: "valid" | "expired" | "revoked"
+  claims?: Record<string, string | number>
+  data?: Record<string, string>
+}
 
 interface CredentialCardProps {
   credential: VerifiableCredential
   onView?: (id: string) => void
+  onShowQR?: () => void
 }
 
 const statusIcons = {
@@ -35,7 +46,7 @@ export function CredentialCard({ credential, onView }: CredentialCardProps) {
       </div>
 
       <div className="space-y-2 mb-4">
-        {credential.claims && Object.entries(credential.claims).slice(0, 3).map(([key, value]) => (
+        {(credential.claims || credential.data) && Object.entries(credential.claims || credential.data || {}).slice(0, 3).map(([key, value]) => (
           <div key={key} className="flex justify-between text-sm">
             <span className="text-white/70">{key}</span>
             <span className="font-medium">{String(value)}</span>

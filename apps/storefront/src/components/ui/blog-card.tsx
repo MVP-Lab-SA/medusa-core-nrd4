@@ -32,7 +32,7 @@ export function BlogCard({
   if (featured) {
     return (
       <Link
-        to={`/us/blog/${slug}`}
+        to={`/us/blog/${slug}` as any}
         className={`group block ${className}`}
       >
         <div className="relative aspect-[16/9] md:aspect-[21/9] rounded-2xl overflow-hidden mb-4">
@@ -88,7 +88,7 @@ export function BlogCard({
 
   return (
     <Link
-      to={`/us/blog/${slug}`}
+      to={`/us/blog/${slug}` as any}
       className={`group block ${className}`}
     >
       <div className="aspect-[16/9] rounded-xl overflow-hidden mb-4">

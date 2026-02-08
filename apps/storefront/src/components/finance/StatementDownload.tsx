@@ -1,5 +1,11 @@
 import { ArrowDownTray, DocumentText, Calendar } from "@medusajs/icons"
-import type { AccountStatement } from "../../lib/mock/erpnext"
+
+interface AccountStatement {
+  id: string
+  period: string
+  startDate: string
+  endDate: string
+}
 
 interface StatementDownloadProps {
   statements: AccountStatement[]
