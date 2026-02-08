@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useBlogPosts, useBlogCategories } from "@/lib/hooks/use-payloadcms"
-import { BlogCard } from "@/components/ui/content-components"
+import { BlogCard } from "@/components/content/BlogCard"
 import { MagnifyingGlass } from "@medusajs/icons"
 
 interface BlogListPageProps {
