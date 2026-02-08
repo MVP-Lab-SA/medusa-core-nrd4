@@ -40,6 +40,7 @@ import { Route as CountryCodeCartRouteImport } from './routes/$countryCode/cart'
 import { Route as CountryCodeBlogRouteImport } from './routes/$countryCode/blog'
 import { Route as CountryCodeAnnouncementsRouteImport } from './routes/$countryCode/announcements'
 import { Route as CountryCodeAboutRouteImport } from './routes/$countryCode/about'
+import { Route as CountryCodeSplatRouteImport } from './routes/$countryCode/$'
 import { Route as CountryCodeVerifyIndexRouteImport } from './routes/$countryCode/verify/index'
 import { Route as CountryCodeVenuesIndexRouteImport } from './routes/$countryCode/venues/index'
 import { Route as CountryCodeVendorsIndexRouteImport } from './routes/$countryCode/vendors/index'
@@ -104,6 +105,7 @@ import { Route as CountryCodeAccountBusinessRouteImport } from './routes/$countr
 import { Route as CountryCodeAccountBookingsRouteImport } from './routes/$countryCode/account/bookings'
 import { Route as CountryCodeVendorsHandleReviewsRouteImport } from './routes/$countryCode/vendors/$handle/reviews'
 import { Route as CountryCodeVendorsHandleProductsRouteImport } from './routes/$countryCode/vendors/$handle/products'
+import { Route as CountryCodeProductsHandleReviewsRouteImport } from './routes/$countryCode/products/$handle/reviews'
 import { Route as CountryCodeOrderOrderIdConfirmedRouteImport } from './routes/$countryCode/order/$orderId/confirmed'
 import { Route as CountryCodeAccountSubscriptionsIdRouteImport } from './routes/$countryCode/account/subscriptions/$id'
 import { Route as CountryCodeAccountDeliveriesIdRouteImport } from './routes/$countryCode/account/deliveries/$id'
@@ -265,6 +267,11 @@ const CountryCodeAnnouncementsRoute =
 const CountryCodeAboutRoute = CountryCodeAboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const CountryCodeSplatRoute = CountryCodeSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => CountryCodeRoute,
 } as any)
 const CountryCodeVerifyIndexRoute = CountryCodeVerifyIndexRouteImport.update({
@@ -631,6 +638,12 @@ const CountryCodeVendorsHandleProductsRoute =
     path: '/products',
     getParentRoute: () => CountryCodeVendorsHandleRoute,
   } as any)
+const CountryCodeProductsHandleReviewsRoute =
+  CountryCodeProductsHandleReviewsRouteImport.update({
+    id: '/reviews',
+    path: '/reviews',
+    getParentRoute: () => CountryCodeProductsHandleRoute,
+  } as any)
 const CountryCodeOrderOrderIdConfirmedRoute =
   CountryCodeOrderOrderIdConfirmedRouteImport.update({
     id: '/order/$orderId/confirmed',
@@ -664,6 +677,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/health': typeof HealthRoute
   '/store': typeof StoreRoute
+  '/$countryCode/$': typeof CountryCodeSplatRoute
   '/$countryCode/about': typeof CountryCodeAboutRoute
   '/$countryCode/announcements': typeof CountryCodeAnnouncementsRoute
   '/$countryCode/blog': typeof CountryCodeBlogRouteWithChildren
@@ -726,7 +740,7 @@ export interface FileRoutesByFullPath {
   '/$countryCode/events/$slug': typeof CountryCodeEventsSlugRoute
   '/$countryCode/help/$category': typeof CountryCodeHelpCategoryRoute
   '/$countryCode/orders/$orderId': typeof CountryCodeOrdersOrderIdRoute
-  '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRoute
+  '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRouteWithChildren
   '/$countryCode/providers/$id': typeof CountryCodeProvidersIdRoute
   '/$countryCode/returns/$id': typeof CountryCodeReturnsIdRoute
   '/$countryCode/returns/create': typeof CountryCodeReturnsCreateRoute
@@ -754,6 +768,7 @@ export interface FileRoutesByFullPath {
   '/$countryCode/account/deliveries/$id': typeof CountryCodeAccountDeliveriesIdRoute
   '/$countryCode/account/subscriptions/$id': typeof CountryCodeAccountSubscriptionsIdRoute
   '/$countryCode/order/$orderId/confirmed': typeof CountryCodeOrderOrderIdConfirmedRoute
+  '/$countryCode/products/$handle/reviews': typeof CountryCodeProductsHandleReviewsRoute
   '/$countryCode/vendors/$handle/products': typeof CountryCodeVendorsHandleProductsRoute
   '/$countryCode/vendors/$handle/reviews': typeof CountryCodeVendorsHandleReviewsRoute
 }
@@ -764,6 +779,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/health': typeof HealthRoute
   '/store': typeof StoreRoute
+  '/$countryCode/$': typeof CountryCodeSplatRoute
   '/$countryCode/about': typeof CountryCodeAboutRoute
   '/$countryCode/announcements': typeof CountryCodeAnnouncementsRoute
   '/$countryCode/cart': typeof CountryCodeCartRoute
@@ -824,7 +840,7 @@ export interface FileRoutesByTo {
   '/$countryCode/events/$slug': typeof CountryCodeEventsSlugRoute
   '/$countryCode/help/$category': typeof CountryCodeHelpCategoryRoute
   '/$countryCode/orders/$orderId': typeof CountryCodeOrdersOrderIdRoute
-  '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRoute
+  '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRouteWithChildren
   '/$countryCode/providers/$id': typeof CountryCodeProvidersIdRoute
   '/$countryCode/returns/$id': typeof CountryCodeReturnsIdRoute
   '/$countryCode/returns/create': typeof CountryCodeReturnsCreateRoute
@@ -852,6 +868,7 @@ export interface FileRoutesByTo {
   '/$countryCode/account/deliveries/$id': typeof CountryCodeAccountDeliveriesIdRoute
   '/$countryCode/account/subscriptions/$id': typeof CountryCodeAccountSubscriptionsIdRoute
   '/$countryCode/order/$orderId/confirmed': typeof CountryCodeOrderOrderIdConfirmedRoute
+  '/$countryCode/products/$handle/reviews': typeof CountryCodeProductsHandleReviewsRoute
   '/$countryCode/vendors/$handle/products': typeof CountryCodeVendorsHandleProductsRoute
   '/$countryCode/vendors/$handle/reviews': typeof CountryCodeVendorsHandleReviewsRoute
 }
@@ -864,6 +881,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/health': typeof HealthRoute
   '/store': typeof StoreRoute
+  '/$countryCode/$': typeof CountryCodeSplatRoute
   '/$countryCode/about': typeof CountryCodeAboutRoute
   '/$countryCode/announcements': typeof CountryCodeAnnouncementsRoute
   '/$countryCode/blog': typeof CountryCodeBlogRouteWithChildren
@@ -926,7 +944,7 @@ export interface FileRoutesById {
   '/$countryCode/events/$slug': typeof CountryCodeEventsSlugRoute
   '/$countryCode/help/$category': typeof CountryCodeHelpCategoryRoute
   '/$countryCode/orders/$orderId': typeof CountryCodeOrdersOrderIdRoute
-  '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRoute
+  '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRouteWithChildren
   '/$countryCode/providers/$id': typeof CountryCodeProvidersIdRoute
   '/$countryCode/returns/$id': typeof CountryCodeReturnsIdRoute
   '/$countryCode/returns/create': typeof CountryCodeReturnsCreateRoute
@@ -954,6 +972,7 @@ export interface FileRoutesById {
   '/$countryCode/account/deliveries/$id': typeof CountryCodeAccountDeliveriesIdRoute
   '/$countryCode/account/subscriptions/$id': typeof CountryCodeAccountSubscriptionsIdRoute
   '/$countryCode/order/$orderId/confirmed': typeof CountryCodeOrderOrderIdConfirmedRoute
+  '/$countryCode/products/$handle/reviews': typeof CountryCodeProductsHandleReviewsRoute
   '/$countryCode/vendors/$handle/products': typeof CountryCodeVendorsHandleProductsRoute
   '/$countryCode/vendors/$handle/reviews': typeof CountryCodeVendorsHandleReviewsRoute
 }
@@ -967,6 +986,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/health'
     | '/store'
+    | '/$countryCode/$'
     | '/$countryCode/about'
     | '/$countryCode/announcements'
     | '/$countryCode/blog'
@@ -1057,6 +1077,7 @@ export interface FileRouteTypes {
     | '/$countryCode/account/deliveries/$id'
     | '/$countryCode/account/subscriptions/$id'
     | '/$countryCode/order/$orderId/confirmed'
+    | '/$countryCode/products/$handle/reviews'
     | '/$countryCode/vendors/$handle/products'
     | '/$countryCode/vendors/$handle/reviews'
   fileRoutesByTo: FileRoutesByTo
@@ -1067,6 +1088,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/health'
     | '/store'
+    | '/$countryCode/$'
     | '/$countryCode/about'
     | '/$countryCode/announcements'
     | '/$countryCode/cart'
@@ -1155,6 +1177,7 @@ export interface FileRouteTypes {
     | '/$countryCode/account/deliveries/$id'
     | '/$countryCode/account/subscriptions/$id'
     | '/$countryCode/order/$orderId/confirmed'
+    | '/$countryCode/products/$handle/reviews'
     | '/$countryCode/vendors/$handle/products'
     | '/$countryCode/vendors/$handle/reviews'
   id:
@@ -1166,6 +1189,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/health'
     | '/store'
+    | '/$countryCode/$'
     | '/$countryCode/about'
     | '/$countryCode/announcements'
     | '/$countryCode/blog'
@@ -1256,6 +1280,7 @@ export interface FileRouteTypes {
     | '/$countryCode/account/deliveries/$id'
     | '/$countryCode/account/subscriptions/$id'
     | '/$countryCode/order/$orderId/confirmed'
+    | '/$countryCode/products/$handle/reviews'
     | '/$countryCode/vendors/$handle/products'
     | '/$countryCode/vendors/$handle/reviews'
   fileRoutesById: FileRoutesById
@@ -1487,6 +1512,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/$countryCode/about'
       preLoaderRoute: typeof CountryCodeAboutRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/$': {
+      id: '/$countryCode/$'
+      path: '/$'
+      fullPath: '/$countryCode/$'
+      preLoaderRoute: typeof CountryCodeSplatRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/verify/': {
@@ -1937,6 +1969,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeVendorsHandleProductsRouteImport
       parentRoute: typeof CountryCodeVendorsHandleRoute
     }
+    '/$countryCode/products/$handle/reviews': {
+      id: '/$countryCode/products/$handle/reviews'
+      path: '/reviews'
+      fullPath: '/$countryCode/products/$handle/reviews'
+      preLoaderRoute: typeof CountryCodeProductsHandleReviewsRouteImport
+      parentRoute: typeof CountryCodeProductsHandleRoute
+    }
     '/$countryCode/order/$orderId/confirmed': {
       id: '/$countryCode/order/$orderId/confirmed'
       path: '/order/$orderId/confirmed'
@@ -2088,6 +2127,21 @@ const CountryCodeAccountSubscriptionsRouteWithChildren =
     CountryCodeAccountSubscriptionsRouteChildren,
   )
 
+interface CountryCodeProductsHandleRouteChildren {
+  CountryCodeProductsHandleReviewsRoute: typeof CountryCodeProductsHandleReviewsRoute
+}
+
+const CountryCodeProductsHandleRouteChildren: CountryCodeProductsHandleRouteChildren =
+  {
+    CountryCodeProductsHandleReviewsRoute:
+      CountryCodeProductsHandleReviewsRoute,
+  }
+
+const CountryCodeProductsHandleRouteWithChildren =
+  CountryCodeProductsHandleRoute._addFileChildren(
+    CountryCodeProductsHandleRouteChildren,
+  )
+
 interface CountryCodeVendorsHandleRouteChildren {
   CountryCodeVendorsHandleProductsRoute: typeof CountryCodeVendorsHandleProductsRoute
   CountryCodeVendorsHandleReviewsRoute: typeof CountryCodeVendorsHandleReviewsRoute
@@ -2106,6 +2160,7 @@ const CountryCodeVendorsHandleRouteWithChildren =
   )
 
 interface CountryCodeRouteChildren {
+  CountryCodeSplatRoute: typeof CountryCodeSplatRoute
   CountryCodeAboutRoute: typeof CountryCodeAboutRoute
   CountryCodeAnnouncementsRoute: typeof CountryCodeAnnouncementsRoute
   CountryCodeBlogRoute: typeof CountryCodeBlogRouteWithChildren
@@ -2166,7 +2221,7 @@ interface CountryCodeRouteChildren {
   CountryCodeCategoriesHandleRoute: typeof CountryCodeCategoriesHandleRoute
   CountryCodeEventsSlugRoute: typeof CountryCodeEventsSlugRoute
   CountryCodeOrdersOrderIdRoute: typeof CountryCodeOrdersOrderIdRoute
-  CountryCodeProductsHandleRoute: typeof CountryCodeProductsHandleRoute
+  CountryCodeProductsHandleRoute: typeof CountryCodeProductsHandleRouteWithChildren
   CountryCodeProvidersIdRoute: typeof CountryCodeProvidersIdRoute
   CountryCodeServicesHandleRoute: typeof CountryCodeServicesHandleRoute
   CountryCodeVendorsHandleRoute: typeof CountryCodeVendorsHandleRouteWithChildren
@@ -2187,6 +2242,7 @@ interface CountryCodeRouteChildren {
 }
 
 const CountryCodeRouteChildren: CountryCodeRouteChildren = {
+  CountryCodeSplatRoute: CountryCodeSplatRoute,
   CountryCodeAboutRoute: CountryCodeAboutRoute,
   CountryCodeAnnouncementsRoute: CountryCodeAnnouncementsRoute,
   CountryCodeBlogRoute: CountryCodeBlogRouteWithChildren,
@@ -2250,7 +2306,7 @@ const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodeCategoriesHandleRoute: CountryCodeCategoriesHandleRoute,
   CountryCodeEventsSlugRoute: CountryCodeEventsSlugRoute,
   CountryCodeOrdersOrderIdRoute: CountryCodeOrdersOrderIdRoute,
-  CountryCodeProductsHandleRoute: CountryCodeProductsHandleRoute,
+  CountryCodeProductsHandleRoute: CountryCodeProductsHandleRouteWithChildren,
   CountryCodeProvidersIdRoute: CountryCodeProvidersIdRoute,
   CountryCodeServicesHandleRoute: CountryCodeServicesHandleRoute,
   CountryCodeVendorsHandleRoute: CountryCodeVendorsHandleRouteWithChildren,
