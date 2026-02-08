@@ -97,7 +97,7 @@ export function BookingForm({
             <AvailabilityCalendar 
               availableDates={availableDates}
               selectedDate={selectedDate}
-              onSelectDate={(date) => {
+              onDateSelect={(date: string) => {
                 setSelectedDate(date)
                 setStep(2)
               }}
@@ -112,8 +112,8 @@ export function BookingForm({
             </h3>
             <TimeSlotPicker 
               slots={availableSlots}
-              selectedTime={selectedTime}
-              onSelectTime={(time) => {
+              selectedSlot={selectedTime}
+              onSlotSelect={(time: string) => {
                 setSelectedTime(time)
                 setStep(3)
               }}

@@ -226,8 +226,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/$countryCode/track"
-                    params={{ countryCode }}
+                    to={`/${countryCode}/track` as any}
                     className="text-city-gray hover:text-city-cyan transition-colors text-sm"
                   >
                     Track Order
@@ -280,8 +279,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/$countryCode/blog"
-                    params={{ countryCode }}
+                    to={`/${countryCode}/blog` as any}
                     className="text-city-gray hover:text-city-cyan transition-colors text-sm"
                   >
                     Blog

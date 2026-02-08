@@ -1,6 +1,18 @@
 import { Link } from "@tanstack/react-router"
 import { Star, CheckCircle } from "@medusajs/icons"
-import type { Vendor } from "../../lib/mock/marketplace"
+
+interface Vendor {
+  id: string
+  handle: string
+  name: string
+  description: string
+  logo?: string
+  banner?: string
+  verified: boolean
+  rating: number
+  reviewCount: number
+  productCount: number
+}
 
 interface VendorCardProps {
   vendor: Vendor
@@ -10,7 +22,7 @@ interface VendorCardProps {
 export function VendorCard({ vendor, countryCode }: VendorCardProps) {
   return (
     <Link
-      to={`/${countryCode}/vendors/${vendor.handle}`}
+      to={`/${countryCode}/vendors/${vendor.handle}` as any}
       className="group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
     >
       <div className="aspect-[16/9] relative overflow-hidden bg-gray-100">

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Check, ArrowUp, ArrowDown } from "@medusajs/icons"
+import { Check, ArrowUpRightMini, ArrowDownMini } from "@medusajs/icons"
 
 interface Plan {
   id: string
@@ -78,12 +78,12 @@ export function UpgradeDowngradeFlow({ currentPlan, availablePlans, onChangePlan
                 }`}>
                   {priceChange > 0 ? (
                     <>
-                      <ArrowUp className="w-4 h-4" />
+                      <ArrowUpRightMini className="w-4 h-4" />
                       <span>+${priceChange}/{plan.interval}</span>
                     </>
                   ) : (
                     <>
-                      <ArrowDown className="w-4 h-4" />
+                      <ArrowDownMini className="w-4 h-4" />
                       <span>-${Math.abs(priceChange)}/{plan.interval}</span>
                     </>
                   )}

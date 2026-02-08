@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, ReceiptPercent } from "@medusajs/icons"
+import { ArrowUpRightMini, ArrowDownMini, ReceiptPercent } from "@medusajs/icons"
 
 interface TransactionCardProps {
   transaction: {
@@ -17,9 +17,9 @@ export function TransactionCard({ transaction, onClick }: TransactionCardProps) 
   const getIcon = () => {
     switch (transaction.type) {
       case 'credit':
-        return <ArrowDown className="w-5 h-5 text-green-500" />
+        return <ArrowDownMini className="w-5 h-5 text-green-500" />
       case 'debit':
-        return <ArrowUp className="w-5 h-5 text-red-500" />
+        return <ArrowUpRightMini className="w-5 h-5 text-red-500" />
       case 'refund':
         return <ReceiptPercent className="w-5 h-5 text-blue-500" />
     }

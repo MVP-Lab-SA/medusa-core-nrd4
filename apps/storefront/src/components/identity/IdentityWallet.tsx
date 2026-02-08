@@ -1,5 +1,5 @@
 import { CredentialCard } from "./CredentialCard"
-import { Plus, QrCode } from "@medusajs/icons"
+import { Plus, Key } from "@medusajs/icons"
 
 interface Credential {
   id: string
@@ -42,7 +42,7 @@ export function IdentityWallet({ credentials, onAddCredential, onViewCredential,
 
       {credentials.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
-          <QrCode className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <Key className="w-12 h-12 text-gray-300 mx-auto mb-4" />
           <h3 className="font-medium text-gray-900">No credentials yet</h3>
           <p className="text-sm text-gray-500 mt-1">Add your first digital credential to get started</p>
           {onAddCredential && (

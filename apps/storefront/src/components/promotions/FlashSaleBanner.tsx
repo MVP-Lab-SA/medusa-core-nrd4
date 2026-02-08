@@ -1,7 +1,13 @@
 import { Link } from "@tanstack/react-router"
 import { Bolt } from "@medusajs/icons"
 import { CountdownTimer } from "./CountdownTimer"
-import type { FlashSale } from "../../lib/mock/marketplace"
+
+interface FlashSale {
+  id: string
+  name: string
+  description: string
+  endsAt: string
+}
 
 interface FlashSaleBannerProps {
   sale: FlashSale
@@ -24,10 +30,10 @@ export function FlashSaleBanner({ sale, countryCode }: FlashSaleBannerProps) {
         <div className="flex items-center gap-6">
           <div className="text-center">
             <p className="text-sm text-white/80 mb-1">Ends in</p>
-            <CountdownTimer endDate={sale.endDate} variant="light" />
+            <CountdownTimer endDate={sale.endsAt} variant="light" />
           </div>
           <Link
-            to={`/${countryCode}/flash-sales/${sale.id}`}
+            to={`/${countryCode}/flash-sales/${sale.id}` as any}
             className="px-6 py-3 bg-white text-red-600 font-bold rounded-lg hover:bg-gray-100 transition-colors"
           >
             Shop Now

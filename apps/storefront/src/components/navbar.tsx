@@ -226,8 +226,7 @@ export const Navbar = () => {
                         <div className="flex flex-col gap-3">
                           <NavigationMenu.Link asChild>
                             <Link
-                              to="/$countryCode/blog"
-                              params={{ countryCode }}
+                              to={`/${countryCode}/blog` as any}
                               className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
                             >
                               Blog
@@ -312,8 +311,7 @@ export const Navbar = () => {
                         <div className="flex flex-col gap-3">
                           <NavigationMenu.Link asChild>
                             <Link
-                              to="/$countryCode/track"
-                              params={{ countryCode }}
+                              to={`/${countryCode}/track` as any}
                               className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
                             >
                               Track Order
@@ -529,8 +527,7 @@ export const Navbar = () => {
                     </DrawerClose>
                     <DrawerClose asChild>
                       <Link
-                        to="/$countryCode/blog"
-                        params={{ countryCode }}
+                        to={`/${countryCode}/blog` as any}
                         className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
                       >
                         Blog
@@ -554,8 +551,7 @@ export const Navbar = () => {
                   <div className="flex flex-col">
                     <DrawerClose asChild>
                       <Link
-                        to="/$countryCode/track"
-                        params={{ countryCode }}
+                        to={`/${countryCode}/track` as any}
                         className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
                       >
                         Track Order

@@ -29,7 +29,7 @@ export function VendorProducts({ products, countryCode, vendorName }: VendorProd
       {products.map((product) => (
         <Link
           key={product.id}
-          to={`/${countryCode}/products/${product.handle}`}
+          to={`/${countryCode}/products/${product.handle}` as any}
           className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
         >
           <div className="aspect-square bg-gray-100 overflow-hidden">

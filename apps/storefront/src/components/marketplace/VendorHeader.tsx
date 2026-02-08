@@ -1,5 +1,17 @@
 import { Star, CheckCircle, MapPin } from "@medusajs/icons"
-import type { Vendor } from "../../lib/mock/marketplace"
+
+interface Vendor {
+  id: string
+  name: string
+  description: string
+  logo?: string
+  banner?: string
+  verified: boolean
+  rating: number
+  reviewCount: number
+  productCount: number
+  location?: string
+}
 
 interface VendorHeaderProps {
   vendor: Vendor

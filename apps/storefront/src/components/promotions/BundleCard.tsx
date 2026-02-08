@@ -1,5 +1,24 @@
 import { Link } from "@tanstack/react-router"
-import type { Bundle } from "../../lib/mock/marketplace"
+
+interface BundleProduct {
+  id: string
+  title: string
+  image?: string
+}
+
+interface Bundle {
+  id: string
+  handle: string
+  name: string
+  description: string
+  image?: string
+  products: BundleProduct[]
+  bundlePrice: number
+  originalPrice: number
+  savings: number
+  savingsPercent: number
+  currency: string
+}
 
 interface BundleCardProps {
   bundle: Bundle
@@ -9,7 +28,7 @@ interface BundleCardProps {
 export function BundleCard({ bundle, countryCode }: BundleCardProps) {
   return (
     <Link
-      to={`/${countryCode}/bundles/${bundle.handle}`}
+      to={`/${countryCode}/bundles/${bundle.handle}` as any}
       className="group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
     >
       <div className="relative">

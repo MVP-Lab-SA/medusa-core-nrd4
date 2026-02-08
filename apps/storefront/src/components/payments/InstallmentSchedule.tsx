@@ -1,4 +1,4 @@
-import { Check, Clock, AlertCircle, Calendar } from "lucide-react";
+import { Check, Clock, ExclamationCircle, Calendar } from "@medusajs/icons";
 
 export interface Installment {
   id: string;
@@ -51,7 +51,7 @@ export function InstallmentSchedule({
       case "pending":
         return <Clock className="w-4 h-4 text-blue-600" />;
       case "overdue":
-        return <AlertCircle className="w-4 h-4 text-red-600" />;
+        return <ExclamationCircle className="w-4 h-4 text-red-600" />;
       case "upcoming":
         return <Calendar className="w-4 h-4 text-gray-400" />;
     }

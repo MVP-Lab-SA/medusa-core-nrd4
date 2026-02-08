@@ -103,7 +103,7 @@ const CookieConsent = () => {
         >
           Accept
         </button>
-        <Link to="/us/privacy" className="px-4 py-2 text-city-gray text-sm hover:text-city-white transition-colors">
+        <Link to={"/us/privacy" as any} className="px-4 py-2 text-city-gray text-sm hover:text-city-white transition-colors">
           Privacy Policy
         </Link>
       </div>
@@ -190,25 +190,25 @@ const MobileBottomNav = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-city-navy border-t border-city-steel/30 md:hidden">
       <nav className="flex justify-around py-2">
-        <Link to="/us" className="flex flex-col items-center p-2 text-city-muted hover:text-city-cyan">
+        <Link to={"/us" as any} className="flex flex-col items-center p-2 text-city-muted hover:text-city-cyan">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
           </svg>
           <span className="text-xs mt-1">Home</span>
         </Link>
-        <Link to="/us/store" className="flex flex-col items-center p-2 text-city-muted hover:text-city-cyan">
+        <Link to={"/us/store" as any} className="flex flex-col items-center p-2 text-city-muted hover:text-city-cyan">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
           </svg>
           <span className="text-xs mt-1">Store</span>
         </Link>
-        <Link to="/us/cart" className="flex flex-col items-center p-2 text-city-muted hover:text-city-cyan">
+        <Link to={"/us/cart" as any} className="flex flex-col items-center p-2 text-city-muted hover:text-city-cyan">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
           <span className="text-xs mt-1">Cart</span>
         </Link>
-        <Link to="/us/account" className="flex flex-col items-center p-2 text-city-muted hover:text-city-cyan">
+        <Link to={"/us/account" as any} className="flex flex-col items-center p-2 text-city-muted hover:text-city-cyan">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>

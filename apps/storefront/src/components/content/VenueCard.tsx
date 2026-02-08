@@ -1,6 +1,17 @@
 import { Link } from "@tanstack/react-router"
 import { Star, MapPin, Phone } from "@medusajs/icons"
-import type { VenueProfile } from "../../lib/mock/payloadcms"
+
+interface VenueProfile {
+  id: string
+  slug: string
+  name: string
+  type: string
+  address: string
+  phone?: string
+  images?: string[]
+  rating?: number
+  priceRange?: string
+}
 
 interface VenueCardProps {
   venue: VenueProfile
@@ -10,7 +21,7 @@ interface VenueCardProps {
 export function VenueCard({ venue, countryCode }: VenueCardProps) {
   return (
     <Link
-      to={`/${countryCode}/venues/${venue.slug}`}
+      to={`/${countryCode}/venues/${venue.slug}` as any}
       className="group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
     >
       <div className="aspect-[16/9] bg-gray-100 overflow-hidden">

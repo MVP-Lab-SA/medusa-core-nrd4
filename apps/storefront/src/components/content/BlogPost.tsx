@@ -21,8 +21,7 @@ export function BlogPost({ post, countryCode }: BlogPostProps) {
   return (
     <article className="max-w-3xl mx-auto">
       <Link 
-        to="/$countryCode/blog"
-        params={{ countryCode }}
+        to={`/${countryCode}/blog` as any}
         className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6"
       >
         <ArrowLeft className="w-4 h-4" />

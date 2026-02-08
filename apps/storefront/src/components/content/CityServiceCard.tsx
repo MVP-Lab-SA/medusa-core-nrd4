@@ -1,6 +1,13 @@
 import { Link } from "@tanstack/react-router"
 import { ArrowRight } from "@medusajs/icons"
-import type { CityService } from "../../lib/mock/payloadcms"
+
+interface CityService {
+  id: string
+  slug: string
+  title: string
+  description: string
+  icon?: string
+}
 
 interface CityServiceCardProps {
   service: CityService
@@ -10,7 +17,7 @@ interface CityServiceCardProps {
 export function CityServiceCard({ service, countryCode }: CityServiceCardProps) {
   return (
     <Link
-      to={`/${countryCode}/city-services/${service.slug}`}
+      to={`/${countryCode}/city-services/${service.slug}` as any}
       className="group block bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-blue-300 transition-all"
     >
       <div className="flex items-start gap-4">
@@ -21,7 +28,7 @@ export function CityServiceCard({ service, countryCode }: CityServiceCardProps) 
         )}
         <div className="flex-1">
           <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
-            {service.name}
+            {service.title}
           </h3>
           <p className="text-gray-600 text-sm line-clamp-2 mb-3">{service.description}</p>
           <div className="flex items-center text-blue-600 text-sm font-medium group-hover:underline">

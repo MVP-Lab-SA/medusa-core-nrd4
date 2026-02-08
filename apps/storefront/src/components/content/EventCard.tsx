@@ -1,6 +1,21 @@
 import { Link } from "@tanstack/react-router"
 import { MapPin, Clock } from "@medusajs/icons"
-import type { CityEvent } from "../../lib/mock/payloadcms"
+
+interface CityEvent {
+  id: string
+  slug: string
+  title: string
+  description: string
+  date?: string
+  startDate: string
+  endDate?: string
+  location: string | { name?: string; address?: string }
+  featuredImage?: string
+  category?: string
+  isFree?: boolean
+  price?: number
+  ticketUrl?: string
+}
 
 interface EventCardProps {
   event: CityEvent
@@ -24,7 +39,7 @@ export function EventCard({ event, countryCode }: EventCardProps) {
 
   return (
     <Link
-      to={`/${countryCode}/events/${event.slug}`}
+      to={`/${countryCode}/events/${event.slug}` as any}
       className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow ${
         isPast ? "opacity-60" : ""
       }`}

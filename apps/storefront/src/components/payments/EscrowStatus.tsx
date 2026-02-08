@@ -1,4 +1,4 @@
-import { Lock, Check, Clock, ArrowRight } from "@medusajs/icons"
+import { LockClosedSolid, Check, Clock, ArrowRightMini } from "@medusajs/icons"
 
 interface EscrowStatusProps {
   escrow: {
@@ -20,11 +20,11 @@ export function EscrowStatus({ escrow, role, onRelease, onDispute }: EscrowStatu
   const getStatusConfig = () => {
     switch (escrow.status) {
       case 'held':
-        return { icon: Lock, color: 'text-yellow-600', bg: 'bg-yellow-100', label: 'Funds Held' }
+        return { icon: LockClosedSolid, color: 'text-yellow-600', bg: 'bg-yellow-100', label: 'Funds Held' }
       case 'released':
         return { icon: Check, color: 'text-green-600', bg: 'bg-green-100', label: 'Released' }
       case 'refunded':
-        return { icon: ArrowRight, color: 'text-blue-600', bg: 'bg-blue-100', label: 'Refunded' }
+        return { icon: ArrowRightMini, color: 'text-blue-600', bg: 'bg-blue-100', label: 'Refunded' }
       case 'disputed':
         return { icon: Clock, color: 'text-red-600', bg: 'bg-red-100', label: 'Disputed' }
     }

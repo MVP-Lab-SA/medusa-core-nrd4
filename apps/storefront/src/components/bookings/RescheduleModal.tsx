@@ -70,7 +70,7 @@ export function RescheduleModal({
               <AvailabilityCalendar 
                 availableDates={availableDates}
                 selectedDate={newDate}
-                onSelectDate={(date) => {
+                onDateSelect={(date: string) => {
                   setNewDate(date)
                   setStep(2)
                 }}
@@ -85,8 +85,8 @@ export function RescheduleModal({
               </h3>
               <TimeSlotPicker 
                 slots={availableSlots}
-                selectedTime={newTime}
-                onSelectTime={(time) => setNewTime(time)}
+                selectedSlot={newTime}
+                onSlotSelect={(time: string) => setNewTime(time)}
               />
               <button
                 type="button"

@@ -1,5 +1,17 @@
-import { Star, ThumbUpDown } from "@medusajs/icons"
-import type { Review } from "../../lib/mock/marketplace"
+import { Star, ThumbUp } from "@medusajs/icons"
+
+interface Review {
+  id: string
+  rating: number
+  title?: string
+  content: string
+  customerName: string
+  customerAvatar?: string
+  createdAt: string
+  images?: string[]
+  verified?: boolean
+  helpfulCount?: number
+}
 
 interface ReviewCardProps {
   review: Review
@@ -65,7 +77,7 @@ export function ReviewCard({ review, onHelpful }: ReviewCardProps) {
           onClick={() => onHelpful(review.id)}
           className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700"
         >
-          <ThumbUpDown className="w-4 h-4" />
+          <ThumbUp className="w-4 h-4" />
           <span>Helpful ({review.helpfulCount || 0})</span>
         </button>
       )}
