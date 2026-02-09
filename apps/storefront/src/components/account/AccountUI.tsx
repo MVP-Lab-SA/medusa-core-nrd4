@@ -200,11 +200,12 @@ AccountInput.displayName = "AccountInput"
 interface AccountSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string
   error?: string
-  options: { value: string; label: string }[]
+  options?: { value: string; label: string }[]
+  children?: ReactNode
 }
 
 export const AccountSelect = forwardRef<HTMLSelectElement, AccountSelectProps>(
-  ({ label, error, options, className, id, ...props }, ref) => {
+  ({ label, error, options, children, className, id, ...props }, ref) => {
     const selectId = id || label?.toLowerCase().replace(/\s/g, "-")
 
     return (
@@ -226,11 +227,11 @@ export const AccountSelect = forwardRef<HTMLSelectElement, AccountSelectProps>(
           )}
           {...props}
         >
-          {options.map((opt) => (
+          {options ? options.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>
-          ))}
+          )) : children}
         </select>
         {error && <p className="text-sm text-red-400">{error}</p>}
       </div>
@@ -355,14 +356,51 @@ export function AccountBadge({ children, variant = "default", size = "sm" }: Acc
 // EMPTY STATE COMPONENT
 // ============================================================================
 
+interface AccountEmptyStateAction {
+  label: string
+  href?: string
+  onClick?: () => void
+}
+
 interface AccountEmptyStateProps {
   icon: ReactNode
   title: string
   description: string
-  action?: ReactNode
+  action?: AccountEmptyStateAction | ReactNode
+}
+
+function isActionObject(action: any): action is AccountEmptyStateAction {
+  return action && typeof action === "object" && "label" in action
 }
 
 export function AccountEmptyState({ icon, title, description, action }: AccountEmptyStateProps) {
+  const renderAction = () => {
+    if (!action) return null
+    
+    if (isActionObject(action)) {
+      if (action.href) {
+        return (
+          <a
+            href={action.href}
+            className="px-4 py-2 bg-cyan-500 text-black font-medium rounded-lg hover:bg-cyan-400 transition-colors"
+          >
+            {action.label}
+          </a>
+        )
+      }
+      return (
+        <button
+          onClick={action.onClick}
+          className="px-4 py-2 bg-cyan-500 text-black font-medium rounded-lg hover:bg-cyan-400 transition-colors"
+        >
+          {action.label}
+        </button>
+      )
+    }
+    
+    return action
+  }
+
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
       <div className="p-4 bg-gray-800 rounded-full text-gray-400 mb-4">
@@ -370,7 +408,7 @@ export function AccountEmptyState({ icon, title, description, action }: AccountE
       </div>
       <h3 className="text-lg font-medium text-white mb-2">{title}</h3>
       <p className="text-gray-400 max-w-sm mb-6">{description}</p>
-      {action}
+      {renderAction()}
     </div>
   )
 }
@@ -380,7 +418,8 @@ export function AccountEmptyState({ icon, title, description, action }: AccountE
 // ============================================================================
 
 interface AccountModalProps {
-  open: boolean
+  open?: boolean
+  isOpen?: boolean
   onClose: () => void
   title: string
   children: ReactNode
@@ -388,8 +427,9 @@ interface AccountModalProps {
   size?: "sm" | "md" | "lg"
 }
 
-export function AccountModal({ open, onClose, title, children, footer, size = "md" }: AccountModalProps) {
-  if (!open) return null
+export function AccountModal({ open, isOpen, onClose, title, children, footer, size = "md" }: AccountModalProps) {
+  const isVisible = open ?? isOpen ?? false
+  if (!isVisible) return null
 
   const sizes = {
     sm: "max-w-sm",
@@ -603,14 +643,17 @@ interface AccountPageHeaderProps {
   description?: string
   action?: ReactNode
   breadcrumb?: { label: string; href?: string }[]
+  breadcrumbs?: { label: string; href?: string }[]
 }
 
-export function AccountPageHeader({ title, description, action, breadcrumb }: AccountPageHeaderProps) {
+export function AccountPageHeader({ title, description, action, breadcrumb, breadcrumbs }: AccountPageHeaderProps) {
+  const crumbs = breadcrumbs || breadcrumb || []
+  
   return (
     <div className="mb-8">
-      {breadcrumb && breadcrumb.length > 0 && (
+      {crumbs.length > 0 && (
         <nav className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-          {breadcrumb.map((item, index) => (
+          {crumbs.map((item, index) => (
             <span key={item.label} className="flex items-center gap-2">
               {index > 0 && <span>/</span>}
               {item.href ? (
