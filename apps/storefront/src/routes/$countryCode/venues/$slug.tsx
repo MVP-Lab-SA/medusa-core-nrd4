@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { MapPin, Clock, Phone, Globe, Star, Heart, Share2, ArrowLeft, Navigation } from "lucide-react"
+import { MapPin, Clock, Phone, Link as GlobeIcon, Star, Heart, ArrowLeftMini, ArrowUpRightOnBox } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/venues/$slug")({
   component: VenueDetailPage,
@@ -51,7 +51,7 @@ function VenueDetailPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <a href="/venues" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeftMini />
         Back to Venues
       </a>
 
@@ -79,7 +79,7 @@ function VenueDetailPage() {
               <h1 className="text-3xl font-bold mt-3">{venue.name}</h1>
               <div className="flex items-center gap-4 mt-2">
                 <div className="flex items-center gap-1">
-                  <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
+                  <Star className="text-amber-400" />
                   <span className="font-semibold">{venue.rating}</span>
                   <span className="text-gray-500">({venue.reviewCount} reviews)</span>
                 </div>
@@ -87,10 +87,10 @@ function VenueDetailPage() {
             </div>
             <div className="flex gap-2">
               <button className="p-2 border rounded-lg hover:bg-gray-50">
-                <Heart className="w-5 h-5" />
+                <Heart />
               </button>
               <button className="p-2 border rounded-lg hover:bg-gray-50">
-                <Share2 className="w-5 h-5" />
+                <ArrowUpRightOnBox />
               </button>
             </div>
           </div>
@@ -138,7 +138,7 @@ function VenueDetailPage() {
                       {[...Array(5)].map((_, i) => (
                         <Star 
                           key={i} 
-                          className={`w-4 h-4 ${i < review.rating ? "fill-amber-400 text-amber-400" : "text-gray-300"}`} 
+                          className={i < review.rating ? "text-amber-400" : "text-gray-300"} 
                         />
                       ))}
                     </div>
@@ -156,21 +156,21 @@ function VenueDetailPage() {
             {/* Contact */}
             <div className="space-y-4 mb-6">
               <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
+                <MapPin className="text-gray-400" />
                 <div>
                   <p className="font-medium">Address</p>
                   <p className="text-gray-600">{venue.address}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Phone className="w-5 h-5 text-gray-400 mt-0.5" />
+                <Phone className="text-gray-400" />
                 <div>
                   <p className="font-medium">Phone</p>
                   <p className="text-gray-600">{venue.phone}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Globe className="w-5 h-5 text-gray-400 mt-0.5" />
+                <GlobeIcon className="text-gray-400" />
                 <div>
                   <p className="font-medium">Website</p>
                   <a href="#" className="text-blue-600 hover:underline">{venue.website}</a>
@@ -179,7 +179,7 @@ function VenueDetailPage() {
             </div>
 
             <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 mb-3">
-              <Navigation className="w-5 h-5" />
+              <MapPin />
               Get Directions
             </button>
             <button className="w-full border py-3 rounded-lg hover:bg-gray-50">
@@ -189,7 +189,7 @@ function VenueDetailPage() {
             {/* Hours */}
             <div className="mt-6 pt-6 border-t">
               <div className="flex items-center gap-2 mb-4">
-                <Clock className="w-5 h-5 text-gray-400" />
+                <Clock className="text-gray-400" />
                 <p className="font-medium">Opening Hours</p>
               </div>
               <div className="space-y-2 text-sm">
