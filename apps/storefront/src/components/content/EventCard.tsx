@@ -26,13 +26,11 @@ export function EventCard({ event, countryCode }: EventCardProps) {
   const eventDate = new Date(event.date || event.startDate)
   const isPast = eventDate < new Date()
 
-  // Format time from date
   const formatTime = (dateStr: string) => {
     const date = new Date(dateStr)
     return date.toLocaleTimeString("en", { hour: "numeric", minute: "2-digit" })
   }
 
-  // Get location string from object or string
   const locationString = typeof event.location === "string" 
     ? event.location 
     : event.location?.name || event.location?.address || "TBA"
@@ -40,68 +38,72 @@ export function EventCard({ event, countryCode }: EventCardProps) {
   return (
     <Link
       to={`/${countryCode}/events/${event.slug}` as any}
-      className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow ${
+      className={`group block bg-city-navy border border-city-steel/30 rounded-lg overflow-hidden hover:border-city-cyan/50 transition-all ${
         isPast ? "opacity-60" : ""
       }`}
     >
-      <div className="aspect-[16/9] bg-gray-100 overflow-hidden relative">
+      <div className="aspect-[16/9] bg-city-slate overflow-hidden relative">
         {event.featuredImage ? (
           <img
             src={event.featuredImage}
             alt={event.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-cyan-100 to-blue-100" />
+          <div className="w-full h-full bg-gradient-to-br from-city-cyan/20 to-city-slate" />
         )}
         {isPast && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="px-4 py-2 bg-black/70 text-white font-medium rounded-lg">
+          <div className="absolute inset-0 bg-city-dark/70 flex items-center justify-center">
+            <span className="px-4 py-2 bg-city-dark/90 text-city-muted font-medium rounded-lg border border-city-steel/30">
               Past Event
             </span>
           </div>
         )}
+        {/* Date Badge */}
         <div className="absolute top-3 left-3">
-          <div className="bg-white rounded-lg p-2 text-center shadow-md">
-            <div className="text-sm font-bold text-cyan-600">
+          <div className="bg-city-dark/90 backdrop-blur-sm rounded-lg p-2 text-center border border-city-steel/30">
+            <div className="text-xs font-bold text-city-cyan uppercase tracking-wider">
               {eventDate.toLocaleDateString("en", { month: "short" })}
             </div>
-            <div className="text-2xl font-bold text-gray-900">
+            <div className="text-2xl font-bold text-city-white">
               {eventDate.getDate()}
             </div>
           </div>
         </div>
+        {/* Category Badge */}
         {event.category && (
           <div className="absolute top-3 right-3">
-            <span className="px-2 py-1 bg-cyan-500 text-white text-xs font-medium rounded">
+            <span className="px-3 py-1 bg-city-cyan text-city-dark text-xs font-bold uppercase tracking-wider rounded">
               {event.category}
             </span>
           </div>
         )}
       </div>
-      <div className="p-4">
-        <h3 className="font-bold text-gray-900 group-hover:text-cyan-600 transition-colors mb-2 line-clamp-2">
+      <div className="p-5">
+        <h3 className="font-bold text-city-white group-hover:text-city-cyan transition-colors mb-2 line-clamp-2">
           {event.title}
         </h3>
-        <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+        <p className="text-sm text-city-gray line-clamp-2 mb-4">
           {event.description}
         </p>
-        <div className="space-y-2 text-sm text-gray-500">
+        <div className="space-y-2 text-sm text-city-muted">
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4" />
+            <Clock className="w-4 h-4 text-city-cyan" />
             <span>{formatTime(event.startDate)}</span>
           </div>
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4" />
+            <MapPin className="w-4 h-4 text-city-cyan" />
             <span className="truncate">{locationString}</span>
           </div>
         </div>
-        <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
-          <span className={`font-semibold ${event.isFree ? "text-green-600" : "text-gray-900"}`}>
-            {event.isFree ? "Free" : event.price ? `$${event.price}` : "TBA"}
+        <div className="mt-4 pt-4 border-t border-city-steel/30 flex items-center justify-between">
+          <span className={`font-bold ${event.isFree ? "text-green-400" : "text-city-white"}`}>
+            {event.isFree ? "Free Event" : event.price ? `$${event.price}` : "TBA"}
           </span>
           {event.ticketUrl && !isPast && (
-            <span className="text-cyan-600 text-sm font-medium">Get Tickets</span>
+            <span className="text-city-cyan text-sm font-semibold group-hover:underline">
+              Get Tickets
+            </span>
           )}
         </div>
       </div>
