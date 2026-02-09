@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { Calendar, MapPin, Clock, Users, Share2, Heart, ArrowLeft, Ticket } from "lucide-react"
+import { Calendar, MapPin, Clock, Users, ArrowUpRightOnBox, Heart, ArrowLeftMini, Tag } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/events/$slug")({
   component: EventDetailPage,
@@ -49,7 +49,7 @@ function EventDetailPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <a href="/events" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeftMini className="w-4 h-4" />
         Back to Events
       </a>
 
@@ -96,7 +96,7 @@ function EventDetailPage() {
           <div className="bg-white border rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-4">Location</h2>
             <div className="flex items-start gap-3 mb-4">
-              <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
+              <MapPin className="w-5 h-5 mt-0.5" style={{ color: "#9ca3af" }} />
               <div>
                 <p className="font-medium">{event.location}</p>
                 <p className="text-gray-600">{event.address}</p>
@@ -118,7 +118,7 @@ function EventDetailPage() {
             </div>
 
             <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 mb-3">
-              <Ticket className="w-5 h-5" />
+              <Tag className="w-5 h-5" />
               Register for Event
             </button>
 
@@ -128,7 +128,7 @@ function EventDetailPage() {
                 Save
               </button>
               <button className="flex-1 flex items-center justify-center gap-2 py-2 border rounded-lg hover:bg-gray-50">
-                <Share2 className="w-4 h-4" />
+                <ArrowUpRightOnBox className="w-4 h-4" />
                 Share
               </button>
             </div>
