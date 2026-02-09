@@ -54,6 +54,7 @@ import { Route as CountryCodeProvidersIndexRouteImport } from './routes/$country
 import { Route as CountryCodePreordersIndexRouteImport } from './routes/$countryCode/preorders/index'
 import { Route as CountryCodePlatformIndexRouteImport } from './routes/$countryCode/platform/index'
 import { Route as CountryCodeMembershipsIndexRouteImport } from './routes/$countryCode/memberships/index'
+import { Route as CountryCodeExploreIndexRouteImport } from './routes/$countryCode/explore/index'
 import { Route as CountryCodeEventsIndexRouteImport } from './routes/$countryCode/events/index'
 import { Route as CountryCodeConsignmentIndexRouteImport } from './routes/$countryCode/consignment/index'
 import { Route as CountryCodeCampaignsIndexRouteImport } from './routes/$countryCode/campaigns/index'
@@ -79,11 +80,13 @@ import { Route as CountryCodeRentalsHandleRouteImport } from './routes/$countryC
 import { Route as CountryCodeProvidersIdRouteImport } from './routes/$countryCode/providers/$id'
 import { Route as CountryCodeProductsHandleRouteImport } from './routes/$countryCode/products/$handle'
 import { Route as CountryCodePreordersHandleRouteImport } from './routes/$countryCode/preorders/$handle'
+import { Route as CountryCodePoiSlugRouteImport } from './routes/$countryCode/poi/$slug'
 import { Route as CountryCodeOrdersOrderIdRouteImport } from './routes/$countryCode/orders/$orderId'
 import { Route as CountryCodeMembershipsHandleRouteImport } from './routes/$countryCode/memberships/$handle'
 import { Route as CountryCodeHelpCategoryRouteImport } from './routes/$countryCode/help/$category'
 import { Route as CountryCodeEventsSlugRouteImport } from './routes/$countryCode/events/$slug'
 import { Route as CountryCodeConsignmentHandleRouteImport } from './routes/$countryCode/consignment/$handle'
+import { Route as CountryCodeCmsSplatRouteImport } from './routes/$countryCode/cms/$'
 import { Route as CountryCodeCategoriesHandleRouteImport } from './routes/$countryCode/categories/$handle'
 import { Route as CountryCodeCampaignsHandleRouteImport } from './routes/$countryCode/campaigns/$handle'
 import { Route as CountryCodeBusinessTeamRouteImport } from './routes/$countryCode/business/team'
@@ -369,6 +372,11 @@ const CountryCodeMembershipsIndexRoute =
     path: '/memberships/',
     getParentRoute: () => CountryCodeRoute,
   } as any)
+const CountryCodeExploreIndexRoute = CountryCodeExploreIndexRouteImport.update({
+  id: '/explore/',
+  path: '/explore/',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
 const CountryCodeEventsIndexRoute = CountryCodeEventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
@@ -508,6 +516,11 @@ const CountryCodePreordersHandleRoute =
     path: '/preorders/$handle',
     getParentRoute: () => CountryCodeRoute,
   } as any)
+const CountryCodePoiSlugRoute = CountryCodePoiSlugRouteImport.update({
+  id: '/poi/$slug',
+  path: '/poi/$slug',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
 const CountryCodeOrdersOrderIdRoute =
   CountryCodeOrdersOrderIdRouteImport.update({
     id: '/orders/$orderId',
@@ -536,6 +549,11 @@ const CountryCodeConsignmentHandleRoute =
     path: '/consignment/$handle',
     getParentRoute: () => CountryCodeRoute,
   } as any)
+const CountryCodeCmsSplatRoute = CountryCodeCmsSplatRouteImport.update({
+  id: '/cms/$',
+  path: '/cms/$',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
 const CountryCodeCategoriesHandleRoute =
   CountryCodeCategoriesHandleRouteImport.update({
     id: '/categories/$handle',
@@ -911,11 +929,13 @@ export interface FileRoutesByFullPath {
   '/$countryCode/business/team': typeof CountryCodeBusinessTeamRoute
   '/$countryCode/campaigns/$handle': typeof CountryCodeCampaignsHandleRoute
   '/$countryCode/categories/$handle': typeof CountryCodeCategoriesHandleRoute
+  '/$countryCode/cms/$': typeof CountryCodeCmsSplatRoute
   '/$countryCode/consignment/$handle': typeof CountryCodeConsignmentHandleRoute
   '/$countryCode/events/$slug': typeof CountryCodeEventsSlugRoute
   '/$countryCode/help/$category': typeof CountryCodeHelpCategoryRoute
   '/$countryCode/memberships/$handle': typeof CountryCodeMembershipsHandleRoute
   '/$countryCode/orders/$orderId': typeof CountryCodeOrdersOrderIdRoute
+  '/$countryCode/poi/$slug': typeof CountryCodePoiSlugRoute
   '/$countryCode/preorders/$handle': typeof CountryCodePreordersHandleRoute
   '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRouteWithChildren
   '/$countryCode/providers/$id': typeof CountryCodeProvidersIdRoute
@@ -941,6 +961,7 @@ export interface FileRoutesByFullPath {
   '/$countryCode/campaigns/': typeof CountryCodeCampaignsIndexRoute
   '/$countryCode/consignment/': typeof CountryCodeConsignmentIndexRoute
   '/$countryCode/events/': typeof CountryCodeEventsIndexRoute
+  '/$countryCode/explore/': typeof CountryCodeExploreIndexRoute
   '/$countryCode/memberships/': typeof CountryCodeMembershipsIndexRoute
   '/$countryCode/platform/': typeof CountryCodePlatformIndexRoute
   '/$countryCode/preorders/': typeof CountryCodePreordersIndexRoute
@@ -1034,11 +1055,13 @@ export interface FileRoutesByTo {
   '/$countryCode/business/team': typeof CountryCodeBusinessTeamRoute
   '/$countryCode/campaigns/$handle': typeof CountryCodeCampaignsHandleRoute
   '/$countryCode/categories/$handle': typeof CountryCodeCategoriesHandleRoute
+  '/$countryCode/cms/$': typeof CountryCodeCmsSplatRoute
   '/$countryCode/consignment/$handle': typeof CountryCodeConsignmentHandleRoute
   '/$countryCode/events/$slug': typeof CountryCodeEventsSlugRoute
   '/$countryCode/help/$category': typeof CountryCodeHelpCategoryRoute
   '/$countryCode/memberships/$handle': typeof CountryCodeMembershipsHandleRoute
   '/$countryCode/orders/$orderId': typeof CountryCodeOrdersOrderIdRoute
+  '/$countryCode/poi/$slug': typeof CountryCodePoiSlugRoute
   '/$countryCode/preorders/$handle': typeof CountryCodePreordersHandleRoute
   '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRouteWithChildren
   '/$countryCode/providers/$id': typeof CountryCodeProvidersIdRoute
@@ -1064,6 +1087,7 @@ export interface FileRoutesByTo {
   '/$countryCode/campaigns': typeof CountryCodeCampaignsIndexRoute
   '/$countryCode/consignment': typeof CountryCodeConsignmentIndexRoute
   '/$countryCode/events': typeof CountryCodeEventsIndexRoute
+  '/$countryCode/explore': typeof CountryCodeExploreIndexRoute
   '/$countryCode/memberships': typeof CountryCodeMembershipsIndexRoute
   '/$countryCode/platform': typeof CountryCodePlatformIndexRoute
   '/$countryCode/preorders': typeof CountryCodePreordersIndexRoute
@@ -1162,11 +1186,13 @@ export interface FileRoutesById {
   '/$countryCode/business/team': typeof CountryCodeBusinessTeamRoute
   '/$countryCode/campaigns/$handle': typeof CountryCodeCampaignsHandleRoute
   '/$countryCode/categories/$handle': typeof CountryCodeCategoriesHandleRoute
+  '/$countryCode/cms/$': typeof CountryCodeCmsSplatRoute
   '/$countryCode/consignment/$handle': typeof CountryCodeConsignmentHandleRoute
   '/$countryCode/events/$slug': typeof CountryCodeEventsSlugRoute
   '/$countryCode/help/$category': typeof CountryCodeHelpCategoryRoute
   '/$countryCode/memberships/$handle': typeof CountryCodeMembershipsHandleRoute
   '/$countryCode/orders/$orderId': typeof CountryCodeOrdersOrderIdRoute
+  '/$countryCode/poi/$slug': typeof CountryCodePoiSlugRoute
   '/$countryCode/preorders/$handle': typeof CountryCodePreordersHandleRoute
   '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRouteWithChildren
   '/$countryCode/providers/$id': typeof CountryCodeProvidersIdRoute
@@ -1192,6 +1218,7 @@ export interface FileRoutesById {
   '/$countryCode/campaigns/': typeof CountryCodeCampaignsIndexRoute
   '/$countryCode/consignment/': typeof CountryCodeConsignmentIndexRoute
   '/$countryCode/events/': typeof CountryCodeEventsIndexRoute
+  '/$countryCode/explore/': typeof CountryCodeExploreIndexRoute
   '/$countryCode/memberships/': typeof CountryCodeMembershipsIndexRoute
   '/$countryCode/platform/': typeof CountryCodePlatformIndexRoute
   '/$countryCode/preorders/': typeof CountryCodePreordersIndexRoute
@@ -1291,11 +1318,13 @@ export interface FileRouteTypes {
     | '/$countryCode/business/team'
     | '/$countryCode/campaigns/$handle'
     | '/$countryCode/categories/$handle'
+    | '/$countryCode/cms/$'
     | '/$countryCode/consignment/$handle'
     | '/$countryCode/events/$slug'
     | '/$countryCode/help/$category'
     | '/$countryCode/memberships/$handle'
     | '/$countryCode/orders/$orderId'
+    | '/$countryCode/poi/$slug'
     | '/$countryCode/preorders/$handle'
     | '/$countryCode/products/$handle'
     | '/$countryCode/providers/$id'
@@ -1321,6 +1350,7 @@ export interface FileRouteTypes {
     | '/$countryCode/campaigns/'
     | '/$countryCode/consignment/'
     | '/$countryCode/events/'
+    | '/$countryCode/explore/'
     | '/$countryCode/memberships/'
     | '/$countryCode/platform/'
     | '/$countryCode/preorders/'
@@ -1414,11 +1444,13 @@ export interface FileRouteTypes {
     | '/$countryCode/business/team'
     | '/$countryCode/campaigns/$handle'
     | '/$countryCode/categories/$handle'
+    | '/$countryCode/cms/$'
     | '/$countryCode/consignment/$handle'
     | '/$countryCode/events/$slug'
     | '/$countryCode/help/$category'
     | '/$countryCode/memberships/$handle'
     | '/$countryCode/orders/$orderId'
+    | '/$countryCode/poi/$slug'
     | '/$countryCode/preorders/$handle'
     | '/$countryCode/products/$handle'
     | '/$countryCode/providers/$id'
@@ -1444,6 +1476,7 @@ export interface FileRouteTypes {
     | '/$countryCode/campaigns'
     | '/$countryCode/consignment'
     | '/$countryCode/events'
+    | '/$countryCode/explore'
     | '/$countryCode/memberships'
     | '/$countryCode/platform'
     | '/$countryCode/preorders'
@@ -1541,11 +1574,13 @@ export interface FileRouteTypes {
     | '/$countryCode/business/team'
     | '/$countryCode/campaigns/$handle'
     | '/$countryCode/categories/$handle'
+    | '/$countryCode/cms/$'
     | '/$countryCode/consignment/$handle'
     | '/$countryCode/events/$slug'
     | '/$countryCode/help/$category'
     | '/$countryCode/memberships/$handle'
     | '/$countryCode/orders/$orderId'
+    | '/$countryCode/poi/$slug'
     | '/$countryCode/preorders/$handle'
     | '/$countryCode/products/$handle'
     | '/$countryCode/providers/$id'
@@ -1571,6 +1606,7 @@ export interface FileRouteTypes {
     | '/$countryCode/campaigns/'
     | '/$countryCode/consignment/'
     | '/$countryCode/events/'
+    | '/$countryCode/explore/'
     | '/$countryCode/memberships/'
     | '/$countryCode/platform/'
     | '/$countryCode/preorders/'
@@ -1919,6 +1955,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeMembershipsIndexRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/explore/': {
+      id: '/$countryCode/explore/'
+      path: '/explore'
+      fullPath: '/$countryCode/explore/'
+      preLoaderRoute: typeof CountryCodeExploreIndexRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/events/': {
       id: '/$countryCode/events/'
       path: '/events'
@@ -2094,6 +2137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodePreordersHandleRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/poi/$slug': {
+      id: '/$countryCode/poi/$slug'
+      path: '/poi/$slug'
+      fullPath: '/$countryCode/poi/$slug'
+      preLoaderRoute: typeof CountryCodePoiSlugRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/orders/$orderId': {
       id: '/$countryCode/orders/$orderId'
       path: '/orders/$orderId'
@@ -2127,6 +2177,13 @@ declare module '@tanstack/react-router' {
       path: '/consignment/$handle'
       fullPath: '/$countryCode/consignment/$handle'
       preLoaderRoute: typeof CountryCodeConsignmentHandleRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/cms/$': {
+      id: '/$countryCode/cms/$'
+      path: '/cms/$'
+      fullPath: '/$countryCode/cms/$'
+      preLoaderRoute: typeof CountryCodeCmsSplatRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/categories/$handle': {
@@ -2714,10 +2771,12 @@ interface CountryCodeRouteChildren {
   CountryCodeBusinessTeamRoute: typeof CountryCodeBusinessTeamRoute
   CountryCodeCampaignsHandleRoute: typeof CountryCodeCampaignsHandleRoute
   CountryCodeCategoriesHandleRoute: typeof CountryCodeCategoriesHandleRoute
+  CountryCodeCmsSplatRoute: typeof CountryCodeCmsSplatRoute
   CountryCodeConsignmentHandleRoute: typeof CountryCodeConsignmentHandleRoute
   CountryCodeEventsSlugRoute: typeof CountryCodeEventsSlugRoute
   CountryCodeMembershipsHandleRoute: typeof CountryCodeMembershipsHandleRoute
   CountryCodeOrdersOrderIdRoute: typeof CountryCodeOrdersOrderIdRoute
+  CountryCodePoiSlugRoute: typeof CountryCodePoiSlugRoute
   CountryCodePreordersHandleRoute: typeof CountryCodePreordersHandleRoute
   CountryCodeProductsHandleRoute: typeof CountryCodeProductsHandleRouteWithChildren
   CountryCodeProvidersIdRoute: typeof CountryCodeProvidersIdRoute
@@ -2737,6 +2796,7 @@ interface CountryCodeRouteChildren {
   CountryCodeCampaignsIndexRoute: typeof CountryCodeCampaignsIndexRoute
   CountryCodeConsignmentIndexRoute: typeof CountryCodeConsignmentIndexRoute
   CountryCodeEventsIndexRoute: typeof CountryCodeEventsIndexRoute
+  CountryCodeExploreIndexRoute: typeof CountryCodeExploreIndexRoute
   CountryCodeMembershipsIndexRoute: typeof CountryCodeMembershipsIndexRoute
   CountryCodePreordersIndexRoute: typeof CountryCodePreordersIndexRoute
   CountryCodeProvidersIndexRoute: typeof CountryCodeProvidersIndexRoute
@@ -2822,10 +2882,12 @@ const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodeBusinessTeamRoute: CountryCodeBusinessTeamRoute,
   CountryCodeCampaignsHandleRoute: CountryCodeCampaignsHandleRoute,
   CountryCodeCategoriesHandleRoute: CountryCodeCategoriesHandleRoute,
+  CountryCodeCmsSplatRoute: CountryCodeCmsSplatRoute,
   CountryCodeConsignmentHandleRoute: CountryCodeConsignmentHandleRoute,
   CountryCodeEventsSlugRoute: CountryCodeEventsSlugRoute,
   CountryCodeMembershipsHandleRoute: CountryCodeMembershipsHandleRoute,
   CountryCodeOrdersOrderIdRoute: CountryCodeOrdersOrderIdRoute,
+  CountryCodePoiSlugRoute: CountryCodePoiSlugRoute,
   CountryCodePreordersHandleRoute: CountryCodePreordersHandleRoute,
   CountryCodeProductsHandleRoute: CountryCodeProductsHandleRouteWithChildren,
   CountryCodeProvidersIdRoute: CountryCodeProvidersIdRoute,
@@ -2845,6 +2907,7 @@ const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodeCampaignsIndexRoute: CountryCodeCampaignsIndexRoute,
   CountryCodeConsignmentIndexRoute: CountryCodeConsignmentIndexRoute,
   CountryCodeEventsIndexRoute: CountryCodeEventsIndexRoute,
+  CountryCodeExploreIndexRoute: CountryCodeExploreIndexRoute,
   CountryCodeMembershipsIndexRoute: CountryCodeMembershipsIndexRoute,
   CountryCodePreordersIndexRoute: CountryCodePreordersIndexRoute,
   CountryCodeProvidersIndexRoute: CountryCodeProvidersIndexRoute,
