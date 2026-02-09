@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
-import { ArrowLeft, Check, Clock, Spinner } from "@medusajs/icons"
+import { ArrowLeft, Check, Clock, Spinner, ShieldCheck } from "@medusajs/icons"
 import { useRentalProduct, useCreateRental } from "../../../lib/hooks/use-commerce-models"
 import { useCustomer } from "@/lib/context/customer-context"
 
@@ -217,7 +217,7 @@ function RentalDetailPage() {
               <ul className="space-y-2">
                 {product.terms.map((term, i) => (
                   <li key={i} className="flex items-start gap-3 text-city-gray">
-                    <Shield className="w-5 h-5 text-city-cyan flex-shrink-0 mt-0.5" />
+                    <ShieldCheck className="w-5 h-5 text-city-cyan flex-shrink-0 mt-0.5" />
                     {term}
                   </li>
                 ))}
