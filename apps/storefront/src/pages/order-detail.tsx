@@ -1,4 +1,5 @@
 import { Link, useParams } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { ArrowLeft, CheckCircleSolid } from "@medusajs/icons"
 
 // Inline icons since ClockSolid and TruckSolid may not exist
@@ -120,7 +121,7 @@ export function OrderDetailPage() {
         {/* Header */}
         <div className="mb-8">
           <Link 
-            to="/us/account" 
+            to={href("/us/account")} 
             className="inline-flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -286,7 +287,7 @@ export function OrderDetailPage() {
             {/* Actions */}
             <div className="space-y-3">
               <Link
-                to="/us/returns"
+                to={href("/us/returns")}
                 className="block w-full py-3 text-center border border-gray-700 hover:border-gray-600 rounded-lg font-semibold transition-colors"
               >
                 Start Return
@@ -295,7 +296,7 @@ export function OrderDetailPage() {
                 Download Invoice
               </button>
               <Link
-                to="/us/contact"
+                to={href("/us/contact")}
                 className="block w-full py-3 text-center text-gray-400 hover:text-white transition-colors text-sm"
               >
                 Need Help? Contact Support

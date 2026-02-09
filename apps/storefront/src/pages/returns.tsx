@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { ArrowLeft, ArrowUpTray, XMark, CheckCircleSolid } from "@medusajs/icons"
 
 type ReturnReason = "defective" | "wrong_item" | "not_as_described" | "changed_mind" | "other"
@@ -80,7 +81,7 @@ export function ReturnsPage() {
             <p className="font-mono text-lg text-cyan-400">RET-{Date.now().toString(36).toUpperCase()}</p>
           </div>
           <Link 
-            to="/us/store"
+            to={href("/us/store")}
             className="inline-flex px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold rounded-lg transition-colors"
           >
             Continue Shopping
@@ -96,7 +97,7 @@ export function ReturnsPage() {
         {/* Header */}
         <div className="mb-8">
           <Link 
-            to="/us" 
+            to={href("/us")} 
             className="inline-flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />

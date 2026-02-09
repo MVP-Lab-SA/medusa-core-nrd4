@@ -3,6 +3,7 @@ import ProductCard from "@/components/product-card"
 import { Button } from "@/components/ui/button"
 import { useProducts } from "@/lib/hooks/use-products"
 import { useLoaderData, Link } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { XMark, Eye, AdjustmentsDone } from "@medusajs/icons"
 
 // Inline SVG icons
@@ -121,7 +122,7 @@ const Store = () => {
 
             {/* Compare Link */}
             <Link
-              to="/us/compare"
+              to={href("/us/compare")}
               className="px-4 py-2 border border-gray-700 hover:border-cyan-500 text-gray-300 hover:text-cyan-400 rounded-lg transition-colors text-sm"
             >
               Compare
@@ -264,7 +265,7 @@ const Store = () => {
                         />
                         <div className="flex-1">
                           <h3 className="font-semibold text-lg hover:text-cyan-400 transition-colors">
-                            <Link to={`/us/products/${product.handle}`}>{product.title}</Link>
+                            <Link to={href(`/us/products/${product.handle}`)}>{product.title}</Link>
                           </h3>
                           <p className="text-gray-400 text-sm mt-1 line-clamp-2">{product.description}</p>
                           <div className="flex items-center justify-between mt-4">
@@ -359,7 +360,7 @@ const Store = () => {
                     Add to Cart
                   </button>
                   <Link
-                    to={`/us/products/${quickViewProduct.handle}`}
+                    to={href(`/us/products/${quickViewProduct.handle}`)}
                     className="px-6 py-3 border border-gray-700 hover:border-cyan-500 rounded-lg transition-colors"
                     onClick={() => setQuickViewProduct(null)}
                   >

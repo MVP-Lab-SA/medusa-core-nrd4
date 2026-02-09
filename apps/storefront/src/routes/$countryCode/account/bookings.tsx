@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { Calendar, Clock, MapPin, User, Plus } from "@medusajs/icons"
 import { useBookings } from "../../../lib/hooks/use-marketplace"
+import { href } from "../../../lib/utils/link"
 import { AccountLayout } from "../../../components/account/AccountSidebar"
 
 export const Route = createFileRoute("/$countryCode/account/bookings")({
@@ -26,7 +27,7 @@ function BookingsPage() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold text-white">My Bookings</h1>
         <Link
-          to={`/${countryCode}/services`}
+          to={href(`/${countryCode}/services`)}
           className="flex items-center gap-2 px-4 py-2 bg-cyan-500 text-black font-medium rounded-lg hover:bg-cyan-400"
         >
           <Plus className="w-4 h-4" />
@@ -113,7 +114,7 @@ function BookingsPage() {
             <div className="text-center py-12 bg-gray-900 rounded-lg border border-gray-800">
               <p className="text-gray-400 mb-4">No bookings yet</p>
               <Link
-                to={`/${countryCode}/services`}
+                to={href(`/${countryCode}/services`)}
                 className="px-4 py-2 bg-cyan-500 text-black font-medium rounded-lg hover:bg-cyan-400"
               >
                 Browse Services

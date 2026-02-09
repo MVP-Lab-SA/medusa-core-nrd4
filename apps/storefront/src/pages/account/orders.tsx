@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { ShoppingBag, ArrowRight, TruckFast, Check, Clock, XCircle, BuildingStorefront } from "@medusajs/icons"
 import { useCustomerOrders } from "@/lib/hooks/use-orders"
 import { AccountLayout } from "@/components/account/AccountSidebar"
@@ -102,7 +103,7 @@ export function AccountOrdersPage({ countryCode }: OrdersPageProps) {
                       {order.items?.length || 0} item{(order.items?.length || 0) !== 1 ? "s" : ""}
                     </p>
                     <Link
-                      to={`/${countryCode}/orders/${order.id}`}
+                      to={href(`/${countryCode}/orders/${order.id}`)}
                       className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors"
                     >
                       View Details

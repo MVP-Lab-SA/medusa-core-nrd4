@@ -33,7 +33,7 @@ export function EventCalendar({ events, onSelectDate, onSelectEvent }: EventCale
     return events.filter(e => e.date.startsWith(dateStr))
   }
 
-  const days = []
+  const days: React.ReactNode[] = []
   for (let i = 0; i < startDayOfWeek; i++) {
     days.push(<div key={`empty-${i}`} className="h-24 bg-gray-50" />)
   }

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { ArrowPath, Clock, Check, XCircle, ArrowRight, Calendar, CreditCard } from "@medusajs/icons"
 import { AccountLayout } from "@/components/account/AccountSidebar"
 import {
@@ -261,7 +262,7 @@ function SubscriptionCard({ subscription, countryCode, onCancel }: SubscriptionC
             )}
           </div>
           <Link
-            to={`/${countryCode}/account/subscriptions/${subscription.id}`}
+            to={href(`/${countryCode}/account/subscriptions/${subscription.id}`)}
             className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors"
           >
             View Details

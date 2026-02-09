@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { Plus, Heart, Trash, PencilSquare, XMark, ShoppingBag } from "@medusajs/icons"
 import { useWishlist, Wishlist, WishlistItem } from "@/components/wishlist"
 import { AccountLayout } from "@/components/account/AccountSidebar"
@@ -178,7 +179,7 @@ export function AccountWishlistsPage({ countryCode }: WishlistsPageProps) {
                       <Heart className="w-8 h-8 text-gray-700 mx-auto mb-2" />
                       <p className="text-gray-500 text-sm">This wishlist is empty</p>
                       <Link 
-                        to={`/${countryCode}/store`}
+                        to={href(`/${countryCode}/store`)}
                         className="text-cyan-400 hover:text-cyan-300 text-sm mt-2 inline-block"
                       >
                         Browse products
@@ -296,7 +297,7 @@ function WishlistItemRow({
     <div className="p-4 flex items-center gap-4 hover:bg-gray-800/30 transition-colors">
       {/* Thumbnail */}
       <Link
-        to={`/${countryCode}/products/${item.handle}`}
+        to={href(`/${countryCode}/products/${item.handle}`)}
         className="w-16 h-16 bg-gray-900 flex-shrink-0 rounded overflow-hidden"
       >
         {item.thumbnail ? (
@@ -311,7 +312,7 @@ function WishlistItemRow({
       {/* Info */}
       <div className="flex-1 min-w-0">
         <Link
-          to={`/${countryCode}/products/${item.handle}`}
+          to={href(`/${countryCode}/products/${item.handle}`)}
           className="text-white font-medium hover:text-cyan-400 transition-colors block truncate"
         >
           {item.title}
@@ -334,7 +335,7 @@ function WishlistItemRow({
       {/* Actions */}
       <div className="flex items-center gap-2">
         <Link
-          to={`/${countryCode}/products/${item.handle}`}
+          to={href(`/${countryCode}/products/${item.handle}`)}
           className="px-3 py-1.5 bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 text-sm font-medium rounded transition-colors"
         >
           View

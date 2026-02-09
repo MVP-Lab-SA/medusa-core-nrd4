@@ -4,10 +4,13 @@
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "module": "esnext",
+    "target": "ES2022",
     "types": ["vite/client", "vite-plugin-terminal/client"],
     "moduleResolution": "Bundler",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "skipLibCheck": true,
+    "downlevelIteration": true,
+    "noImplicitAny": false,
     /* Path mapping */
     "baseUrl": "./src",
     "paths": {

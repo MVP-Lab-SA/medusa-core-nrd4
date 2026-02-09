@@ -228,6 +228,7 @@ export interface PurchaseOrder {
   id: string
   companyId: string
   quoteId?: string
+  poNumber?: string
   status: 'pending' | 'approved' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
   items: PurchaseOrderItem[]
   subtotal: number
@@ -451,4 +452,282 @@ export function useRegisterCompany() {
   }
 
   return { register, isLoading, error }
+}
+
+// =============================================================================
+// DIGITAL ASSETS / DOWNLOADS
+// =============================================================================
+
+export interface DigitalAsset {
+  id: string
+  name: string
+  type: 'download' | 'license' | 'subscription'
+  fileUrl?: string
+  fileName?: string
+  fileSize?: number
+  fileType?: string
+  downloadCount: number
+  maxDownloads?: number
+  expiresAt?: string
+  purchasedAt: string
+  orderId: string
+}
+
+export function useDigitalAssets() {
+  const [data, setData] = useState<DigitalAsset[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const mockAssets: DigitalAsset[] = [
+      {
+        id: "asset_1",
+        name: "Product Manual PDF",
+        type: "download",
+        fileName: "manual.pdf",
+        fileSize: 2500000,
+        downloadCount: 3,
+        maxDownloads: 10,
+        purchasedAt: "2024-01-15",
+        orderId: "order_1"
+      }
+    ]
+    setData(mockAssets)
+    setIsLoading(false)
+  }, [])
+
+  return { data, isLoading }
+}
+
+// =============================================================================
+// BOOKING / SERVICES
+// =============================================================================
+
+export interface BookingService {
+  id: string
+  name: string
+  title?: string
+  description: string
+  duration: number
+  price: number
+  currencyCode: string
+  category: string
+  image?: string
+  images?: string[]
+  handle?: string
+  maxParticipants?: number
+}
+
+export interface ServiceProvider {
+  id: string
+  name: string
+  avatar?: string
+  rating: number
+  reviewCount: number
+  specialties: string[]
+  bio?: string
+  description?: string
+  availability?: string
+}
+
+export interface TimeSlot {
+  id: string
+  startTime: string
+  endTime: string
+  available: boolean
+}
+
+export interface Booking {
+  id: string
+  serviceId: string
+  serviceName: string
+  providerId: string
+  providerName: string
+  date: string
+  startTime: string
+  endTime: string
+  time?: string
+  location?: string
+  status: 'confirmed' | 'pending' | 'canceled' | 'completed'
+  price: number
+  currencyCode: string
+}
+
+export function useBookingServices() {
+  const [data, setData] = useState<BookingService[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setData([])
+    setIsLoading(false)
+  }, [])
+
+  return { data, isLoading }
+}
+
+export function useBookingService(id: string) {
+  const [data, setData] = useState<BookingService | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setData(null)
+    setIsLoading(false)
+  }, [id])
+
+  return { data, isLoading }
+}
+
+export function useServiceProviders(serviceId?: string) {
+  const [data, setData] = useState<ServiceProvider[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setData([])
+    setIsLoading(false)
+  }, [serviceId])
+
+  return { data, isLoading }
+}
+
+export function useAvailableSlots(providerId: string, date: string) {
+  const [data, setData] = useState<TimeSlot[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setData([])
+    setIsLoading(false)
+  }, [providerId, date])
+
+  return { data, isLoading }
+}
+
+export function useBookings() {
+  const [data, setData] = useState<Booking[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setData([])
+    setIsLoading(false)
+  }, [])
+
+  return { data, isLoading }
+}
+
+export function useCreateBooking() {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const createBooking = async (booking: Partial<Booking>) => {
+    setIsLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 500))
+    setIsLoading(false)
+    return { success: true }
+  }
+
+  return { createBooking, isLoading }
+}
+
+// =============================================================================
+// SUBSCRIPTIONS
+// =============================================================================
+
+export interface SubscriptionPlan {
+  id: string
+  name: string
+  description: string
+  price: number
+  currencyCode: string
+  interval: 'monthly' | 'yearly'
+  features: string[]
+}
+
+export interface Subscription {
+  id: string
+  planId: string
+  planName: string
+  status: 'active' | 'paused' | 'canceled' | 'expired'
+  currentPeriodStart: string
+  currentPeriodEnd: string
+  price: number
+  currencyCode: string
+}
+
+export function useSubscriptionPlans() {
+  const [data, setData] = useState<SubscriptionPlan[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setData([])
+    setIsLoading(false)
+  }, [])
+
+  return { data, isLoading }
+}
+
+export function useSubscriptions() {
+  const [data, setData] = useState<Subscription[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setData([])
+    setIsLoading(false)
+  }, [])
+
+  return { data, isLoading }
+}
+
+export function useCreateSubscription() {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const createSubscription = async (planId: string) => {
+    setIsLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 500))
+    setIsLoading(false)
+    return { success: true }
+  }
+
+  return { createSubscription, isLoading }
+}
+
+// =============================================================================
+// BUNDLES
+// =============================================================================
+
+export interface Bundle {
+  id: string
+  name: string
+  description: string
+  products: { id: string; name: string; thumbnail?: string }[]
+  originalPrice: number
+  bundlePrice: number
+  currencyCode: string
+  savings: number
+}
+
+export function useBundles() {
+  const [data, setData] = useState<Bundle[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setData([])
+    setIsLoading(false)
+  }, [])
+
+  return { data, isLoading }
+}
+
+// =============================================================================
+// FOLLOW VENDOR
+// =============================================================================
+
+export function useFollowVendor(vendorId: string) {
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const toggleFollow = async () => {
+    setIsLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 300))
+    setIsFollowing(prev => !prev)
+    setIsLoading(false)
+  }
+
+  return { isFollowing, toggleFollow, isLoading }
 }

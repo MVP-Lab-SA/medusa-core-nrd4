@@ -17,7 +17,7 @@ interface AccountBusinessPageProps {
 
 export default function AccountBusinessPage({ countryCode }: AccountBusinessPageProps) {
   const { customer } = useCustomer()
-  const { data: company, isLoading: companyLoading } = useCompany(customer?.id || "")
+  const { data: company, isLoading: companyLoading } = useCompany()
   const { data: quotes } = useQuotes(company?.id || "")
   const { data: purchaseOrders } = usePurchaseOrders(company?.id || "")
   const { data: approvals } = useApprovalRequests(company?.id || "")
@@ -35,7 +35,7 @@ export default function AccountBusinessPage({ countryCode }: AccountBusinessPage
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await registerCompany.mutateAsync(formData)
+      await registerCompany.register(formData)
       setShowRegister(false)
     } catch (error) {
       console.error("Registration failed:", error)
@@ -174,10 +174,10 @@ export default function AccountBusinessPage({ countryCode }: AccountBusinessPage
                   </button>
                   <button
                     type="submit"
-                    disabled={registerCompany.isPending}
+                    disabled={registerCompany.isLoading}
                     className="flex-1 py-2.5 text-black bg-cyan-500 rounded-lg hover:bg-cyan-400 disabled:bg-gray-600 transition-colors font-medium"
                   >
-                    {registerCompany.isPending ? "Registering..." : "Register"}
+                    {registerCompany.isLoading ? "Registering..." : "Register"}
                   </button>
                 </div>
               </form>
@@ -233,7 +233,7 @@ export default function AccountBusinessPage({ countryCode }: AccountBusinessPage
                 </div>
               </div>
               <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                company.status === "verified" ? "bg-green-500/20 text-green-400" : "bg-amber-500/20 text-amber-400"
+                company.status === "active" ? "bg-green-500/20 text-green-400" : "bg-amber-500/20 text-amber-400"
               }`}>
                 {company.status}
               </span>

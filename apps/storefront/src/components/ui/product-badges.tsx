@@ -100,7 +100,7 @@ export function ProductBadges({
   className = "",
   maxBadges = 3
 }: ProductBadgesProps) {
-  const badges = []
+  const badges: React.ReactNode[] = []
 
   if (salePercentage || saleAmount) {
     badges.push(<SaleBadge key="sale" percentage={salePercentage} amount={saleAmount} />)

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { TruckFast, Clock, CheckCircle, XCircle } from "@medusajs/icons"
 import { useDeliveries } from "../../../lib/hooks/use-fleetbase"
+import { href } from "../../../lib/utils/link"
 import { AccountLayout } from "../../../components/account/AccountSidebar"
 
 export const Route = createFileRoute("/$countryCode/account/deliveries")({
@@ -54,7 +55,7 @@ function DeliveriesPage() {
                   return (
                     <Link
                       key={delivery.id}
-                      to={`/${countryCode}/track/${delivery.trackingNumber}`}
+                      to={href(`/${countryCode}/track/${delivery.trackingNumber}`)}
                       className="block bg-gray-900 border border-gray-800 rounded-lg p-4 hover:border-gray-700 transition-colors"
                     >
                       <div className="flex items-center justify-between">

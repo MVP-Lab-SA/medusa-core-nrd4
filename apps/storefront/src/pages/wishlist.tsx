@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { ArrowLeft, XMark, ShoppingCart, Heart } from "@medusajs/icons"
 
 type WishlistItem = {
@@ -66,7 +67,7 @@ export function WishlistPage() {
         <div className="max-w-4xl mx-auto px-4 py-12">
           <div className="mb-8">
             <Link 
-              to="/us/store" 
+              to={href("/us/store")} 
               className="inline-flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors mb-4"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -85,7 +86,7 @@ export function WishlistPage() {
               Save items you love by clicking the heart icon on any product. Your wishlist will be waiting for you here.
             </p>
             <Link 
-              to="/us/store"
+              to={href("/us/store")}
               className="inline-flex px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold rounded-lg transition-colors"
             >
               Discover Products
@@ -102,7 +103,7 @@ export function WishlistPage() {
         {/* Header */}
         <div className="mb-8">
           <Link 
-            to="/us/store" 
+            to={href("/us/store")} 
             className="inline-flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -130,7 +131,7 @@ export function WishlistPage() {
               className="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex gap-6"
             >
               {/* Image */}
-              <Link to={`/us/products/${item.id}`} className="flex-shrink-0">
+              <Link to={href(`/us/products/${item.id}`)} className="flex-shrink-0">
                 <img 
                   src={item.thumbnail} 
                   alt={item.title}
@@ -143,7 +144,7 @@ export function WishlistPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <Link 
-                      to={`/us/products/${item.id}`}
+                      to={href(`/us/products/${item.id}`)}
                       className="font-semibold text-lg hover:text-cyan-400 transition-colors"
                     >
                       {item.title}

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { Star, StarSolid, PencilSquare, Trash, Clock, Check } from "@medusajs/icons"
 import { AccountLayout } from "@/components/account/AccountSidebar"
 import {
@@ -221,7 +222,7 @@ function ReviewCard({ review, countryCode, renderStars, isPending }: ReviewCardP
             </div>
             <div>
               <Link 
-                to={`/${countryCode}/products/${review.productId}`}
+                to={href(`/${countryCode}/products/${review.productId}`)}
                 className="font-medium text-white hover:text-cyan-400 transition-colors"
               >
                 {review.productName}

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { ArrowLeft, Gift } from "@medusajs/icons"
 
 const giftCardAmounts = [25, 50, 75, 100, 150, 200, 500]
@@ -38,7 +39,7 @@ export function GiftCardsPage() {
         {/* Header */}
         <div className="mb-8">
           <Link 
-            to="/us/store" 
+            to={href("/us/store")} 
             className="inline-flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />

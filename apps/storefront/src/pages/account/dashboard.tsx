@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar } from "@/components/ui/avatar"
 import { useCustomer } from "@/lib/context/customer-context"
 import { Link, useNavigate } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { useEffect, useState } from "react"
 import { sdk } from "@/lib/utils/sdk"
 import { formatPrice } from "@/lib/utils/price"
@@ -112,7 +113,7 @@ const AccountDashboard = ({ countryCode }: AccountDashboardProps) => {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Link to={`/${countryCode}/account/settings`}>
+            <Link to={href(`/${countryCode}/account/settings`)}>
               <Button variant="secondary" className="flex items-center gap-2">
                 <CogSixTooth className="w-4 h-4" />
                 Settings
@@ -161,7 +162,7 @@ const AccountDashboard = ({ countryCode }: AccountDashboardProps) => {
       {/* Quick Actions */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         <Link 
-          to={`/${countryCode}/account/wishlists`}
+          to={href(`/${countryCode}/account/wishlists`)}
           className="flex flex-col items-center gap-2 p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-cyan-500/50 transition-colors"
         >
           <div className="w-12 h-12 rounded-full bg-pink-500/20 flex items-center justify-center">
@@ -170,7 +171,7 @@ const AccountDashboard = ({ countryCode }: AccountDashboardProps) => {
           <span className="text-sm text-gray-300">Wishlists</span>
         </Link>
         <Link 
-          to={`/${countryCode}/account/orders`}
+          to={href(`/${countryCode}/account/orders`)}
           className="flex flex-col items-center gap-2 p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-cyan-500/50 transition-colors"
         >
           <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
@@ -179,7 +180,7 @@ const AccountDashboard = ({ countryCode }: AccountDashboardProps) => {
           <span className="text-sm text-gray-300">Track Order</span>
         </Link>
         <Link 
-          to={`/${countryCode}/account/subscriptions`}
+          to={href(`/${countryCode}/account/subscriptions`)}
           className="flex flex-col items-center gap-2 p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-cyan-500/50 transition-colors"
         >
           <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center">
@@ -188,7 +189,7 @@ const AccountDashboard = ({ countryCode }: AccountDashboardProps) => {
           <span className="text-sm text-gray-300">Subscriptions</span>
         </Link>
         <Link 
-          to={`/${countryCode}/account/loyalty`}
+          to={href(`/${countryCode}/account/loyalty`)}
           className="flex flex-col items-center gap-2 p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-cyan-500/50 transition-colors"
         >
           <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
@@ -203,7 +204,7 @@ const AccountDashboard = ({ countryCode }: AccountDashboardProps) => {
         <div className="bg-gray-900 border border-gray-800 rounded-xl">
           <div className="flex items-center justify-between p-4 border-b border-gray-800">
             <h2 className="font-semibold text-white">Recent Orders</h2>
-            <Link to={`/${countryCode}/account/orders`} className="text-cyan-400 text-sm hover:underline">
+            <Link to={href(`/${countryCode}/account/orders`)} className="text-cyan-400 text-sm hover:underline">
               View All
             </Link>
           </div>
@@ -219,7 +220,7 @@ const AccountDashboard = ({ countryCode }: AccountDashboardProps) => {
                 {orders.slice(0, 4).map((order) => (
                   <Link
                     key={order.id}
-                    to={`/${countryCode}/orders/${order.id}`}
+                    to={href(`/${countryCode}/orders/${order.id}`)}
                     className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg hover:bg-gray-800 transition-colors"
                   >
                     <div>
@@ -244,7 +245,7 @@ const AccountDashboard = ({ countryCode }: AccountDashboardProps) => {
               <div className="text-center py-8">
                 <CubeSolid className="w-10 h-10 text-gray-600 mx-auto mb-3" />
                 <p className="text-gray-400 text-sm">No orders yet</p>
-                <Link to={`/${countryCode}/store`}>
+                <Link to={href(`/${countryCode}/store`)}>
                   <Button variant="secondary" className="mt-3">
                     Start Shopping
                   </Button>

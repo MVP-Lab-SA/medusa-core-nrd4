@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
+import { href } from "@/lib/utils/link"
 import { ExclamationCircle, Clock, Check, XCircle, ChatBubbleLeftRight, Plus, ArrowRight } from "@medusajs/icons"
 import { AccountLayout } from "@/components/account/AccountSidebar"
 import {
@@ -153,7 +154,7 @@ export function AccountDisputesPage({ countryCode }: DisputesPageProps) {
                       <span>{dispute.messages} messages</span>
                     </div>
                     <Link
-                      to={`/${countryCode}/account/disputes/${dispute.id}`}
+                      to={href(`/${countryCode}/account/disputes/${dispute.id}`)}
                       className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors"
                     >
                       View Details

@@ -325,19 +325,22 @@ export function AccountToggle({ checked, onChange, label, description, disabled 
 // BADGE COMPONENT
 // ============================================================================
 
-interface AccountBadgeProps {
+export interface AccountBadgeProps {
   children: ReactNode
-  variant?: "default" | "success" | "warning" | "danger" | "accent"
+  variant?: "default" | "success" | "warning" | "danger" | "accent" | "info" | "error"
   size?: "sm" | "md"
+  className?: string
 }
 
-export function AccountBadge({ children, variant = "default", size = "sm" }: AccountBadgeProps) {
-  const variants = {
+export function AccountBadge({ children, variant = "default", size = "sm", className }: AccountBadgeProps) {
+  const variants: Record<string, string> = {
     default: "bg-gray-800 text-gray-300",
     success: "bg-emerald-500/10 text-emerald-400",
     warning: "bg-amber-500/10 text-amber-400",
     danger: "bg-red-500/10 text-red-400",
     accent: "bg-cyan-500/10 text-cyan-400",
+    info: "bg-blue-500/10 text-blue-400",
+    error: "bg-red-500/10 text-red-400",
   }
 
   const sizes = {
@@ -346,7 +349,7 @@ export function AccountBadge({ children, variant = "default", size = "sm" }: Acc
   }
 
   return (
-    <span className={clsx("inline-flex items-center rounded-full font-medium", variants[variant], sizes[size])}>
+    <span className={clsx("inline-flex items-center rounded-full font-medium", variants[variant] || variants.default, sizes[size], className)}>
       {children}
     </span>
   )
@@ -460,26 +463,38 @@ export function AccountModal({ open, isOpen, onClose, title, children, footer, s
 // STATS CARD COMPONENT
 // ============================================================================
 
-interface AccountStatCardProps {
-  label: string
+export interface AccountStatCardProps {
+  label?: string
+  title?: string
   value: string | number
   icon: ReactNode
-  trend?: { value: number; positive: boolean }
+  trend?: { value: number; positive: boolean } | string
+  description?: string
   accent?: boolean
 }
 
-export function AccountStatCard({ label, value, icon, trend, accent }: AccountStatCardProps) {
+export function AccountStatCard({ label, title, value, icon, trend, description, accent }: AccountStatCardProps) {
+  const displayLabel = label || title
+  const renderTrend = () => {
+    if (!trend) return null
+    if (typeof trend === 'string') {
+      return <p className="text-sm mt-1 text-gray-400">{trend}</p>
+    }
+    return (
+      <p className={clsx("text-sm mt-1", trend.positive ? "text-emerald-400" : "text-red-400")}>
+        {trend.positive ? "+" : ""}{trend.value}% from last month
+      </p>
+    )
+  }
+
   return (
     <AccountCard>
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-400 mb-1">{label}</p>
+          <p className="text-sm text-gray-400 mb-1">{displayLabel}</p>
           <p className={clsx("text-2xl font-bold", accent ? "text-cyan-400" : "text-white")}>{value}</p>
-          {trend && (
-            <p className={clsx("text-sm mt-1", trend.positive ? "text-emerald-400" : "text-red-400")}>
-              {trend.positive ? "+" : ""}{trend.value}% from last month
-            </p>
-          )}
+          {renderTrend()}
+          {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
         </div>
         <div className={clsx("p-3 rounded-lg", accent ? "bg-cyan-500/10 text-cyan-400" : "bg-gray-800 text-gray-400")}>
           {icon}
@@ -556,15 +571,16 @@ export function AccountTableCell({ children, className }: { children: ReactNode;
 // TAB COMPONENTS
 // ============================================================================
 
-interface AccountTabsProps {
-  tabs: { id: string; label: string; icon?: ReactNode }[]
+export interface AccountTabsProps {
+  tabs: { id: string; label: string; icon?: ReactNode; count?: number }[]
   activeTab: string
   onChange: (tabId: string) => void
+  className?: string
 }
 
-export function AccountTabs({ tabs, activeTab, onChange }: AccountTabsProps) {
+export function AccountTabs({ tabs, activeTab, onChange, className }: AccountTabsProps) {
   return (
-    <div className="flex gap-1 p-1 bg-gray-900 border border-gray-800 rounded-lg mb-6">
+    <div className={clsx("flex gap-1 p-1 bg-gray-900 border border-gray-800 rounded-lg mb-6", className)}>
       {tabs.map((tab) => (
         <button
           key={tab.id}
@@ -578,6 +594,14 @@ export function AccountTabs({ tabs, activeTab, onChange }: AccountTabsProps) {
         >
           {tab.icon}
           {tab.label}
+          {tab.count !== undefined && (
+            <span className={clsx(
+              "ml-1 px-1.5 py-0.5 text-xs rounded-full",
+              activeTab === tab.id ? "bg-black/20" : "bg-gray-800"
+            )}>
+              {tab.count}
+            </span>
+          )}
         </button>
       ))}
     </div>
@@ -614,13 +638,22 @@ export function AccountAlert({ type, title, children }: AccountAlertProps) {
 // LOADING SKELETON
 // ============================================================================
 
-interface AccountSkeletonProps {
+export interface AccountSkeletonProps {
   className?: string
+  height?: string
+  width?: string
 }
 
-export function AccountSkeleton({ className }: AccountSkeletonProps) {
+export function AccountSkeleton({ className, height, width }: AccountSkeletonProps) {
+  const style: React.CSSProperties = {}
+  if (height) style.height = height
+  if (width) style.width = width
+  
   return (
-    <div className={clsx("animate-pulse bg-gray-800 rounded", className)} />
+    <div 
+      className={clsx("animate-pulse bg-gray-800 rounded", className)} 
+      style={style}
+    />
   )
 }
 
