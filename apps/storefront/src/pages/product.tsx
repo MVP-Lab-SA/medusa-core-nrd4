@@ -21,6 +21,12 @@ const ProductDetails = () => {
   })
   
   const [showShareMenu, setShowShareMenu] = useState(false)
+  const [shareUrl, setShareUrl] = useState("")
+  
+  // Set share URL on client only to avoid hydration mismatch
+  useEffect(() => {
+    setShareUrl(window.location.href)
+  }, [])
 
   // Track recently viewed products
   useEffect(() => {
@@ -111,20 +117,22 @@ const ProductDetails = () => {
             <div className="mb-6 flex items-center gap-3">
               <span className="text-city-muted text-sm">Share:</span>
               <button 
-                onClick={() => navigator.clipboard.writeText(window.location.href)}
+                onClick={() => navigator.clipboard.writeText(shareUrl)}
                 className="p-2 bg-city-slate hover:bg-city-steel text-city-gray hover:text-city-white rounded transition-colors"
                 title="Copy link"
               >
                 <Link className="w-4 h-4" />
               </button>
-              <a 
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 bg-city-slate hover:bg-city-steel text-city-gray hover:text-city-white rounded transition-colors"
-              >
-                <Facebook className="w-4 h-4" />
-              </a>
+              {shareUrl && (
+                <a 
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-city-slate hover:bg-city-steel text-city-gray hover:text-city-white rounded transition-colors"
+                >
+                  <Facebook className="w-4 h-4" />
+                </a>
+              )}
             </div>
 
             {/* Product Actions */}
