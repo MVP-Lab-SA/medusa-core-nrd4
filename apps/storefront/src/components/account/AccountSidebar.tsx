@@ -20,6 +20,7 @@ import {
   ChevronRight,
   Sparkles,
   CurrencyDollar,
+  BellAlert,
 } from "@medusajs/icons"
 import { clsx } from "clsx"
 
@@ -43,7 +44,8 @@ export function AccountSidebar({ currentPath }: { currentPath?: string }) {
       title: "Overview",
       items: [
         { label: "Dashboard", href: `/${countryCode}/account`, icon: <User className="w-4 h-4" /> },
-        { label: "Settings", href: `/${countryCode}/account/settings`, icon: <CogSixTooth className="w-4 h-4" /> },
+        { label: "Profile", href: `/${countryCode}/account/profile`, icon: <User className="w-4 h-4" /> },
+        { label: "Addresses", href: `/${countryCode}/account/addresses`, icon: <MapPin className="w-4 h-4" /> },
       ],
     },
     {
@@ -88,7 +90,15 @@ export function AccountSidebar({ currentPath }: { currentPath?: string }) {
       ],
     },
     {
-      title: "Identity & Security",
+      title: "Settings",
+      items: [
+        { label: "Notifications", href: `/${countryCode}/account/notifications`, icon: <BellAlert className="w-4 h-4" /> },
+        { label: "Security", href: `/${countryCode}/account/security`, icon: <ShieldCheck className="w-4 h-4" /> },
+        { label: "Preferences", href: `/${countryCode}/account/settings`, icon: <CogSixTooth className="w-4 h-4" /> },
+      ],
+    },
+    {
+      title: "Identity & Compliance",
       items: [
         { label: "Credentials", href: `/${countryCode}/account/credentials`, icon: <ShieldCheck className="w-4 h-4" /> },
         { label: "Consents", href: `/${countryCode}/account/consents`, icon: <DocumentText className="w-4 h-4" /> },
