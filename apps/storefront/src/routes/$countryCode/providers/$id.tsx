@@ -1,14 +1,139 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { ProviderCard, AvailabilityCalendar, TimeSlotPicker } from "~/components/bookings"
-import { Star, MapPin, Clock, Award, Calendar, ArrowLeft, CheckCircle } from "lucide-react"
+import { Star, MapPin, Clock, CheckCircle, ArrowLeftMini, ChevronLeft, ChevronRight } from "@medusajs/icons"
 import { useState } from "react"
 
 export const Route = createFileRoute("/$countryCode/providers/$id")({
   component: ProviderDetailPage,
 })
 
+// Simple inline calendar component
+function SimpleCalendar({ 
+  selectedDate, 
+  onDateSelect 
+}: { 
+  selectedDate: string | null
+  onDateSelect: (date: string) => void 
+}) {
+  const [currentMonth, setCurrentMonth] = useState(new Date())
+
+  const daysInMonth = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth() + 1,
+    0
+  ).getDate()
+
+  const firstDayOfMonth = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth(),
+    1
+  ).getDay()
+
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
+  const padding = Array.from({ length: firstDayOfMonth }, () => null)
+
+  const getDateString = (day: number) => {
+    return new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
+      .toISOString()
+      .split("T")[0]
+  }
+
+  const isPast = (day: number) => {
+    const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return date < today
+  }
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg p-4">
+      <div className="flex items-center justify-between mb-4">
+        <button
+          onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
+          className="p-2 hover:bg-gray-100 rounded-lg"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <h3 className="font-semibold text-gray-900">
+          {currentMonth.toLocaleDateString("en", { month: "long", year: "numeric" })}
+        </h3>
+        <button
+          onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
+          className="p-2 hover:bg-gray-100 rounded-lg"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+
+      <div className="grid grid-cols-7 gap-1 mb-2">
+        {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+          <div key={day} className="text-center text-xs font-medium text-gray-500 py-2">
+            {day}
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-7 gap-1">
+        {padding.map((_, i) => (
+          <div key={`pad-${i}`} className="aspect-square" />
+        ))}
+        {days.map((day) => {
+          const dateStr = getDateString(day)
+          const past = isPast(day)
+          const selected = dateStr === selectedDate
+
+          return (
+            <button
+              key={day}
+              onClick={() => !past && onDateSelect(dateStr)}
+              disabled={past}
+              className={`aspect-square flex items-center justify-center text-sm rounded-lg transition-colors ${
+                selected
+                  ? "bg-purple-600 text-white"
+                  : !past
+                  ? "hover:bg-purple-100 text-gray-900"
+                  : "text-gray-300 cursor-not-allowed"
+              }`}
+            >
+              {day}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// Simple time slot picker
+function SimpleTimeSlots({
+  selectedTime,
+  onTimeSelect,
+  slots
+}: {
+  selectedTime: string | null
+  onTimeSelect: (time: string) => void
+  slots: string[]
+}) {
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {slots.map((slot) => (
+        <button
+          key={slot}
+          onClick={() => onTimeSelect(slot)}
+          className={`px-3 py-2 text-sm rounded-lg border transition-colors ${
+            selectedTime === slot
+              ? "bg-purple-600 text-white border-purple-600"
+              : "border-gray-200 hover:border-purple-400"
+          }`}
+        >
+          {slot}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 function ProviderDetailPage() {
-  const { id } = Route.useParams()
+  const { id, countryCode } = Route.useParams()
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
 
@@ -36,21 +161,14 @@ function ProviderDetailPage() {
       { author: "Michelle K.", rating: 5, date: "2024-01-10", text: "Love my new balayage! So natural looking." },
       { author: "Jessica T.", rating: 4, date: "2024-01-05", text: "Great experience, very professional." },
     ],
-    availability: {
-      monday: ["9:00", "10:00", "11:00", "14:00", "15:00", "16:00"],
-      tuesday: ["9:00", "10:00", "11:00", "14:00", "15:00"],
-      wednesday: ["10:00", "11:00", "14:00", "15:00", "16:00"],
-      thursday: ["9:00", "10:00", "14:00", "15:00", "16:00"],
-      friday: ["9:00", "10:00", "11:00", "14:00"],
-      saturday: ["10:00", "11:00", "12:00"],
-      sunday: [],
-    },
   }
+
+  const availableSlots = ["9:00 AM", "10:00 AM", "11:00 AM", "2:00 PM", "3:00 PM", "4:00 PM"]
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <a href="/providers" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
-        <ArrowLeft className="w-4 h-4" />
+      <a href={`/${countryCode}/providers`} className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
+        <ArrowLeftMini className="w-4 h-4" />
         Back to Providers
       </a>
 
@@ -66,9 +184,9 @@ function ProviderDetailPage() {
               <div className="flex-1">
                 <h1 className="text-2xl font-bold">{provider.name}</h1>
                 <p className="text-gray-600">{provider.title}</p>
-                <div className="flex items-center gap-4 mt-2">
+                <div className="flex items-center gap-4 mt-2 flex-wrap">
                   <div className="flex items-center gap-1">
-                    <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
+                    <Star className="w-5 h-5 text-amber-400" />
                     <span className="font-semibold">{provider.rating}</span>
                     <span className="text-gray-500">({provider.reviewCount} reviews)</span>
                   </div>
@@ -101,7 +219,7 @@ function ProviderDetailPage() {
           {/* Certifications */}
           <div className="bg-white border rounded-xl p-6">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Award className="w-5 h-5 text-amber-500" />
+              <Star className="w-5 h-5 text-amber-500" />
               Certifications
             </h2>
             <div className="space-y-2">
@@ -148,7 +266,7 @@ function ProviderDetailPage() {
                     </div>
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`w-4 h-4 ${i < review.rating ? "fill-amber-400 text-amber-400" : "text-gray-300"}`} />
+                        <Star key={i} className={`w-4 h-4 ${i < review.rating ? "text-amber-400" : "text-gray-300"}`} />
                       ))}
                     </div>
                   </div>
@@ -164,27 +282,28 @@ function ProviderDetailPage() {
         <div className="lg:col-span-1">
           <div className="bg-white border rounded-xl p-6 sticky top-4">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Calendar className="w-5 h-5" />
+              <Clock className="w-5 h-5" />
               Book Appointment
             </h2>
             
-            <AvailabilityCalendar
+            <SimpleCalendar
               selectedDate={selectedDate}
-              onDateChange={setSelectedDate}
+              onDateSelect={setSelectedDate}
             />
 
             {selectedDate && (
               <div className="mt-4">
-                <TimeSlotPicker
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Available Times</h3>
+                <SimpleTimeSlots
                   selectedTime={selectedTime}
-                  onTimeChange={setSelectedTime}
-                  availableSlots={["9:00", "10:00", "11:00", "14:00", "15:00"]}
+                  onTimeSelect={setSelectedTime}
+                  slots={availableSlots}
                 />
               </div>
             )}
 
             <button 
-              className="w-full mt-4 bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 disabled:bg-gray-300"
+              className="w-full mt-4 bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
               disabled={!selectedDate || !selectedTime}
             >
               Book Appointment
