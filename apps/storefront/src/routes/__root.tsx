@@ -1,5 +1,6 @@
 import Layout from "@/components/layout"
 import { listRegions } from "@/lib/data/regions"
+import { CityOSProvider } from "@/lib/cityos"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import {
   HeadContent,
@@ -54,7 +55,17 @@ function RootComponent() {
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
-          <Layout />
+          <CityOSProvider
+            tenant="platform"
+            fallbackToDefault={true}
+            config={{
+              baseUrl: import.meta.env.VITE_CITYOS_API_URL || 'https://cms.dfrnt.dev',
+              channel: 'storefront',
+              enableCache: true,
+            }}
+          >
+            <Layout />
+          </CityOSProvider>
         </QueryClientProvider>
 
         <Scripts />

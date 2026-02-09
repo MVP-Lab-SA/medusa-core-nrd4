@@ -2,12 +2,15 @@ import CountrySelect from "@/components/country-select"
 import { Newsletter } from "@/components/newsletter"
 import { useCategories } from "@/lib/hooks/use-categories"
 import { useRegions } from "@/lib/hooks/use-regions"
+import { useCityOSOptional } from "@/lib/cityos"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
 import { Link, useLocation } from "@tanstack/react-router"
+import { ShieldCheck, GlobeEurope, Buildings } from "@medusajs/icons"
 
 const Footer = () => {
   const location = useLocation()
   const countryCode = getCountryCodeFromPath(location.pathname) || "us"
+  const cityOS = useCityOSOptional()
 
   const { data: categories } = useCategories({
     fields: "name,handle",
@@ -334,10 +337,39 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-city-steel/30 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-xs text-city-muted">
-              {new Date().getFullYear()} Dakkah CityOS. All rights reserved.
-            </span>
-            <div className="flex gap-6">
+            <div className="flex items-center gap-4">
+              <span className="text-xs text-city-muted">
+                {new Date().getFullYear()} Dakkah CityOS. All rights reserved.
+              </span>
+              {/* CityOS Platform Context Info */}
+              {cityOS?.tenant && (
+                <div className="hidden md:flex items-center gap-3 text-xs text-city-muted border-l border-city-steel/30 pl-4">
+                  <span className="flex items-center gap-1">
+                    <Buildings className="w-3 h-3" />
+                    {cityOS.tenant.name}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <GlobeEurope className="w-3 h-3" />
+                    {cityOS.tenant.residencyZone}
+                  </span>
+                  {cityOS.governance?.policies?.compliance?.frameworks && (
+                    <span className="flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3 text-city-cyan" />
+                      {(cityOS.governance.policies.compliance.frameworks as string[]).join(', ')}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-6">
+              {/* Platform Link */}
+              <Link
+                to="/$countryCode/platform"
+                params={{ countryCode }}
+                className="text-xs text-city-muted hover:text-city-cyan transition-colors"
+              >
+                Platform
+              </Link>
               <Link
                 to="/$countryCode/privacy"
                 params={{ countryCode }}

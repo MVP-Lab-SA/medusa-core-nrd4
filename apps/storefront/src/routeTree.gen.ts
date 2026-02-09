@@ -52,6 +52,7 @@ import { Route as CountryCodeReturnsIndexRouteImport } from './routes/$countryCo
 import { Route as CountryCodeRentalsIndexRouteImport } from './routes/$countryCode/rentals/index'
 import { Route as CountryCodeProvidersIndexRouteImport } from './routes/$countryCode/providers/index'
 import { Route as CountryCodePreordersIndexRouteImport } from './routes/$countryCode/preorders/index'
+import { Route as CountryCodePlatformIndexRouteImport } from './routes/$countryCode/platform/index'
 import { Route as CountryCodeMembershipsIndexRouteImport } from './routes/$countryCode/memberships/index'
 import { Route as CountryCodeEventsIndexRouteImport } from './routes/$countryCode/events/index'
 import { Route as CountryCodeConsignmentIndexRouteImport } from './routes/$countryCode/consignment/index'
@@ -355,6 +356,12 @@ const CountryCodePreordersIndexRoute =
     id: '/preorders/',
     path: '/preorders/',
     getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodePlatformIndexRoute =
+  CountryCodePlatformIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => CountryCodePlatformRoute,
   } as any)
 const CountryCodeMembershipsIndexRoute =
   CountryCodeMembershipsIndexRouteImport.update({
@@ -850,7 +857,7 @@ export interface FileRoutesByFullPath {
   '/$countryCode/help': typeof CountryCodeHelpRouteWithChildren
   '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
   '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
-  '/$countryCode/platform': typeof CountryCodePlatformRoute
+  '/$countryCode/platform': typeof CountryCodePlatformRouteWithChildren
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/referrals': typeof CountryCodeReferralsRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRouteWithChildren
@@ -935,6 +942,7 @@ export interface FileRoutesByFullPath {
   '/$countryCode/consignment/': typeof CountryCodeConsignmentIndexRoute
   '/$countryCode/events/': typeof CountryCodeEventsIndexRoute
   '/$countryCode/memberships/': typeof CountryCodeMembershipsIndexRoute
+  '/$countryCode/platform/': typeof CountryCodePlatformIndexRoute
   '/$countryCode/preorders/': typeof CountryCodePreordersIndexRoute
   '/$countryCode/providers/': typeof CountryCodeProvidersIndexRoute
   '/$countryCode/rentals/': typeof CountryCodeRentalsIndexRoute
@@ -974,7 +982,6 @@ export interface FileRoutesByTo {
   '/$countryCode/help': typeof CountryCodeHelpRouteWithChildren
   '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
   '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
-  '/$countryCode/platform': typeof CountryCodePlatformRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/referrals': typeof CountryCodeReferralsRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
@@ -1058,6 +1065,7 @@ export interface FileRoutesByTo {
   '/$countryCode/consignment': typeof CountryCodeConsignmentIndexRoute
   '/$countryCode/events': typeof CountryCodeEventsIndexRoute
   '/$countryCode/memberships': typeof CountryCodeMembershipsIndexRoute
+  '/$countryCode/platform': typeof CountryCodePlatformIndexRoute
   '/$countryCode/preorders': typeof CountryCodePreordersIndexRoute
   '/$countryCode/providers': typeof CountryCodeProvidersIndexRoute
   '/$countryCode/rentals': typeof CountryCodeRentalsIndexRoute
@@ -1100,7 +1108,7 @@ export interface FileRoutesById {
   '/$countryCode/help': typeof CountryCodeHelpRouteWithChildren
   '/$countryCode/lookbook': typeof CountryCodeLookbookRoute
   '/$countryCode/loyalty': typeof CountryCodeLoyaltyRoute
-  '/$countryCode/platform': typeof CountryCodePlatformRoute
+  '/$countryCode/platform': typeof CountryCodePlatformRouteWithChildren
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/referrals': typeof CountryCodeReferralsRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRouteWithChildren
@@ -1185,6 +1193,7 @@ export interface FileRoutesById {
   '/$countryCode/consignment/': typeof CountryCodeConsignmentIndexRoute
   '/$countryCode/events/': typeof CountryCodeEventsIndexRoute
   '/$countryCode/memberships/': typeof CountryCodeMembershipsIndexRoute
+  '/$countryCode/platform/': typeof CountryCodePlatformIndexRoute
   '/$countryCode/preorders/': typeof CountryCodePreordersIndexRoute
   '/$countryCode/providers/': typeof CountryCodeProvidersIndexRoute
   '/$countryCode/rentals/': typeof CountryCodeRentalsIndexRoute
@@ -1313,6 +1322,7 @@ export interface FileRouteTypes {
     | '/$countryCode/consignment/'
     | '/$countryCode/events/'
     | '/$countryCode/memberships/'
+    | '/$countryCode/platform/'
     | '/$countryCode/preorders/'
     | '/$countryCode/providers/'
     | '/$countryCode/rentals/'
@@ -1352,7 +1362,6 @@ export interface FileRouteTypes {
     | '/$countryCode/help'
     | '/$countryCode/lookbook'
     | '/$countryCode/loyalty'
-    | '/$countryCode/platform'
     | '/$countryCode/privacy'
     | '/$countryCode/referrals'
     | '/$countryCode/store'
@@ -1436,6 +1445,7 @@ export interface FileRouteTypes {
     | '/$countryCode/consignment'
     | '/$countryCode/events'
     | '/$countryCode/memberships'
+    | '/$countryCode/platform'
     | '/$countryCode/preorders'
     | '/$countryCode/providers'
     | '/$countryCode/rentals'
@@ -1562,6 +1572,7 @@ export interface FileRouteTypes {
     | '/$countryCode/consignment/'
     | '/$countryCode/events/'
     | '/$countryCode/memberships/'
+    | '/$countryCode/platform/'
     | '/$countryCode/preorders/'
     | '/$countryCode/providers/'
     | '/$countryCode/rentals/'
@@ -1893,6 +1904,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/$countryCode/preorders/'
       preLoaderRoute: typeof CountryCodePreordersIndexRouteImport
       parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/platform/': {
+      id: '/$countryCode/platform/'
+      path: '/'
+      fullPath: '/$countryCode/platform/'
+      preLoaderRoute: typeof CountryCodePlatformIndexRouteImport
+      parentRoute: typeof CountryCodePlatformRoute
     }
     '/$countryCode/memberships/': {
       id: '/$countryCode/memberships/'
@@ -2490,6 +2508,17 @@ const CountryCodeHelpRouteWithChildren = CountryCodeHelpRoute._addFileChildren(
   CountryCodeHelpRouteChildren,
 )
 
+interface CountryCodePlatformRouteChildren {
+  CountryCodePlatformIndexRoute: typeof CountryCodePlatformIndexRoute
+}
+
+const CountryCodePlatformRouteChildren: CountryCodePlatformRouteChildren = {
+  CountryCodePlatformIndexRoute: CountryCodePlatformIndexRoute,
+}
+
+const CountryCodePlatformRouteWithChildren =
+  CountryCodePlatformRoute._addFileChildren(CountryCodePlatformRouteChildren)
+
 interface CountryCodeReturnsRouteChildren {
   CountryCodeReturnsIdRoute: typeof CountryCodeReturnsIdRoute
   CountryCodeReturnsCreateRoute: typeof CountryCodeReturnsCreateRoute
@@ -2632,7 +2661,7 @@ interface CountryCodeRouteChildren {
   CountryCodeHelpRoute: typeof CountryCodeHelpRouteWithChildren
   CountryCodeLookbookRoute: typeof CountryCodeLookbookRoute
   CountryCodeLoyaltyRoute: typeof CountryCodeLoyaltyRoute
-  CountryCodePlatformRoute: typeof CountryCodePlatformRoute
+  CountryCodePlatformRoute: typeof CountryCodePlatformRouteWithChildren
   CountryCodePrivacyRoute: typeof CountryCodePrivacyRoute
   CountryCodeReferralsRoute: typeof CountryCodeReferralsRoute
   CountryCodeReturnsRoute: typeof CountryCodeReturnsRouteWithChildren
@@ -2737,7 +2766,7 @@ const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodeHelpRoute: CountryCodeHelpRouteWithChildren,
   CountryCodeLookbookRoute: CountryCodeLookbookRoute,
   CountryCodeLoyaltyRoute: CountryCodeLoyaltyRoute,
-  CountryCodePlatformRoute: CountryCodePlatformRoute,
+  CountryCodePlatformRoute: CountryCodePlatformRouteWithChildren,
   CountryCodePrivacyRoute: CountryCodePrivacyRoute,
   CountryCodeReferralsRoute: CountryCodeReferralsRoute,
   CountryCodeReturnsRoute: CountryCodeReturnsRouteWithChildren,
