@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
-import { ArrowLeft, User, Bell, LockClosedSolid, CreditCard, MapPin } from "@medusajs/icons"
+import { ArrowLeft, User, BellAlert, LockClosedSolid, CreditCard, MapPin } from "@medusajs/icons"
 
 export function AccountSettingsPage() {
   const [activeTab, setActiveTab] = useState("profile")
@@ -25,7 +25,7 @@ export function AccountSettingsPage() {
 
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
-    { id: "notifications", label: "Notifications", icon: Bell },
+    { id: "notifications", label: "Notifications", icon: BellAlert },
     { id: "security", label: "Security", icon: LockClosedSolid },
     { id: "payments", label: "Payment Methods", icon: CreditCard },
     { id: "addresses", label: "Addresses", icon: MapPin },
