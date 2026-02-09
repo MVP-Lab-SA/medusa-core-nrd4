@@ -5,6 +5,7 @@ import { CartProvider } from "@/lib/context/cart"
 import { ToastProvider } from "@/lib/context/toast-context"
 import { CustomerProvider } from "@/lib/context/customer-context"
 import { WishlistProvider } from "@/components/wishlist"
+import { ThemeProvider } from "@/lib/theme"
 import { Outlet } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
 import { XMark } from "@medusajs/icons"
@@ -221,11 +222,12 @@ const MobileBottomNav = () => {
 
 const Layout = () => {
   return (
-    <ToastProvider>
-      <CustomerProvider>
-        <WishlistProvider>
-          <CartProvider>
-            <div className="min-h-screen flex flex-col bg-city-dark">
+    <ThemeProvider>
+      <ToastProvider>
+        <CustomerProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <div className="min-h-screen flex flex-col bg-city-dark">
               {/* Announcement Bar */}
               <AnnouncementBar />
               
@@ -244,13 +246,14 @@ const Layout = () => {
               <CookieConsent />
               <ChatWidget />
               
-              {/* Mobile Bottom Navigation */}
-              <MobileBottomNav />
-            </div>
-          </CartProvider>
-        </WishlistProvider>
-      </CustomerProvider>
-    </ToastProvider>
+                {/* Mobile Bottom Navigation */}
+                <MobileBottomNav />
+              </div>
+            </CartProvider>
+          </WishlistProvider>
+        </CustomerProvider>
+      </ToastProvider>
+    </ThemeProvider>
   )
 }
 

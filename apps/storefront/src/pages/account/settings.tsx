@@ -1,11 +1,14 @@
 import { useState } from "react"
 import { useParams } from "@tanstack/react-router"
-import { User, BellAlert, LockClosedSolid, CreditCard, MapPin } from "@medusajs/icons"
+import { User, BellAlert, LockClosedSolid, CreditCard, MapPin, Sun } from "@medusajs/icons"
 import { AccountLayout } from "@/components/account/AccountSidebar"
+import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher"
+import { useTheme } from "@/lib/theme"
 
 export function AccountSettingsPage() {
   const { countryCode } = useParams({ strict: false }) as { countryCode: string }
   const [activeTab, setActiveTab] = useState("profile")
+  const { theme } = useTheme()
   
   // Profile state
   const [firstName, setFirstName] = useState("John")
@@ -27,6 +30,7 @@ export function AccountSettingsPage() {
 
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
+    { id: "appearance", label: "Appearance", icon: Sun },
     { id: "notifications", label: "Notifications", icon: BellAlert },
     { id: "security", label: "Security", icon: LockClosedSolid },
     { id: "payments", label: "Payment Methods", icon: CreditCard },
@@ -124,6 +128,47 @@ export function AccountSettingsPage() {
                   <button className="px-5 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-black font-medium rounded-lg transition-colors">
                     Save Changes
                   </button>
+                </div>
+              </div>
+            )}
+
+            {/* Appearance Tab */}
+            {activeTab === "appearance" && (
+              <div>
+                <h2 className="text-lg font-semibold text-white mb-2">Appearance</h2>
+                <p className="text-gray-400 text-sm mb-6">
+                  Choose a theme that suits your style. Your preference will be saved automatically.
+                </p>
+                
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-400 mb-4">Select Theme</h3>
+                    <ThemeSwitcher variant="grid" />
+                  </div>
+                  
+                  <div className="p-4 bg-gray-800/50 rounded-lg">
+                    <h3 className="font-medium text-white mb-2">Current Theme</h3>
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-lg"
+                        style={{
+                          background: theme.isDark
+                            ? `linear-gradient(135deg, ${theme.id === "cityos-dark" ? "#0a0f1a" : theme.id === "minimal-dark" ? "#000" : theme.id === "ocean-breeze" ? "#0c1929" : theme.id === "sunset-warm" ? "#1a0f0f" : "#f8fafc"} 50%, ${theme.id === "cityos-dark" ? "#06b6d4" : theme.id === "minimal-dark" ? "#fafafa" : theme.id === "ocean-breeze" ? "#0ea5e9" : theme.id === "sunset-warm" ? "#f97316" : "#0891b2"} 50%)`
+                            : `linear-gradient(135deg, #f8fafc 50%, #0891b2 50%)`,
+                        }}
+                      />
+                      <div>
+                        <p className="font-medium text-white">{theme.name}</p>
+                        <p className="text-sm text-gray-500">{theme.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
+                    <p className="text-cyan-400 text-sm">
+                      Theme changes are applied instantly and saved to your browser. Your preference will persist across sessions.
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
