@@ -1,237 +1,305 @@
 /**
  * CMS Page Renderer
  * 
- * Renders a full page from Payload CMS data.
- * Handles hero, layout blocks, meta tags, and breadcrumbs.
+ * Renders CMS pages from Payload data with dynamic sections.
  */
 
-import React from 'react';
-import type { Page, PageTemplate } from '@/lib/payload/types';
-import { BlockRenderer, RichText } from './blocks';
-
-// =============================================================================
-// PAGE META
-// =============================================================================
-
-interface PageMetaProps {
-  page: Page;
-}
-
-export function PageMeta({ page }: PageMetaProps) {
-  const title = page.meta?.title || page.title;
-  const description = page.meta?.description || page.description;
-  const image = page.meta?.image?.url;
-
-  // In TanStack Start, we'd use createFileRoute's meta option
-  // This is for reference and can be integrated with the route's meta
-  return null;
-}
-
-export function getPageMeta(page: Page) {
-  return {
-    title: page.meta?.title || page.title,
-    description: page.meta?.description || page.description,
-    openGraph: page.meta?.image ? {
-      images: [{ url: page.meta.image.url }],
-    } : undefined,
-    robots: page.meta?.noIndex ? { index: false, follow: false } : undefined,
-  };
-}
-
-// =============================================================================
-// BREADCRUMBS
-// =============================================================================
-
-interface BreadcrumbsProps {
-  items: { label: string; url?: string }[];
-}
-
-export function Breadcrumbs({ items }: BreadcrumbsProps) {
-  if (!items || items.length === 0) {
-    return null;
-  }
-
-  return (
-    <nav aria-label="Breadcrumb" className="py-4 px-4">
-      <div className="container mx-auto">
-        <ol className="flex flex-wrap items-center gap-2 text-sm">
-          <li>
-            <a href="/" className="text-gray-500 hover:text-primary transition-colors">
-              Home
-            </a>
-          </li>
-          {items.map((item, index) => (
-            <li key={index} className="flex items-center gap-2">
-              <span className="text-gray-400">/</span>
-              {item.url && index < items.length - 1 ? (
-                <a href={item.url} className="text-gray-500 hover:text-primary transition-colors">
-                  {item.label}
-                </a>
-              ) : (
-                <span className="text-gray-900 dark:text-white font-medium">
-                  {item.label}
-                </span>
-              )}
-            </li>
-          ))}
-        </ol>
-      </div>
-    </nav>
-  );
-}
-
-// =============================================================================
-// PAGE HEADER
-// =============================================================================
-
-interface PageHeaderProps {
-  title: string;
-  description?: string;
-  showBreadcrumbs?: boolean;
-  breadcrumbItems?: { label: string; url?: string }[];
-}
-
-export function PageHeader({ title, description, showBreadcrumbs, breadcrumbItems }: PageHeaderProps) {
-  return (
-    <header className="bg-gray-50 dark:bg-gray-900 py-12 px-4">
-      <div className="container mx-auto">
-        {showBreadcrumbs && breadcrumbItems && (
-          <Breadcrumbs items={breadcrumbItems} />
-        )}
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
-        {description && (
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl">
-            {description}
-          </p>
-        )}
-      </div>
-    </header>
-  );
-}
+import React from 'react'
+import { Link } from '@tanstack/react-router'
+import type { CMSPage, PageSection, Feature, Testimonial, Stat, TrustBadge, FAQ, FAQCategory } from '@/lib/cms'
 
 // =============================================================================
 // PAGE RENDERER
 // =============================================================================
 
 interface PageRendererProps {
-  page: Page;
-  template?: PageTemplate;
+  page: CMSPage
+  countryCode: string
 }
 
-export function PageRenderer({ page, template }: PageRendererProps) {
-  // Determine template type for conditional rendering
-  const templateType = typeof page.template === 'string' 
-    ? template?.type 
-    : page.template?.type;
-
-  // Build breadcrumb items
-  const breadcrumbItems = page.breadcrumb?.enabled 
-    ? page.breadcrumb.items || [{ label: page.title }]
-    : undefined;
-
+export function PageRenderer({ page, countryCode }: PageRendererProps) {
   return (
-    <article>
-      {/* Hero Section (if present) */}
-      {page.hero && (
-        <BlockRenderer blocks={[page.hero]} />
-      )}
-
-      {/* Page Header (for non-hero pages) */}
-      {!page.hero && (
-        <PageHeader
-          title={page.title}
-          description={page.description}
-          showBreadcrumbs={page.breadcrumb?.enabled}
-          breadcrumbItems={breadcrumbItems}
-        />
-      )}
-
-      {/* Breadcrumbs (for hero pages, shown below hero) */}
-      {page.hero && page.breadcrumb?.enabled && breadcrumbItems && (
-        <Breadcrumbs items={breadcrumbItems} />
-      )}
-
-      {/* Main Content - Layout Blocks */}
-      <main>
-        <BlockRenderer blocks={page.layout} />
-      </main>
-    </article>
-  );
-}
-
-// =============================================================================
-// LOADING SKELETON
-// =============================================================================
-
-export function PageSkeleton() {
-  return (
-    <div className="animate-pulse">
-      {/* Hero Skeleton */}
-      <div className="bg-gray-200 dark:bg-gray-800 h-[50vh] min-h-[400px]" />
-
-      {/* Content Skeleton */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="space-y-4 max-w-3xl">
-          <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded w-3/4" />
-          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full" />
-          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-5/6" />
-          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-4/6" />
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6 mt-12">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="space-y-4">
-              <div className="aspect-video bg-gray-200 dark:bg-gray-800 rounded-xl" />
-              <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4" />
-              <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full" />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// =============================================================================
-// ERROR STATE
-// =============================================================================
-
-interface PageErrorProps {
-  error?: string;
-  statusCode?: number;
-}
-
-export function PageError({ error, statusCode = 404 }: PageErrorProps) {
-  const isNotFound = statusCode === 404;
-
-  return (
-    <div className="min-h-[60vh] flex items-center justify-center px-4">
-      <div className="text-center">
-        <h1 className="text-6xl font-bold text-gray-300 dark:text-gray-700 mb-4">
-          {statusCode}
-        </h1>
-        <h2 className="text-2xl font-semibold mb-4">
-          {isNotFound ? 'Page Not Found' : 'Something Went Wrong'}
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md">
-          {error || (isNotFound 
-            ? "The page you're looking for doesn't exist or has been moved."
-            : 'An error occurred while loading this page.'
+    <div className="min-h-screen">
+      {/* Page Header */}
+      <div className="bg-city-charcoal py-12 md:py-20">
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-city-white mb-4">
+            {page.title}
+          </h1>
+          {page.description && (
+            <p className="text-lg text-city-gray max-w-3xl">
+              {page.description}
+            </p>
           )}
-        </p>
-        <a
-          href="/"
-          className="inline-block px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors"
-        >
-          Go Home
-        </a>
+        </div>
+      </div>
+
+      {/* Page Sections */}
+      <div className="container mx-auto px-4 py-12">
+        {page.sections.map((section) => (
+          <SectionRenderer
+            key={section.id}
+            section={section}
+            countryCode={countryCode}
+          />
+        ))}
       </div>
     </div>
-  );
+  )
 }
 
 // =============================================================================
-// EXPORTS
+// SECTION RENDERER
 // =============================================================================
 
-export type { PageRendererProps, PageHeaderProps, BreadcrumbsProps };
+interface SectionRendererProps {
+  section: PageSection
+  countryCode: string
+}
+
+function SectionRenderer({ section, countryCode }: SectionRendererProps) {
+  const bgClass = {
+    default: 'bg-transparent',
+    muted: 'bg-city-slate/50',
+    accent: 'bg-city-lime/5',
+    dark: 'bg-city-charcoal',
+  }[section.background || 'default']
+
+  const spacingClass = {
+    sm: 'py-8',
+    md: 'py-12',
+    lg: 'py-16',
+    xl: 'py-24',
+  }[section.spacing || 'md']
+
+  return (
+    <section className={`${bgClass} ${spacingClass} mb-8 last:mb-0 rounded-xl`}>
+      {section.title && (
+        <div className="mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-city-white">
+            {section.title}
+          </h2>
+          {section.subtitle && (
+            <p className="text-city-gray mt-2">{section.subtitle}</p>
+          )}
+        </div>
+      )}
+
+      {renderSectionContent(section, countryCode)}
+    </section>
+  )
+}
+
+function renderSectionContent(section: PageSection, countryCode: string) {
+  switch (section.sectionType) {
+    case 'features':
+      return <FeaturesContent features={section.features} />
+    case 'testimonials':
+      return <TestimonialsContent testimonials={section.testimonials} />
+    case 'stats':
+      return <StatsContent stats={section.stats} />
+    case 'trust-badges':
+      return <TrustBadgesContent badges={section.badges} />
+    case 'faq':
+      return <FAQContent categories={section.categories} />
+    case 'cta':
+      return <CTAContent section={section} countryCode={countryCode} />
+    case 'content':
+      return (
+        <div 
+          className="prose prose-invert max-w-none"
+          dangerouslySetInnerHTML={{ __html: section.content }}
+        />
+      )
+    default:
+      return null
+  }
+}
+
+// =============================================================================
+// SECTION CONTENT COMPONENTS
+// =============================================================================
+
+function FeaturesContent({ features }: { features: Feature[] }) {
+  if (!features?.length) return null
+
+  return (
+    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {features.map((feature) => (
+        <div key={feature.id} className="p-6 bg-city-slate/50 rounded-xl">
+          {feature.icon && (
+            <div className="w-12 h-12 rounded-lg bg-city-lime/10 flex items-center justify-center mb-4">
+              <span className="text-city-lime text-xl">{feature.icon}</span>
+            </div>
+          )}
+          <h3 className="text-lg font-semibold text-city-white mb-2">
+            {feature.title}
+          </h3>
+          <p className="text-city-gray text-sm">{feature.description}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function TestimonialsContent({ testimonials }: { testimonials: Testimonial[] }) {
+  if (!testimonials?.length) return null
+
+  return (
+    <div className="grid md:grid-cols-3 gap-6">
+      {testimonials.map((testimonial) => (
+        <div key={testimonial.id} className="p-6 bg-city-slate/50 rounded-xl">
+          {testimonial.rating && (
+            <div className="flex mb-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span
+                  key={i}
+                  className={i < testimonial.rating! ? 'text-yellow-400' : 'text-city-steel'}
+                >
+                  Star
+                </span>
+              ))}
+            </div>
+          )}
+          <blockquote className="text-city-gray mb-4">
+            "{testimonial.quote}"
+          </blockquote>
+          <div className="flex items-center gap-3">
+            {testimonial.avatar && (
+              <img
+                src={testimonial.avatar.url}
+                alt={testimonial.author}
+                className="w-10 h-10 rounded-full"
+              />
+            )}
+            <div>
+              <p className="text-city-white font-medium">{testimonial.author}</p>
+              {testimonial.role && (
+                <p className="text-city-gray text-sm">{testimonial.role}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function StatsContent({ stats }: { stats: Stat[] }) {
+  if (!stats?.length) return null
+
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {stats.map((stat) => (
+        <div key={stat.id} className="text-center">
+          <p className="text-3xl md:text-4xl font-bold text-city-lime">
+            {stat.prefix}{stat.value}{stat.suffix}
+          </p>
+          <p className="text-city-gray mt-2">{stat.label}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function TrustBadgesContent({ badges }: { badges: TrustBadge[] }) {
+  if (!badges?.length) return null
+
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {badges.map((badge) => (
+        <div key={badge.id} className="text-center p-4">
+          {badge.icon && (
+            <div className="w-12 h-12 mx-auto rounded-full bg-city-lime/10 flex items-center justify-center mb-3">
+              <span className="text-city-lime">{badge.icon}</span>
+            </div>
+          )}
+          <h3 className="text-city-white font-medium">{badge.title}</h3>
+          {badge.description && (
+            <p className="text-city-gray text-sm mt-1">{badge.description}</p>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function FAQContent({ categories }: { categories: FAQCategory[] }) {
+  if (!categories?.length) return null
+
+  return (
+    <div className="space-y-8">
+      {categories.map((category) => (
+        <div key={category.id}>
+          <h3 className="text-xl font-semibold text-city-white mb-4">
+            {category.title}
+          </h3>
+          <div className="space-y-4">
+            {category.faqs.map((faq) => (
+              <FAQItem key={faq.id} faq={faq} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function FAQItem({ faq }: { faq: FAQ }) {
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  return (
+    <div className="border border-city-steel rounded-lg overflow-hidden">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-city-slate/50 transition-colors"
+      >
+        <span className="text-city-white font-medium">{faq.question}</span>
+        <span className="text-city-gray">{isOpen ? '-' : '+'}</span>
+      </button>
+      {isOpen && (
+        <div className="px-6 py-4 border-t border-city-steel bg-city-slate/30">
+          <p className="text-city-gray">{faq.answer}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+interface CTASectionProps {
+  section: Extract<PageSection, { sectionType: 'cta' }>
+  countryCode: string
+}
+
+function CTAContent({ section, countryCode }: CTASectionProps) {
+  return (
+    <div className="text-center">
+      <h3 className="text-2xl md:text-3xl font-bold text-city-white mb-4">
+        {section.heading}
+      </h3>
+      {section.description && (
+        <p className="text-city-gray mb-8 max-w-2xl mx-auto">
+          {section.description}
+        </p>
+      )}
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        {section.primaryButton && (
+          <Link
+            to={(`/${countryCode}${section.primaryButton.href}`) as any}
+            className="px-6 py-3 bg-city-lime text-city-charcoal font-medium rounded-lg hover:bg-city-lime/90 transition-colors"
+          >
+            {section.primaryButton.label}
+          </Link>
+        )}
+        {section.secondaryButton && (
+          <Link
+            to={(`/${countryCode}${section.secondaryButton.href}`) as any}
+            className="px-6 py-3 border border-city-steel text-city-white font-medium rounded-lg hover:bg-city-slate transition-colors"
+          >
+            {section.secondaryButton.label}
+          </Link>
+        )}
+      </div>
+    </div>
+  )
+}

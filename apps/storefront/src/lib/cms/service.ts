@@ -5,9 +5,7 @@
  * This service is the single source of truth for all CMS content in the storefront.
  */
 
-import { PayloadClient } from '../payload/client'
-
-const payloadClient = new PayloadClient()
+import { PayloadClient, createTenantClient } from '../payload/client'
 import type {
   SiteSettings,
   Navigation,
@@ -26,6 +24,15 @@ import type {
   GiftCardConfig,
   NavSection,
   FooterSection,
+  NavItem,
+  FeaturesSection,
+  TestimonialsSection,
+  StatsSection,
+  TrustBadgesSection,
+  CTASection,
+  FAQSection,
+  ProductGridSection,
+  Labels,
 } from './types'
 import {
   defaultSiteSettings,
@@ -35,10 +42,11 @@ import {
   defaultFAQSection,
   defaultLoyaltyProgram,
   defaultGiftCardConfig,
+  defaultLabels,
 } from './defaults'
 
 // Cache for CMS data
-const cache = new Map<string, { data: any; timestamp: number }>()
+const cache = new Map<string, { data: unknown; timestamp: number }>()
 const CACHE_TTL = 60 * 1000 // 1 minute
 
 function getCached<T>(key: string): T | null {
@@ -49,8 +57,27 @@ function getCached<T>(key: string): T | null {
   return null
 }
 
-function setCache(key: string, data: any): void {
+function setCache(key: string, data: unknown): void {
   cache.set(key, { data, timestamp: Date.now() })
+}
+
+export function invalidateCache(pattern?: string): void {
+  if (!pattern) {
+    cache.clear()
+    return
+  }
+  for (const key of Array.from(cache.keys())) {
+    if (key.includes(pattern)) {
+      cache.delete(key)
+    }
+  }
+}
+
+function getClient(tenantSlug?: string): PayloadClient {
+  if (tenantSlug) {
+    return createTenantClient(tenantSlug)
+  }
+  return new PayloadClient()
 }
 
 // =============================================================================
@@ -63,9 +90,10 @@ export async function getSiteSettings(tenantSlug?: string): Promise<SiteSettings
   if (cached) return cached
 
   try {
-    const response = await payloadClient.getSiteSettings({ tenant: tenantSlug })
+    const client = getClient(tenantSlug)
+    const response = await client.getSiteSettings()
     if (response) {
-      const settings = transformSiteSettings(response)
+      const settings = transformSiteSettings(response as Record<string, unknown>)
       setCache(cacheKey, settings)
       return settings
     }
@@ -76,20 +104,43 @@ export async function getSiteSettings(tenantSlug?: string): Promise<SiteSettings
   return defaultSiteSettings
 }
 
-function transformSiteSettings(data: any): SiteSettings {
+function transformSiteSettings(data: Record<string, unknown>): SiteSettings {
   return {
-    siteName: data.siteName || defaultSiteSettings.siteName,
-    tagline: data.tagline || defaultSiteSettings.tagline,
-    description: data.description || defaultSiteSettings.description,
-    logo: data.logo ? { id: data.logo.id, url: data.logo.url, alt: data.logo.alt || '' } : undefined,
-    favicon: data.favicon ? { id: data.favicon.id, url: data.favicon.url, alt: '' } : undefined,
-    socialMedia: data.socialMedia || defaultSiteSettings.socialMedia,
-    contactInfo: data.contactInfo || defaultSiteSettings.contactInfo,
-    defaultCurrency: data.defaultCurrency || defaultSiteSettings.defaultCurrency,
-    defaultLocale: data.defaultLocale || defaultSiteSettings.defaultLocale,
-    supportedLocales: data.supportedLocales || defaultSiteSettings.supportedLocales,
-    timezone: data.timezone || defaultSiteSettings.timezone,
-    analytics: data.analytics,
+    siteName: (data.siteName as string) || defaultSiteSettings.siteName,
+    tagline: (data.tagline as string) || defaultSiteSettings.tagline,
+    description: (data.siteDescription as string) || (data.description as string) || defaultSiteSettings.description,
+    logo: data.logo ? { 
+      id: (data.logo as Record<string, unknown>).id as string, 
+      url: (data.logo as Record<string, unknown>).url as string, 
+      alt: ((data.logo as Record<string, unknown>).alt as string) || '' 
+    } : undefined,
+    favicon: data.favicon ? { 
+      id: (data.favicon as Record<string, unknown>).id as string, 
+      url: (data.favicon as Record<string, unknown>).url as string, 
+      alt: '' 
+    } : undefined,
+    socialMedia: (data.socialLinks as SiteSettings['socialMedia']) || defaultSiteSettings.socialMedia,
+    contactInfo: transformContactInfo(data.contactInfo as Record<string, unknown> | undefined),
+    defaultCurrency: (data.defaultCurrency as string) || defaultSiteSettings.defaultCurrency,
+    defaultLocale: (data.defaultLocale as string) || defaultSiteSettings.defaultLocale,
+    supportedLocales: (data.supportedLocales as string[]) || defaultSiteSettings.supportedLocales,
+    timezone: (data.timezone as string) || defaultSiteSettings.timezone,
+    analytics: data.analytics as SiteSettings['analytics'],
+  }
+}
+
+function transformContactInfo(data?: Record<string, unknown>): SiteSettings['contactInfo'] {
+  if (!data) return defaultSiteSettings.contactInfo
+  return {
+    email: (data.email as string) || defaultSiteSettings.contactInfo.email,
+    phone: (data.phone as string) || defaultSiteSettings.contactInfo.phone,
+    address: (data.address as string) || defaultSiteSettings.contactInfo.address,
+    city: (data.city as string) || defaultSiteSettings.contactInfo.city,
+    country: (data.country as string) || defaultSiteSettings.contactInfo.country,
+    postalCode: (data.postalCode as string) || defaultSiteSettings.contactInfo.postalCode,
+    businessHours: (data.businessHours as string) || defaultSiteSettings.contactInfo.businessHours,
+    supportEmail: data.supportEmail as string | undefined,
+    salesEmail: data.salesEmail as string | undefined,
   }
 }
 
@@ -103,11 +154,12 @@ export async function getNavigation(tenantSlug?: string): Promise<Navigation> {
   if (cached) return cached
 
   try {
-    const response = await payloadClient.getNavigation({ tenant: tenantSlug })
+    const client = getClient(tenantSlug)
+    const response = await client.getNavigation()
     if (response) {
-      const navigation = transformNavigation(response)
-      setCache(cacheKey, navigation)
-      return navigation
+      const nav = transformNavigation(response as Record<string, unknown>)
+      setCache(cacheKey, nav)
+      return nav
     }
   } catch (error) {
     console.warn('[CMS] Failed to fetch navigation, using defaults:', error)
@@ -116,55 +168,56 @@ export async function getNavigation(tenantSlug?: string): Promise<Navigation> {
   return defaultNavigation
 }
 
-function transformNavigation(data: any): Navigation {
-  const mainMenu: NavSection[] = (data.mainMenu || []).map((section: any) => ({
-    id: section.id || section.label?.toLowerCase().replace(/\s+/g, '-'),
-    label: section.label,
-    items: (section.items || []).map((item: any) => ({
-      id: item.id || item.label?.toLowerCase().replace(/\s+/g, '-'),
-      label: item.label,
-      href: resolveHref(item),
-      description: item.description,
-      icon: item.icon,
-      badge: item.badge,
-      children: item.children?.map((child: any) => ({
-        id: child.id || child.label?.toLowerCase().replace(/\s+/g, '-'),
-        label: child.label,
-        href: resolveHref(child),
-      })),
-      openInNewTab: item.openInNewTab,
-    })),
-    featured: section.featured,
-    columns: section.columns,
-  }))
-
-  const footerMenu: FooterSection[] = (data.footerMenu || []).map((section: any) => ({
-    id: section.id || section.title?.toLowerCase().replace(/\s+/g, '-'),
-    title: section.title || section.label,
-    links: (section.links || section.items || []).map((link: any) => ({
-      id: link.id || link.label?.toLowerCase().replace(/\s+/g, '-'),
-      label: link.label,
-      href: resolveHref(link),
-      openInNewTab: link.openInNewTab,
-    })),
-  }))
+function transformNavigation(data: Record<string, unknown>): Navigation {
+  const mainMenu = data.mainMenu as Array<Record<string, unknown>> | undefined
+  const footerMenu = data.footerMenu as Array<Record<string, unknown>> | undefined
+  const mobileMenu = data.mobileMenu as Array<Record<string, unknown>> | undefined
 
   return {
-    mainMenu: mainMenu.length > 0 ? mainMenu : defaultNavigation.mainMenu,
-    footerMenu: footerMenu.length > 0 ? footerMenu : defaultNavigation.footerMenu,
-    mobileMenu: data.mobileMenu,
-    topBar: data.topBar || defaultNavigation.topBar,
+    mainMenu: mainMenu ? mainMenu.map(transformNavSection) : defaultNavigation.mainMenu,
+    footerMenu: footerMenu ? footerMenu.map(transformFooterSection) : defaultNavigation.footerMenu,
+    mobileMenu: mobileMenu ? mobileMenu.map(transformNavItem) : defaultNavigation.mobileMenu,
+    topBar: data.topBar as Navigation['topBar'],
   }
 }
 
-function resolveHref(item: any): string {
-  if (item.url) return item.url
-  if (item.href) return item.href
-  if (item.page?.slug) return `/${item.page.slug}`
-  if (item.type === 'page' && item.page) {
-    return typeof item.page === 'string' ? `/${item.page}` : `/${item.page.slug}`
+function transformNavSection(data: Record<string, unknown>): NavSection {
+  const items = data.items as Array<Record<string, unknown>> | undefined
+  return {
+    id: (data.id as string) || String(Math.random()),
+    label: (data.label as string) || (data.title as string) || '',
+    items: items ? items.map(transformNavItem) : [],
+    featured: data.featured as NavSection['featured'],
+    columns: data.columns as number | undefined,
   }
-  return '#'
+}
+
+function transformNavItem(data: Record<string, unknown>): NavItem {
+  const children = data.children as Array<Record<string, unknown>> | undefined
+  return {
+    id: (data.id as string) || String(Math.random()),
+    label: (data.label as string) || (data.title as string) || '',
+    href: (data.href as string) || (data.url as string) || (data.link as string) || '#',
+    description: data.description as string | undefined,
+    icon: data.icon as string | undefined,
+    badge: data.badge as string | undefined,
+    children: children ? children.map(transformNavItem) : undefined,
+    openInNewTab: data.openInNewTab as boolean | undefined,
+  }
+}
+
+function transformFooterSection(data: Record<string, unknown>): FooterSection {
+  const links = data.links as Array<Record<string, unknown>> | undefined
+  return {
+    id: (data.id as string) || String(Math.random()),
+    title: (data.title as string) || (data.label as string) || '',
+    links: links ? links.map(link => ({
+      id: (link.id as string) || String(Math.random()),
+      label: (link.label as string) || (link.title as string) || '',
+      href: (link.href as string) || (link.url as string) || '#',
+      openInNewTab: link.openInNewTab as boolean | undefined,
+    })) : [],
+  }
 }
 
 // =============================================================================
@@ -177,10 +230,10 @@ export async function getAnnouncements(tenantSlug?: string): Promise<Announcemen
   if (cached) return cached
 
   try {
-    // Try to get from site settings
-    const settings = await payloadClient.getSiteSettings({ tenant: tenantSlug })
-    if (settings?.announcements?.length) {
-      const announcements = transformAnnouncements(settings.announcements)
+    const client = getClient(tenantSlug)
+    const response = await client.getAnnouncements()
+    if (response && Array.isArray(response)) {
+      const announcements = response.map(transformAnnouncement)
       setCache(cacheKey, announcements)
       return announcements
     }
@@ -191,24 +244,18 @@ export async function getAnnouncements(tenantSlug?: string): Promise<Announcemen
   return defaultAnnouncements
 }
 
-function transformAnnouncements(data: any[]): Announcement[] {
-  return data.map((item, index) => ({
-    id: item.id || `announcement-${index}`,
-    message: item.message || item.text || '',
-    link: item.link || item.url,
-    linkText: item.linkText,
-    type: item.type || 'info',
-    dismissible: item.dismissible ?? true,
-    startDate: item.startDate,
-    endDate: item.endDate,
-    priority: item.priority || index,
-  })).filter(a => {
-    // Filter by date if applicable
-    const now = new Date()
-    if (a.startDate && new Date(a.startDate) > now) return false
-    if (a.endDate && new Date(a.endDate) < now) return false
-    return true
-  })
+function transformAnnouncement(data: Record<string, unknown>): Announcement {
+  return {
+    id: (data.id as string) || String(Math.random()),
+    message: (data.message as string) || (data.text as string) || '',
+    link: data.link as string | undefined,
+    linkText: data.linkText as string | undefined,
+    type: (data.type as Announcement['type']) || 'info',
+    dismissible: (data.dismissible as boolean) ?? true,
+    startDate: data.startDate as string | undefined,
+    endDate: data.endDate as string | undefined,
+    priority: (data.priority as number) || 0,
+  }
 }
 
 // =============================================================================
@@ -221,15 +268,11 @@ export async function getHomePage(tenantSlug?: string): Promise<HomePage> {
   if (cached) return cached
 
   try {
-    // Try to fetch home page from CMS
-    const pages = await payloadClient.getPages({
-      tenant: tenantSlug,
-      where: { slug: { equals: 'home' } },
-      limit: 1,
-    })
-
-    if (pages?.docs?.[0]) {
-      const homePage = transformHomePage(pages.docs[0])
+    const client = getClient(tenantSlug)
+    // Try to get home page from Payload CMS pages collection
+    const response = await client.getPageBySlug('home')
+    if (response) {
+      const homePage = transformHomePage(response as unknown as Record<string, unknown>)
       setCache(cacheKey, homePage)
       return homePage
     }
@@ -240,243 +283,269 @@ export async function getHomePage(tenantSlug?: string): Promise<HomePage> {
   return defaultHomePage
 }
 
-function transformHomePage(data: any): HomePage {
-  const hero = data.hero || data.layout?.find((b: any) => b.blockType === 'hero')
-  
+function transformHomePage(data: Record<string, unknown>): HomePage {
+  const hero = data.hero as Record<string, unknown> | undefined
+  const sections = data.sections as Array<Record<string, unknown>> | undefined
+  const layout = data.layout as Array<Record<string, unknown>> | undefined
+
   return {
-    hero: {
-      slides: hero?.slides?.map(transformHeroSlide) || 
-              (hero ? [transformHeroSlide(hero)] : defaultHomePage.hero.slides),
-      autoplay: hero?.autoplay ?? true,
-      autoplayInterval: hero?.autoplayInterval || 5000,
-    },
-    sections: transformSections(data.layout || data.sections || []),
+    hero: hero ? transformHeroSection(hero) : defaultHomePage.hero,
+    sections: sections ? sections.map(transformPageSection) : 
+              layout ? layout.map(transformPageSection) : 
+              defaultHomePage.sections,
   }
 }
 
-function transformHeroSlide(data: any): HeroSlide {
+function transformHeroSection(data: Record<string, unknown>): HomePage['hero'] {
+  const slides = data.slides as Array<Record<string, unknown>> | undefined
   return {
-    id: data.id || `slide-${Math.random().toString(36).slice(2)}`,
-    title: data.title || data.heading || '',
-    subtitle: data.subtitle || data.subheading || '',
-    description: data.description,
+    slides: slides ? slides.map(transformHeroSlide) : defaultHomePage.hero.slides,
+    autoplay: (data.autoplay as boolean) ?? true,
+    autoplayInterval: (data.autoplayInterval as number) || 5000,
+  }
+}
+
+function transformHeroSlide(data: Record<string, unknown>): HeroSlide {
+  return {
+    id: (data.id as string) || String(Math.random()),
+    title: (data.title as string) || '',
+    subtitle: (data.subtitle as string) || '',
+    description: data.description as string | undefined,
     image: data.image ? {
-      id: data.image.id || data.image,
-      url: data.image.url || data.image,
-      alt: data.image.alt || data.title || '',
+      id: (data.image as Record<string, unknown>).id as string || '',
+      url: (data.image as Record<string, unknown>).url as string || '',
+      alt: ((data.image as Record<string, unknown>).alt as string) || '',
     } : undefined,
     video: data.video ? {
-      id: data.video.id,
-      url: data.video.url,
+      id: (data.video as Record<string, unknown>).id as string || '',
+      url: (data.video as Record<string, unknown>).url as string || '',
       alt: '',
     } : undefined,
-    primaryCTA: data.primaryCTA || data.ctaText ? {
-      label: data.primaryCTA?.label || data.ctaText || 'Learn More',
-      href: data.primaryCTA?.href || data.ctaLink || '#',
-      variant: data.primaryCTA?.variant || 'primary',
-    } : undefined,
-    secondaryCTA: data.secondaryCTA,
-    overlay: data.overlay || 'dark',
-    textPosition: data.textPosition || data.variant || 'center',
+    primaryCTA: data.primaryCTA as HeroSlide['primaryCTA'],
+    secondaryCTA: data.secondaryCTA as HeroSlide['secondaryCTA'],
+    overlay: data.overlay as boolean | undefined,
+    overlayOpacity: data.overlayOpacity as number | undefined,
+    textPosition: data.textPosition as HeroSlide['textPosition'],
+    textColor: data.textColor as HeroSlide['textColor'],
   }
 }
 
-function transformSections(blocks: any[]): PageSection[] {
-  return blocks.map((block) => {
-    switch (block.blockType) {
-      case 'features':
-      case 'card-grid':
-        return {
-          id: block.id || `features-${Math.random().toString(36).slice(2)}`,
-          sectionType: 'features' as const,
-          title: block.title || block.heading,
-          subtitle: block.subtitle,
-          features: (block.features || block.cards || []).map((f: any, i: number) => ({
-            id: f.id || `feature-${i}`,
-            title: f.title,
-            description: f.description,
-            icon: f.icon,
-            image: f.image ? { id: f.image.id, url: f.image.url, alt: f.image.alt || '' } : undefined,
-            link: f.link,
-          })),
-          layout: block.layout || 'grid',
-          columns: (parseInt(block.columns) || 3) as 2 | 3 | 4,
-        }
-
-      case 'testimonial':
-      case 'testimonials':
-        return {
-          id: block.id || `testimonials-${Math.random().toString(36).slice(2)}`,
-          sectionType: 'testimonials' as const,
-          title: block.title || block.heading,
-          testimonials: (block.testimonials || block.quotes || []).map((t: any, i: number) => ({
-            id: t.id || `testimonial-${i}`,
-            quote: t.quote || t.text,
-            author: t.author,
-            role: t.role,
-            company: t.company,
-            avatar: t.avatar ? { id: t.avatar.id, url: t.avatar.url, alt: '' } : undefined,
-            rating: t.rating,
-          })),
-          layout: block.layout || block.variant || 'carousel',
-        }
-
-      case 'stats':
-        return {
-          id: block.id || `stats-${Math.random().toString(36).slice(2)}`,
-          sectionType: 'stats' as const,
-          title: block.title,
-          stats: (block.stats || block.items || []).map((s: any, i: number) => ({
-            id: s.id || `stat-${i}`,
-            value: s.value,
-            label: s.label,
-            prefix: s.prefix,
-            suffix: s.suffix,
-            icon: s.icon,
-          })),
-          layout: block.layout || 'inline',
-        }
-
-      case 'faq':
-        return {
-          id: block.id || `faq-${Math.random().toString(36).slice(2)}`,
-          sectionType: 'faq' as const,
-          title: block.title || block.heading,
-          categories: block.categories || [{
-            id: 'general',
-            title: 'General',
-            faqs: (block.items || block.faqs || []).map((f: any, i: number) => ({
-              id: f.id || `faq-${i}`,
-              question: f.question || f.title,
-              answer: typeof f.answer === 'string' ? f.answer : f.answer?.root?.children?.[0]?.children?.[0]?.text || '',
-            })),
-          }],
-          layout: block.layout || 'accordion',
-        }
-
-      case 'cta':
-        return {
-          id: block.id || `cta-${Math.random().toString(36).slice(2)}`,
-          sectionType: 'cta' as const,
-          heading: block.heading || block.title,
-          text: block.description || block.text,
-          primaryButton: {
-            label: block.buttonText || block.primaryButton?.label || 'Learn More',
-            href: block.buttonLink || block.primaryButton?.href || '#',
-            variant: block.variant || 'primary',
-          },
-          secondaryButton: block.secondaryButton,
-          image: block.image ? { id: block.image.id, url: block.image.url, alt: '' } : undefined,
-          layout: block.layout || 'centered',
-        }
-
-      case 'newsletter':
-        return {
-          id: block.id || `newsletter-${Math.random().toString(36).slice(2)}`,
-          sectionType: 'newsletter' as const,
-          heading: block.heading || block.title || 'Subscribe to Our Newsletter',
-          text: block.text || block.description || 'Get the latest updates and offers.',
-          placeholder: block.placeholder || 'Enter your email',
-          buttonText: block.buttonText || 'Subscribe',
-          successMessage: block.successMessage || 'Thank you for subscribing!',
-          disclaimerText: block.disclaimerText,
-        }
-
-      case 'banner':
-        return {
-          id: block.id || `banner-${Math.random().toString(36).slice(2)}`,
-          sectionType: 'banner' as const,
-          title: block.title,
-          content: block.message || block.content,
-          link: block.link,
-          linkText: block.linkText,
-          image: block.image ? { id: block.image.id, url: block.image.url, alt: '' } : undefined,
-          variant: block.type || 'info',
-          countdown: block.countdown,
-        }
-
-      default:
-        // Return content section for unknown blocks
-        return {
-          id: block.id || `content-${Math.random().toString(36).slice(2)}`,
-          sectionType: 'content' as const,
-          title: block.title,
-          content: block.content || '',
-          layout: 'full',
-        }
-    }
-  })
-}
-
-// =============================================================================
-// CMS PAGES
-// =============================================================================
-
-export async function getCMSPage(slug: string, tenantSlug?: string): Promise<CMSPage | null> {
-  const cacheKey = `page:${slug}:${tenantSlug || 'default'}`
-  const cached = getCached<CMSPage | null>(cacheKey)
-  if (cached !== null) return cached
-
-  try {
-    const pages = await payloadClient.getPages({
-      tenant: tenantSlug,
-      where: { slug: { equals: slug } },
-      limit: 1,
-    })
-
-    if (pages?.docs?.[0]) {
-      const page = transformCMSPage(pages.docs[0])
-      setCache(cacheKey, page)
-      return page
-    }
-  } catch (error) {
-    console.warn(`[CMS] Failed to fetch page "${slug}":`, error)
+function transformPageSection(data: Record<string, unknown>): PageSection {
+  const sectionType = (data.sectionType as string) || (data.blockType as string) || (data.type as string) || 'content'
+  
+  const baseSection = {
+    id: (data.id as string) || String(Math.random()),
+    title: data.title as string | undefined,
+    subtitle: data.subtitle as string | undefined,
+    background: data.background as PageSection['background'],
+    spacing: data.spacing as PageSection['spacing'],
   }
 
-  setCache(cacheKey, null)
-  return null
+  switch (sectionType) {
+    case 'features':
+      return transformFeaturesSection(data, baseSection)
+    case 'testimonials':
+      return transformTestimonialsSection(data, baseSection)
+    case 'stats':
+      return transformStatsSection(data, baseSection)
+    case 'trust-badges':
+    case 'trust':
+      return transformTrustBadgesSection(data, baseSection)
+    case 'cta':
+      return transformCTASection(data, baseSection)
+    case 'faq':
+      return transformFAQPageSection(data, baseSection)
+    case 'product-grid':
+    case 'products':
+      return transformProductGridSection(data, baseSection)
+    default:
+      return {
+        ...baseSection,
+        sectionType: 'content',
+        content: (data.content as string) || '',
+        layout: data.layout as 'full' | 'left' | 'right' | 'center' | undefined,
+      }
+  }
 }
 
-function transformCMSPage(data: any): CMSPage {
+function transformFeaturesSection(data: Record<string, unknown>, base: Record<string, unknown>): FeaturesSection {
+  const features = data.features as Array<Record<string, unknown>> | undefined
   return {
-    id: data.id,
-    slug: data.slug,
-    title: data.title,
-    description: data.description,
-    template: data.template || 'default',
-    hero: data.hero ? transformHeroSlide(data.hero) : undefined,
-    sections: transformSections(data.layout || data.sections || []),
-    seo: data.meta ? {
-      metaTitle: data.meta.title,
-      metaDescription: data.meta.description,
-      ogImage: data.meta.image ? { id: data.meta.image.id, url: data.meta.image.url, alt: '' } : undefined,
+    ...base,
+    sectionType: 'features',
+    features: features ? features.map((f): Feature => ({
+      id: (f.id as string) || String(Math.random()),
+      title: (f.title as string) || '',
+      description: (f.description as string) || '',
+      icon: f.icon as string | undefined,
+      image: f.image ? {
+        id: (f.image as Record<string, unknown>).id as string || '',
+        url: (f.image as Record<string, unknown>).url as string || '',
+        alt: ((f.image as Record<string, unknown>).alt as string) || '',
+      } : undefined,
+      link: f.link as string | undefined,
+    })) : [],
+    layout: data.layout as FeaturesSection['layout'],
+    columns: data.columns as FeaturesSection['columns'],
+  } as FeaturesSection
+}
+
+function transformTestimonialsSection(data: Record<string, unknown>, base: Record<string, unknown>): TestimonialsSection {
+  const testimonials = data.testimonials as Array<Record<string, unknown>> | undefined
+  return {
+    ...base,
+    sectionType: 'testimonials',
+    testimonials: testimonials ? testimonials.map((t): Testimonial => ({
+      id: (t.id as string) || String(Math.random()),
+      quote: (t.quote as string) || (t.text as string) || '',
+      author: (t.author as string) || (t.name as string) || '',
+      role: t.role as string | undefined,
+      company: t.company as string | undefined,
+      avatar: t.avatar ? {
+        id: (t.avatar as Record<string, unknown>).id as string || '',
+        url: (t.avatar as Record<string, unknown>).url as string || '',
+        alt: ((t.avatar as Record<string, unknown>).alt as string) || '',
+      } : undefined,
+      rating: t.rating as number | undefined,
+    })) : [],
+    layout: (data.layout as TestimonialsSection['layout']) || 'carousel',
+  } as TestimonialsSection
+}
+
+function transformStatsSection(data: Record<string, unknown>, base: Record<string, unknown>): StatsSection {
+  const stats = data.stats as Array<Record<string, unknown>> | undefined
+  return {
+    ...base,
+    sectionType: 'stats',
+    stats: stats ? stats.map((s): Stat => ({
+      id: (s.id as string) || String(Math.random()),
+      value: (s.value as string) || '',
+      label: (s.label as string) || '',
+      icon: s.icon as string | undefined,
+      prefix: s.prefix as string | undefined,
+      suffix: s.suffix as string | undefined,
+    })) : [],
+    layout: (data.layout as StatsSection['layout']) || 'inline',
+  } as StatsSection
+}
+
+function transformTrustBadgesSection(data: Record<string, unknown>, base: Record<string, unknown>): TrustBadgesSection {
+  const badges = (data.badges as Array<Record<string, unknown>>) || (data.items as Array<Record<string, unknown>>) || []
+  return {
+    ...base,
+    sectionType: 'trust-badges',
+    badges: badges.map((b): TrustBadge => ({
+      id: (b.id as string) || String(Math.random()),
+      title: (b.title as string) || (b.label as string) || '',
+      description: b.description as string | undefined,
+      icon: b.icon as string | undefined,
+      image: b.image ? {
+        id: (b.image as Record<string, unknown>).id as string || '',
+        url: (b.image as Record<string, unknown>).url as string || '',
+        alt: ((b.image as Record<string, unknown>).alt as string) || '',
+      } : undefined,
+    })),
+  } as TrustBadgesSection
+}
+
+function transformCTASection(data: Record<string, unknown>, base: Record<string, unknown>): CTASection {
+  return {
+    ...base,
+    sectionType: 'cta',
+    heading: (data.heading as string) || (data.title as string) || '',
+    description: data.description as string | undefined,
+    primaryButton: data.primaryCTA as CTASection['primaryButton'] || data.primaryButton as CTASection['primaryButton'],
+    secondaryButton: data.secondaryCTA as CTASection['secondaryButton'] || data.secondaryButton as CTASection['secondaryButton'],
+    image: data.image ? {
+      id: (data.image as Record<string, unknown>).id as string || '',
+      url: (data.image as Record<string, unknown>).url as string || '',
+      alt: ((data.image as Record<string, unknown>).alt as string) || '',
     } : undefined,
-    publishedAt: data.lastPublishedAt || data.publishedAt,
-    status: data.status || 'published',
+    layout: data.layout as CTASection['layout'],
+  } as CTASection
+}
+
+function transformFAQPageSection(data: Record<string, unknown>, base: Record<string, unknown>): FAQSection {
+  const faqs = data.faqs as Array<Record<string, unknown>> | undefined
+  const categories = data.categories as Array<Record<string, unknown>> | undefined
+  
+  if (categories) {
+    return {
+      ...base,
+      sectionType: 'faq',
+      categories: categories.map((cat): FAQCategory => ({
+        id: (cat.id as string) || String(Math.random()),
+        title: (cat.title as string) || (cat.name as string) || '',
+        faqs: ((cat.faqs as Array<Record<string, unknown>>) || []).map((f): FAQ => ({
+          id: (f.id as string) || String(Math.random()),
+          question: (f.question as string) || '',
+          answer: (f.answer as string) || '',
+        })),
+      })),
+      layout: data.layout as FAQSection['layout'],
+    } as FAQSection
   }
+  
+  // If no categories, wrap all FAQs in a single category
+  return {
+    ...base,
+    sectionType: 'faq',
+    categories: [{
+      id: 'default',
+      title: 'General',
+      faqs: faqs ? faqs.map((f): FAQ => ({
+        id: (f.id as string) || String(Math.random()),
+        question: (f.question as string) || '',
+        answer: (f.answer as string) || '',
+      })) : [],
+    }],
+    layout: data.layout as FAQSection['layout'],
+  } as FAQSection
+}
+
+function transformProductGridSection(data: Record<string, unknown>, base: Record<string, unknown>): ProductGridSection {
+  return {
+    ...base,
+    sectionType: 'product-grid',
+    productIds: data.productIds as string[] | undefined,
+    categoryHandle: data.categoryHandle as string | undefined,
+    collectionHandle: data.collectionHandle as string | undefined,
+    limit: (data.limit as number) || 8,
+    layout: data.layout as ProductGridSection['layout'],
+  } as ProductGridSection
 }
 
 // =============================================================================
-// FAQ
+// FAQ PAGE
 // =============================================================================
 
-export async function getFAQs(tenantSlug?: string): Promise<FAQCategory[]> {
-  const cacheKey = `faqs:${tenantSlug || 'default'}`
+export async function getFAQPage(tenantSlug?: string): Promise<FAQCategory[]> {
+  const cacheKey = `faq-page:${tenantSlug || 'default'}`
   const cached = getCached<FAQCategory[]>(cacheKey)
   if (cached) return cached
 
   try {
-    // Try to get FAQ page
-    const page = await getCMSPage('faq', tenantSlug)
-    if (page?.sections) {
-      const faqSection = page.sections.find(s => s.sectionType === 'faq') as any
-      if (faqSection?.categories) {
-        setCache(cacheKey, faqSection.categories)
-        return faqSection.categories
+    const client = getClient(tenantSlug)
+    const response = await client.getPageBySlug('faq')
+    if (response) {
+      const data = response as unknown as Record<string, unknown>
+      const categories = data.categories as Array<Record<string, unknown>> | undefined
+      if (categories) {
+        const faqCategories = categories.map((cat): FAQCategory => ({
+          id: (cat.id as string) || String(Math.random()),
+          title: (cat.title as string) || (cat.name as string) || '',
+          faqs: ((cat.faqs as Array<Record<string, unknown>>) || []).map((f): FAQ => ({
+            id: (f.id as string) || String(Math.random()),
+            question: (f.question as string) || '',
+            answer: (f.answer as string) || '',
+          })),
+        }))
+        setCache(cacheKey, faqCategories)
+        return faqCategories
       }
     }
   } catch (error) {
-    console.warn('[CMS] Failed to fetch FAQs, using defaults:', error)
+    console.warn('[CMS] Failed to fetch FAQ page, using defaults:', error)
   }
 
   return defaultFAQSection.categories
@@ -487,32 +556,34 @@ export async function getFAQs(tenantSlug?: string): Promise<FAQCategory[]> {
 // =============================================================================
 
 export async function getLoyaltyProgram(tenantSlug?: string): Promise<LoyaltyProgram> {
-  const cacheKey = `loyalty:${tenantSlug || 'default'}`
+  const cacheKey = `loyalty-program:${tenantSlug || 'default'}`
   const cached = getCached<LoyaltyProgram>(cacheKey)
   if (cached) return cached
 
   try {
-    // Try to get loyalty page or settings
-    const page = await getCMSPage('loyalty', tenantSlug)
-    if (page) {
-      // Extract loyalty data from page sections if available
-      const program = extractLoyaltyFromPage(page)
-      if (program) {
-        setCache(cacheKey, program)
-        return program
+    const client = getClient(tenantSlug)
+    const response = await client.getPageBySlug('loyalty')
+    if (response) {
+      const data = response as unknown as Record<string, unknown>
+      const program: LoyaltyProgram = {
+        enabled: (data.enabled as boolean) ?? true,
+        name: (data.name as string) || defaultLoyaltyProgram.name,
+        description: (data.description as string) || defaultLoyaltyProgram.description,
+        tiers: (data.tiers as LoyaltyProgram['tiers']) || defaultLoyaltyProgram.tiers,
+        rewards: (data.rewards as LoyaltyProgram['rewards']) || defaultLoyaltyProgram.rewards,
+        pointsPerDollar: (data.pointsPerDollar as number) || defaultLoyaltyProgram.pointsPerDollar,
+        welcomeBonus: data.welcomeBonus as number | undefined,
+        referralBonus: data.referralBonus as number | undefined,
+        termsAndConditions: data.termsAndConditions as string | undefined,
       }
+      setCache(cacheKey, program)
+      return program
     }
   } catch (error) {
     console.warn('[CMS] Failed to fetch loyalty program, using defaults:', error)
   }
 
   return defaultLoyaltyProgram
-}
-
-function extractLoyaltyFromPage(page: CMSPage): LoyaltyProgram | null {
-  // This would parse the page content for loyalty-specific sections
-  // For now, return null to use defaults
-  return null
 }
 
 // =============================================================================
@@ -525,11 +596,17 @@ export async function getGiftCardConfig(tenantSlug?: string): Promise<GiftCardCo
   if (cached) return cached
 
   try {
-    const settings = await payloadClient.getSiteSettings({ tenant: tenantSlug })
-    if (settings?.giftCards) {
-      const config = {
-        ...defaultGiftCardConfig,
-        ...settings.giftCards,
+    const client = getClient(tenantSlug)
+    const response = await client.getPageBySlug('gift-cards')
+    if (response) {
+      const data = response as unknown as Record<string, unknown>
+      const config: GiftCardConfig = {
+        defaultAmounts: (data.denominations as number[]) || (data.defaultAmounts as number[]) || defaultGiftCardConfig.defaultAmounts,
+        allowCustomAmount: (data.allowCustomAmount as boolean) ?? defaultGiftCardConfig.allowCustomAmount,
+        minCustomAmount: (data.minAmount as number) || (data.minCustomAmount as number) || defaultGiftCardConfig.minCustomAmount,
+        maxCustomAmount: (data.maxAmount as number) || (data.maxCustomAmount as number) || defaultGiftCardConfig.maxCustomAmount,
+        designs: (data.designs as GiftCardConfig['designs']) || defaultGiftCardConfig.designs,
+        termsAndConditions: data.termsAndConditions as string | undefined,
       }
       setCache(cacheKey, config)
       return config
@@ -542,13 +619,68 @@ export async function getGiftCardConfig(tenantSlug?: string): Promise<GiftCardCo
 }
 
 // =============================================================================
-// UTILITY: Clear Cache
+// GENERIC CMS PAGE
 // =============================================================================
 
-export function clearCMSCache(): void {
-  cache.clear()
+export async function getCMSPage(slug: string, tenantSlug?: string): Promise<CMSPage | null> {
+  const cacheKey = `page:${slug}:${tenantSlug || 'default'}`
+  const cached = getCached<CMSPage | null>(cacheKey)
+  if (cached !== null) return cached
+
+  try {
+    const client = getClient(tenantSlug)
+    const response = await client.getPageBySlug(slug)
+    if (response) {
+      const data = response as unknown as Record<string, unknown>
+      const page: CMSPage = {
+        id: (data.id as string) || '',
+        slug: (data.slug as string) || slug,
+        title: (data.title as string) || '',
+        description: data.description as string | undefined,
+        sections: ((data.layout as Array<Record<string, unknown>>) || (data.sections as Array<Record<string, unknown>>) || []).map(transformPageSection),
+        seo: data.meta as CMSPage['seo'],
+        publishedAt: data.publishedAt as string | undefined,
+        template: data.template as CMSPage['template'],
+      }
+      setCache(cacheKey, page)
+      return page
+    }
+  } catch (error) {
+    console.warn(`[CMS] Failed to fetch page "${slug}":`, error)
+  }
+
+  setCache(cacheKey, null)
+  return null
 }
 
-export function invalidateCacheKey(key: string): void {
-  cache.delete(key)
+// =============================================================================
+// LABELS (TRANSLATIONS)
+// =============================================================================
+
+export async function getLabels(tenantSlug?: string, locale?: string): Promise<Labels> {
+  const cacheKey = `labels:${tenantSlug || 'default'}:${locale || 'en'}`
+  const cached = getCached<Labels>(cacheKey)
+  if (cached) return cached
+
+  try {
+    const client = getClient(tenantSlug)
+    const response = await client.getLabels?.(locale)
+    if (response) {
+      // Merge with defaults to ensure all fields are present
+      const labels: Labels = {
+        nav: { ...defaultLabels.nav, ...(response.nav as Labels['nav'] || {}) },
+        common: { ...defaultLabels.common, ...(response.common as Labels['common'] || {}) },
+        product: { ...defaultLabels.product, ...(response.product as Labels['product'] || {}) },
+        cart: { ...defaultLabels.cart, ...(response.cart as Labels['cart'] || {}) },
+        account: { ...defaultLabels.account, ...(response.account as Labels['account'] || {}) },
+        footer: { ...defaultLabels.footer, ...(response.footer as Labels['footer'] || {}) },
+      }
+      setCache(cacheKey, labels)
+      return labels
+    }
+  } catch (error) {
+    console.warn('[CMS] Failed to fetch labels, using defaults:', error)
+  }
+
+  return defaultLabels
 }

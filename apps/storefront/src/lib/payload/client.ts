@@ -267,6 +267,27 @@ export class PayloadClient {
   }
 
   /**
+   * Alias for getPage - get page by slug
+   */
+  async getPageBySlug(slug: string): Promise<Page | null> {
+    return this.getPage(slug);
+  }
+
+  /**
+   * Get all published pages
+   */
+  async getPages(options: { limit?: number; page?: number } = {}): Promise<PayloadPaginatedResponse<Page>> {
+    return this.fetch<PayloadPaginatedResponse<Page>>('/api/pages', {
+      params: {
+        'where[status][equals]': 'published',
+        depth: 1,
+        limit: options.limit || 100,
+        page: options.page || 1,
+      },
+    });
+  }
+
+  /**
    * Get pages by template type
    */
   async getPagesByTemplate(
@@ -326,6 +347,31 @@ export class PayloadClient {
     } catch {
       return null;
     }
+  }
+
+  /**
+   * Alias for getPOI - get POI by slug
+   */
+  async getPOIBySlug(slug: string): Promise<POI | null> {
+    return this.getPOI(slug);
+  }
+
+  /**
+   * Get all active POIs
+   */
+  async getPOIs(options: { limit?: number; page?: number; category?: POIPrimaryCategory } = {}): Promise<PayloadPaginatedResponse<POI>> {
+    const params: Record<string, string | number | undefined> = {
+      'where[status][equals]': 'active',
+      depth: 1,
+      limit: options.limit || 20,
+      page: options.page || 1,
+    };
+
+    if (options.category) {
+      params['where[primaryCategory][equals]'] = options.category;
+    }
+
+    return this.fetch<PayloadPaginatedResponse<POI>>('/api/pois', { params });
   }
 
   /**
@@ -580,6 +626,52 @@ export class PayloadClient {
   async getSiteSettings(): Promise<SiteSettings | null> {
     try {
       return await this.fetch<SiteSettings>('/api/globals/site-settings');
+    } catch {
+      return null;
+    }
+  }
+
+  // ===========================================================================
+  // ANNOUNCEMENTS METHODS
+  // ===========================================================================
+
+  /**
+   * Get active announcements
+   */
+  async getAnnouncements(): Promise<Record<string, unknown>[]> {
+    try {
+      const result = await this.fetch<PayloadPaginatedResponse<Record<string, unknown>>>(
+        '/api/announcements',
+        {
+          params: {
+            'where[status][equals]': 'active',
+            sort: '-priority',
+            depth: 1,
+            limit: 10,
+          },
+        }
+      );
+      return result.docs;
+    } catch {
+      return [];
+    }
+  }
+
+  // ===========================================================================
+  // LABELS/TRANSLATIONS METHODS
+  // ===========================================================================
+
+  /**
+   * Get labels for a locale
+   */
+  async getLabels(locale?: string): Promise<Record<string, unknown> | null> {
+    try {
+      return await this.fetch<Record<string, unknown>>(
+        '/api/globals/labels',
+        {
+          params: locale ? { locale } : undefined,
+        }
+      );
     } catch {
       return null;
     }

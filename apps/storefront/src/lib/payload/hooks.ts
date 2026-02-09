@@ -6,16 +6,14 @@
  */
 
 import { useQuery, UseQueryOptions } from "@tanstack/react-query"
-import { getPayloadClient } from "./client"
-
-// Get the singleton client instance
-const payloadClient = getPayloadClient()
+import { getPayloadClient, createTenantClient } from "./client"
 import type { 
   Page as PayloadPage, 
   POI as PayloadPOI, 
   Navigation as PayloadNavigation,
   PlatformContext,
-  POIPrimaryCategory as POICategory 
+  POIPrimaryCategory,
+  TenantConfig,
 } from "./types"
 
 // Query keys for React Query
@@ -45,19 +43,30 @@ const defaultNavigation: PayloadNavigation = {
   ],
 }
 
+const defaultTenantConfig: TenantConfig = {
+  id: "0",
+  name: "Default",
+  slug: "default",
+  domain: "",
+  tenantTier: "CITY",
+  residencyZone: "GLOBAL",
+  status: "active",
+  settings: {
+    defaultLocale: "en",
+    supportedLocales: [{ locale: "en" }],
+    timezone: "UTC",
+    currency: "USD",
+  },
+}
+
 const defaultPlatformContext: PlatformContext = {
-  tenant: {
+  tenant: defaultTenantConfig,
+  masterTenant: {
     id: "0",
-    name: "Default",
-    slug: "default",
-    tenantTier: "CITY",
-    status: "active",
-    settings: {
-      defaultLocale: "en",
-      supportedLocales: [{ locale: "en" }],
-      timezone: "UTC",
-      currency: "USD",
-    },
+    name: "Platform",
+    slug: "platform",
+    tenantTier: "MASTER",
+    domain: "",
   },
   tenantAncestry: [],
   nodeHierarchy: [],
@@ -86,19 +95,31 @@ const defaultPlatformContext: PlatformContext = {
   isDefaultTenant: true,
 }
 
+function getClient(tenant?: string, locale?: string) {
+  if (tenant || locale) {
+    const client = createTenantClient(tenant || 'platform', locale)
+    return client
+  }
+  return getPayloadClient()
+}
+
 /**
  * Hook to fetch platform context with fallback
  */
 export function usePlatformContext(
   tenant: string = "platform",
-  options?: Partial<UseQueryOptions<PlatformContext>>
+  options?: Partial<UseQueryOptions<PlatformContext, Error>>
 ) {
-  return useQuery({
+  return useQuery<PlatformContext, Error>({
     queryKey: cmsQueryKeys.platformContext(tenant),
-    queryFn: async () => {
+    queryFn: async (): Promise<PlatformContext> => {
       try {
-        const context = await payloadClient.getPlatformContext(tenant)
-        return context
+        const client = getPayloadClient()
+        const context = await client.getPlatformContext(tenant)
+        if (context) {
+          return context
+        }
+        return defaultPlatformContext
       } catch (error) {
         console.warn("[CMS] Platform context fetch failed, using default:", error)
         return defaultPlatformContext
@@ -117,15 +138,16 @@ export function usePlatformContext(
 export function useNavigation(
   tenant?: string,
   locale?: string,
-  options?: Partial<UseQueryOptions<PayloadNavigation>>
+  options?: Partial<UseQueryOptions<PayloadNavigation, Error>>
 ) {
-  return useQuery({
+  return useQuery<PayloadNavigation, Error>({
     queryKey: cmsQueryKeys.navigation(tenant, locale),
-    queryFn: async () => {
+    queryFn: async (): Promise<PayloadNavigation> => {
       try {
-        const navigation = await payloadClient.getNavigation({ tenant, locale })
+        const client = getClient(tenant, locale)
+        const navigation = await client.getNavigation()
         // Return CMS navigation if it has items, otherwise use default
-        if (navigation.mainMenu && navigation.mainMenu.length > 0) {
+        if (navigation && navigation.mainMenu && navigation.mainMenu.length > 0) {
           return navigation
         }
         return defaultNavigation
@@ -148,21 +170,21 @@ export function usePage(
   slug: string,
   tenant?: string,
   locale?: string,
-  options?: Partial<UseQueryOptions<PayloadPage | null>>
+  options?: Partial<UseQueryOptions<PayloadPage | null, Error>>
 ) {
-  return useQuery({
+  return useQuery<PayloadPage | null, Error>({
     queryKey: cmsQueryKeys.page(slug, tenant, locale),
-    queryFn: async () => {
+    queryFn: async (): Promise<PayloadPage | null> => {
       try {
-        const page = await payloadClient.getPageBySlug(slug, { tenant, locale })
-        return page
+        const client = getClient(tenant, locale)
+        return await client.getPage(slug)
       } catch (error) {
-        console.warn(`[CMS] Page "${slug}" fetch failed:`, error)
+        console.warn(`[CMS] Page fetch failed for ${slug}:`, error)
         return null
       }
     },
-    staleTime: 2 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     retry: 1,
     enabled: !!slug,
     ...options,
@@ -170,30 +192,26 @@ export function usePage(
 }
 
 /**
- * Hook to fetch pages list
+ * Hook to fetch multiple pages
  */
 export function usePages(
   tenant?: string,
-  status: string = "published",
-  options?: Partial<UseQueryOptions<PayloadPage[]>>
+  options?: Partial<UseQueryOptions<PayloadPage[], Error>>
 ) {
-  return useQuery({
-    queryKey: cmsQueryKeys.pages(tenant, status),
-    queryFn: async () => {
+  return useQuery<PayloadPage[], Error>({
+    queryKey: cmsQueryKeys.pages(tenant),
+    queryFn: async (): Promise<PayloadPage[]> => {
       try {
-        const response = await payloadClient.getPages({ 
-          tenant, 
-          status: status as "draft" | "published" | "archived",
-          limit: 100 
-        })
-        return response.docs
+        const client = getClient(tenant)
+        const result = await client.getPages()
+        return result.docs || []
       } catch (error) {
         console.warn("[CMS] Pages fetch failed:", error)
         return []
       }
     },
-    staleTime: 2 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     retry: 1,
     ...options,
   })
@@ -206,21 +224,21 @@ export function usePOI(
   slug: string,
   tenant?: string,
   locale?: string,
-  options?: Partial<UseQueryOptions<PayloadPOI | null>>
+  options?: Partial<UseQueryOptions<PayloadPOI | null, Error>>
 ) {
-  return useQuery({
+  return useQuery<PayloadPOI | null, Error>({
     queryKey: cmsQueryKeys.poi(slug, tenant, locale),
-    queryFn: async () => {
+    queryFn: async (): Promise<PayloadPOI | null> => {
       try {
-        const poi = await payloadClient.getPOIBySlug(slug, { tenant, locale })
-        return poi
+        const client = getClient(tenant, locale)
+        return await client.getPOI(slug)
       } catch (error) {
-        console.warn(`[CMS] POI "${slug}" fetch failed:`, error)
+        console.warn(`[CMS] POI fetch failed for ${slug}:`, error)
         return null
       }
     },
-    staleTime: 2 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     retry: 1,
     enabled: !!slug,
     ...options,
@@ -228,85 +246,105 @@ export function usePOI(
 }
 
 /**
- * Hook to fetch POIs list
+ * Hook to fetch POIs with optional filtering
  */
 export function usePOIs(
   params: {
-    category?: POICategory
-    nodeId?: string | number
-    tenant?: string
+    category?: POIPrimaryCategory
+    nodeId?: string
     limit?: number
+    tenant?: string
   } = {},
-  options?: Partial<UseQueryOptions<PayloadPOI[]>>
+  options?: Partial<UseQueryOptions<PayloadPOI[], Error>>
 ) {
-  return useQuery({
-    queryKey: cmsQueryKeys.pois({ 
-      category: params.category, 
-      nodeId: params.nodeId?.toString(),
-      tenant: params.tenant 
-    }),
-    queryFn: async () => {
+  return useQuery<PayloadPOI[], Error>({
+    queryKey: cmsQueryKeys.pois(params),
+    queryFn: async (): Promise<PayloadPOI[]> => {
       try {
-        const response = await payloadClient.getPOIs({
-          tenant: params.tenant,
-          primaryCategory: params.category,
-          nodeId: params.nodeId,
-          limit: params.limit || 50,
+        const client = getClient(params.tenant)
+        const result = await client.getPOIs({
+          category: params.category,
+          limit: params.limit,
         })
-        return response.docs
+        return result.docs || []
       } catch (error) {
         console.warn("[CMS] POIs fetch failed:", error)
         return []
       }
     },
-    staleTime: 2 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     retry: 1,
     ...options,
   })
 }
 
 /**
- * Hook to fetch tenant hierarchy
+ * Hook to fetch featured POIs
  */
-export function useTenantHierarchy(
-  options?: Partial<UseQueryOptions<any>>
+export function useFeaturedPOIs(
+  limit: number = 6,
+  tenant?: string,
+  options?: Partial<UseQueryOptions<PayloadPOI[], Error>>
 ) {
-  return useQuery({
-    queryKey: cmsQueryKeys.tenantHierarchy(),
-    queryFn: async () => {
+  return useQuery<PayloadPOI[], Error>({
+    queryKey: ["cms", "featured-pois", limit, tenant],
+    queryFn: async (): Promise<PayloadPOI[]> => {
       try {
-        const hierarchy = await payloadClient.getTenantHierarchy()
-        return hierarchy
+        const client = getClient(tenant)
+        return await client.getFeaturedPOIs(limit)
       } catch (error) {
-        console.warn("[CMS] Tenant hierarchy fetch failed:", error)
+        console.warn("[CMS] Featured POIs fetch failed:", error)
         return []
       }
     },
-    staleTime: 10 * 60 * 1000, // 10 minutes (rarely changes)
-    gcTime: 60 * 60 * 1000, // 1 hour
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     retry: 1,
     ...options,
   })
 }
 
 /**
- * Check if CMS is available (for conditional rendering)
+ * Hook to search POIs
  */
-export function useCMSHealth() {
-  return useQuery({
-    queryKey: ["cms", "health"],
-    queryFn: async () => {
+export function useSearchPOIs(
+  query: string,
+  params: {
+    category?: POIPrimaryCategory
+    limit?: number
+    tenant?: string
+  } = {},
+  options?: Partial<UseQueryOptions<PayloadPOI[], Error>>
+) {
+  return useQuery<PayloadPOI[], Error>({
+    queryKey: ["cms", "search-pois", query, params],
+    queryFn: async (): Promise<PayloadPOI[]> => {
+      if (!query || query.length < 2) return []
       try {
-        // Try to fetch platform context as health check
-        await payloadClient.getPlatformContext("platform")
-        return { available: true, error: null }
+        const client = getClient(params.tenant)
+        return await client.searchPOIs(query, {
+          category: params.category,
+          limit: params.limit,
+        })
       } catch (error) {
-        return { available: false, error: String(error) }
+        console.warn("[CMS] POI search failed:", error)
+        return []
       }
     },
-    staleTime: 60 * 1000, // 1 minute
-    gcTime: 5 * 60 * 1000,
-    retry: 0,
+    staleTime: 2 * 60 * 1000, // Shorter for search results
+    gcTime: 10 * 60 * 1000,
+    retry: 1,
+    enabled: query.length >= 2,
+    ...options,
   })
+}
+
+// Re-export types for convenience
+export type { 
+  PayloadPage, 
+  PayloadPOI, 
+  PayloadNavigation, 
+  PlatformContext,
+  POIPrimaryCategory,
 }

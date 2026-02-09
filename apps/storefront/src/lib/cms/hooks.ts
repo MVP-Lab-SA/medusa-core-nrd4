@@ -1,21 +1,22 @@
 /**
  * CMS React Hooks
  * 
- * React hooks for consuming CMS content with automatic loading states and fallbacks.
+ * React Query hooks for fetching CMS content with caching and fallbacks.
+ * All hooks are tenant-aware and use the current CityOS context.
  */
 
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useCityOS } from '../cityos'
 import {
   getSiteSettings,
   getNavigation,
   getAnnouncements,
   getHomePage,
-  getCMSPage,
-  getFAQs,
+  getFAQPage,
   getLoyaltyProgram,
   getGiftCardConfig,
-  clearCMSCache,
+  getCMSPage,
+  getLabels,
 } from './service'
 import {
   defaultSiteSettings,
@@ -25,297 +26,203 @@ import {
   defaultFAQSection,
   defaultLoyaltyProgram,
   defaultGiftCardConfig,
+  defaultLabels,
 } from './defaults'
 import type {
   SiteSettings,
   Navigation,
   Announcement,
   HomePage,
-  CMSPage,
   FAQCategory,
   LoyaltyProgram,
   GiftCardConfig,
+  CMSPage,
+  NavSection,
+  FooterSection,
+  Labels,
 } from './types'
 
-// Query keys
-const QUERY_KEYS = {
-  siteSettings: (tenant?: string) => ['cms', 'site-settings', tenant],
-  navigation: (tenant?: string) => ['cms', 'navigation', tenant],
-  announcements: (tenant?: string) => ['cms', 'announcements', tenant],
-  homePage: (tenant?: string) => ['cms', 'home-page', tenant],
-  page: (slug: string, tenant?: string) => ['cms', 'page', slug, tenant],
-  faqs: (tenant?: string) => ['cms', 'faqs', tenant],
-  loyalty: (tenant?: string) => ['cms', 'loyalty', tenant],
-  giftCards: (tenant?: string) => ['cms', 'gift-cards', tenant],
+// Query key factory
+const cmsKeys = {
+  all: ['cms'] as const,
+  siteSettings: (tenant?: string) => [...cmsKeys.all, 'site-settings', tenant] as const,
+  navigation: (tenant?: string) => [...cmsKeys.all, 'navigation', tenant] as const,
+  announcements: (tenant?: string) => [...cmsKeys.all, 'announcements', tenant] as const,
+  homePage: (tenant?: string) => [...cmsKeys.all, 'home-page', tenant] as const,
+  faqPage: (tenant?: string) => [...cmsKeys.all, 'faq-page', tenant] as const,
+  loyaltyProgram: (tenant?: string) => [...cmsKeys.all, 'loyalty-program', tenant] as const,
+  giftCardConfig: (tenant?: string) => [...cmsKeys.all, 'gift-card-config', tenant] as const,
+  page: (slug: string, tenant?: string) => [...cmsKeys.all, 'page', slug, tenant] as const,
+  labels: (tenant?: string, locale?: string) => [...cmsKeys.all, 'labels', tenant, locale] as const,
 }
 
-// Stale times
-const STALE_TIME = 5 * 60 * 1000 // 5 minutes
-const CACHE_TIME = 30 * 60 * 1000 // 30 minutes
-
 /**
- * Get current tenant slug from CityOS context
+ * Hook to get current tenant slug from CityOS context
  */
 function useTenantSlug(): string | undefined {
   try {
-    const { context } = useCityOS()
-    return context?.tenant?.slug
+    const cityos = useCityOS()
+    return cityos?.tenant?.slug
   } catch {
     return undefined
   }
 }
 
-// =============================================================================
-// SITE SETTINGS
-// =============================================================================
-
+/**
+ * Hook for site settings (site name, description, contact info, etc.)
+ */
 export function useSiteSettings() {
   const tenantSlug = useTenantSlug()
-
-  return useQuery({
-    queryKey: QUERY_KEYS.siteSettings(tenantSlug),
+  
+  return useQuery<SiteSettings>({
+    queryKey: cmsKeys.siteSettings(tenantSlug),
     queryFn: () => getSiteSettings(tenantSlug),
-    staleTime: STALE_TIME,
-    gcTime: CACHE_TIME,
+    staleTime: 5 * 60 * 1000, // 5 minutes
     placeholderData: defaultSiteSettings,
   })
 }
 
-// =============================================================================
-// NAVIGATION
-// =============================================================================
-
+/**
+ * Hook for full navigation (main menu, footer menu, mobile menu)
+ */
 export function useNavigation() {
   const tenantSlug = useTenantSlug()
-
-  return useQuery({
-    queryKey: QUERY_KEYS.navigation(tenantSlug),
+  
+  return useQuery<Navigation>({
+    queryKey: cmsKeys.navigation(tenantSlug),
     queryFn: () => getNavigation(tenantSlug),
-    staleTime: STALE_TIME,
-    gcTime: CACHE_TIME,
+    staleTime: 5 * 60 * 1000,
     placeholderData: defaultNavigation,
   })
 }
 
 /**
- * Get main menu items
+ * Hook for just the main menu
  */
 export function useMainMenu() {
   const { data: navigation, ...rest } = useNavigation()
   return {
-    ...rest,
     data: navigation?.mainMenu || defaultNavigation.mainMenu,
+    ...rest,
   }
 }
 
 /**
- * Get footer menu items
+ * Hook for just the footer menu
  */
 export function useFooterMenu() {
   const { data: navigation, ...rest } = useNavigation()
   return {
-    ...rest,
     data: navigation?.footerMenu || defaultNavigation.footerMenu,
+    ...rest,
   }
 }
 
-// =============================================================================
-// ANNOUNCEMENTS
-// =============================================================================
-
+/**
+ * Hook for announcements
+ */
 export function useAnnouncements() {
   const tenantSlug = useTenantSlug()
-
-  return useQuery({
-    queryKey: QUERY_KEYS.announcements(tenantSlug),
+  
+  return useQuery<Announcement[]>({
+    queryKey: cmsKeys.announcements(tenantSlug),
     queryFn: () => getAnnouncements(tenantSlug),
-    staleTime: STALE_TIME,
-    gcTime: CACHE_TIME,
+    staleTime: 60 * 1000, // 1 minute (announcements can change often)
     placeholderData: defaultAnnouncements,
   })
 }
 
-// =============================================================================
-// HOME PAGE
-// =============================================================================
-
+/**
+ * Hook for home page content
+ */
 export function useHomePage() {
   const tenantSlug = useTenantSlug()
-
-  return useQuery({
-    queryKey: QUERY_KEYS.homePage(tenantSlug),
+  
+  return useQuery<HomePage>({
+    queryKey: cmsKeys.homePage(tenantSlug),
     queryFn: () => getHomePage(tenantSlug),
-    staleTime: STALE_TIME,
-    gcTime: CACHE_TIME,
+    staleTime: 5 * 60 * 1000,
     placeholderData: defaultHomePage,
   })
 }
 
 /**
- * Get hero section from home page
+ * Hook for just the hero section
  */
 export function useHeroSection() {
   const { data: homePage, ...rest } = useHomePage()
   return {
-    ...rest,
     data: homePage?.hero || defaultHomePage.hero,
+    ...rest,
   }
 }
 
 /**
- * Get home page sections
+ * Hook for FAQ page content
  */
-export function useHomePageSections() {
-  const { data: homePage, ...rest } = useHomePage()
-  return {
-    ...rest,
-    data: homePage?.sections || defaultHomePage.sections,
-  }
-}
-
-// =============================================================================
-// CMS PAGES
-// =============================================================================
-
-export function useCMSPage(slug: string) {
-  const tenantSlug = useTenantSlug()
-
-  return useQuery({
-    queryKey: QUERY_KEYS.page(slug, tenantSlug),
-    queryFn: () => getCMSPage(slug, tenantSlug),
-    staleTime: STALE_TIME,
-    gcTime: CACHE_TIME,
-    enabled: !!slug,
-  })
-}
-
-// =============================================================================
-// FAQ
-// =============================================================================
-
 export function useFAQs() {
   const tenantSlug = useTenantSlug()
-
-  return useQuery({
-    queryKey: QUERY_KEYS.faqs(tenantSlug),
-    queryFn: () => getFAQs(tenantSlug),
-    staleTime: STALE_TIME,
-    gcTime: CACHE_TIME,
+  
+  return useQuery<FAQCategory[]>({
+    queryKey: cmsKeys.faqPage(tenantSlug),
+    queryFn: () => getFAQPage(tenantSlug),
+    staleTime: 10 * 60 * 1000, // 10 minutes
     placeholderData: defaultFAQSection.categories,
   })
 }
 
-// =============================================================================
-// LOYALTY
-// =============================================================================
-
+/**
+ * Hook for loyalty program configuration
+ */
 export function useLoyaltyProgram() {
   const tenantSlug = useTenantSlug()
-
-  return useQuery({
-    queryKey: QUERY_KEYS.loyalty(tenantSlug),
+  
+  return useQuery<LoyaltyProgram>({
+    queryKey: cmsKeys.loyaltyProgram(tenantSlug),
     queryFn: () => getLoyaltyProgram(tenantSlug),
-    staleTime: STALE_TIME,
-    gcTime: CACHE_TIME,
+    staleTime: 10 * 60 * 1000,
     placeholderData: defaultLoyaltyProgram,
   })
 }
 
-// =============================================================================
-// GIFT CARDS
-// =============================================================================
-
+/**
+ * Hook for gift card configuration
+ */
 export function useGiftCardConfig() {
   const tenantSlug = useTenantSlug()
-
-  return useQuery({
-    queryKey: QUERY_KEYS.giftCards(tenantSlug),
+  
+  return useQuery<GiftCardConfig>({
+    queryKey: cmsKeys.giftCardConfig(tenantSlug),
     queryFn: () => getGiftCardConfig(tenantSlug),
-    staleTime: STALE_TIME,
-    gcTime: CACHE_TIME,
+    staleTime: 10 * 60 * 1000,
     placeholderData: defaultGiftCardConfig,
   })
 }
 
-// =============================================================================
-// CACHE MANAGEMENT
-// =============================================================================
-
 /**
- * Hook to manage CMS cache
+ * Hook for a generic CMS page by slug
  */
-export function useCMSCache() {
-  const queryClient = useQueryClient()
+export function useCMSPage(slug: string) {
   const tenantSlug = useTenantSlug()
-
-  return {
-    /**
-     * Invalidate all CMS queries
-     */
-    invalidateAll: () => {
-      queryClient.invalidateQueries({ queryKey: ['cms'] })
-      clearCMSCache()
-    },
-
-    /**
-     * Invalidate specific query
-     */
-    invalidate: (type: 'site-settings' | 'navigation' | 'announcements' | 'home-page' | 'faqs' | 'loyalty' | 'gift-cards') => {
-      const keyMap = {
-        'site-settings': QUERY_KEYS.siteSettings(tenantSlug),
-        'navigation': QUERY_KEYS.navigation(tenantSlug),
-        'announcements': QUERY_KEYS.announcements(tenantSlug),
-        'home-page': QUERY_KEYS.homePage(tenantSlug),
-        'faqs': QUERY_KEYS.faqs(tenantSlug),
-        'loyalty': QUERY_KEYS.loyalty(tenantSlug),
-        'gift-cards': QUERY_KEYS.giftCards(tenantSlug),
-      }
-      queryClient.invalidateQueries({ queryKey: keyMap[type] })
-    },
-
-    /**
-     * Invalidate a specific page
-     */
-    invalidatePage: (slug: string) => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.page(slug, tenantSlug) })
-    },
-
-    /**
-     * Prefetch content for faster navigation
-     */
-    prefetch: async (type: 'navigation' | 'home-page') => {
-      if (type === 'navigation') {
-        await queryClient.prefetchQuery({
-          queryKey: QUERY_KEYS.navigation(tenantSlug),
-          queryFn: () => getNavigation(tenantSlug),
-        })
-      } else if (type === 'home-page') {
-        await queryClient.prefetchQuery({
-          queryKey: QUERY_KEYS.homePage(tenantSlug),
-          queryFn: () => getHomePage(tenantSlug),
-        })
-      }
-    },
-  }
+  
+  return useQuery<CMSPage | null>({
+    queryKey: cmsKeys.page(slug, tenantSlug),
+    queryFn: () => getCMSPage(slug, tenantSlug),
+    staleTime: 5 * 60 * 1000,
+    enabled: !!slug,
+  })
 }
 
-// =============================================================================
-// COMPOSITE HOOKS (Convenience)
-// =============================================================================
-
 /**
- * Get all layout-related CMS data at once
+ * Hook for labels/translations
  */
-export function useLayoutCMS() {
-  const settings = useSiteSettings()
-  const navigation = useNavigation()
-  const announcements = useAnnouncements()
-
-  return {
-    settings: settings.data || defaultSiteSettings,
-    navigation: navigation.data || defaultNavigation,
-    announcements: announcements.data || defaultAnnouncements,
-    isLoading: settings.isLoading || navigation.isLoading || announcements.isLoading,
-    isError: settings.isError || navigation.isError || announcements.isError,
-  }
+export function useLabels(locale?: string) {
+  const tenantSlug = useTenantSlug()
+  
+  return useQuery<Labels>({
+    queryKey: cmsKeys.labels(tenantSlug, locale),
+    queryFn: () => getLabels(tenantSlug, locale),
+    staleTime: 30 * 60 * 1000, // 30 minutes
+    placeholderData: defaultLabels,
+  })
 }

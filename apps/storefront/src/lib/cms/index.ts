@@ -1,31 +1,110 @@
 /**
  * CMS Module
  * 
- * Centralized CMS content management for the storefront.
- * Fetches from Payload CMS with automatic fallback to defaults.
+ * Central export for all CMS functionality.
+ * This is the main entry point for CMS data in the storefront.
  */
 
 // Types
-export * from './types'
+export type {
+  // Media
+  MediaItem,
+  // Site Settings
+  SiteSettings,
+  SocialMediaLinks,
+  ContactInfo,
+  AnalyticsConfig,
+  // Navigation
+  Navigation,
+  NavSection,
+  NavItem,
+  FeaturedItem,
+  FooterSection,
+  FooterLink,
+  TopBarConfig,
+  // Announcements
+  Announcement,
+  // Home Page
+  HomePage,
+  HeroSection,
+  HeroSlide,
+  CTAButton,
+  // Page Sections
+  PageSectionType,
+  PageSection,
+  BannerSection,
+  ContentSection,
+  FeaturesSection,
+  Feature,
+  TestimonialsSection,
+  Testimonial,
+  StatsSection,
+  Stat,
+  FAQSection,
+  FAQCategory,
+  FAQ,
+  CTASection,
+  TrustBadgesSection,
+  TrustBadge,
+  ProductGridSection,
+  CategoryGridSection,
+  NewsletterSection,
+  TeamSection,
+  TeamMember,
+  TimelineSection,
+  TimelineEvent,
+  PricingSection,
+  PricingPlan,
+  GallerySection,
+  // CMS Pages
+  CMSPage,
+  SEOConfig,
+  // Loyalty Program
+  LoyaltyProgram,
+  LoyaltyTier,
+  LoyaltyReward,
+  // Gift Cards
+  GiftCardConfig,
+  GiftCardDesign,
+  // Forms
+  FormConfig,
+  FormField,
+  // Cookies & Consent
+  CookieConsent,
+  CookieCategory,
+  // Chat Widget
+  ChatWidget,
+  // Labels
+  Labels,
+} from './types'
 
-// Default content
-export * from './defaults'
-
-// Service (for server-side usage)
+// Service Functions
 export {
   getSiteSettings,
   getNavigation,
   getAnnouncements,
   getHomePage,
-  getCMSPage,
-  getFAQs,
+  getFAQPage,
   getLoyaltyProgram,
   getGiftCardConfig,
-  clearCMSCache,
-  invalidateCacheKey,
+  getCMSPage,
+  getLabels,
+  invalidateCache,
 } from './service'
 
-// React hooks (for client-side usage)
+// Defaults
+export {
+  defaultSiteSettings,
+  defaultNavigation,
+  defaultAnnouncements,
+  defaultHomePage,
+  defaultFAQSection,
+  defaultLoyaltyProgram,
+  defaultGiftCardConfig,
+  defaultLabels,
+} from './defaults'
+
+// Hooks
 export {
   useSiteSettings,
   useNavigation,
@@ -34,11 +113,9 @@ export {
   useAnnouncements,
   useHomePage,
   useHeroSection,
-  useHomePageSections,
-  useCMSPage,
   useFAQs,
   useLoyaltyProgram,
   useGiftCardConfig,
-  useCMSCache,
-  useLayoutCMS,
+  useCMSPage,
+  useLabels,
 } from './hooks'

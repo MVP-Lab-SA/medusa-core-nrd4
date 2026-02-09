@@ -41,12 +41,27 @@ export type {
   
   // Tenant & Nodes
   Tenant,
+  TenantConfig,
+  TenantAncestor,
+  TenantSettings,
+  TenantTier,
+  ResidencyZone,
   Node,
   NodeType,
+  NodeHierarchy,
+  
+  // Platform Context
+  PlatformContext,
+  PlatformContextResponse,
+  PlatformCapabilities,
+  GovernanceChain,
+  SystemInfo,
+  SystemsOverview,
   
   // Pages
   Page,
   PageStatus,
+  ReviewStatus,
   PageTemplate,
   TemplateType,
   TemplateRegion,
@@ -54,13 +69,20 @@ export type {
   
   // POIs
   POI,
-  POICategory,
+  POIType,
+  POIPrimaryCategory,
+  POISource,
+  BusinessStatus,
+  PriceLevel,
+  StewardshipState,
+  POIStewardship,
   OperatingHours,
   
   // Navigation
   Navigation,
-  NavigationType,
-  NavigationItem,
+  NavigationItemType,
+  NavigationMainMenuItem,
+  NavigationFooterMenuItem,
   
   // Blocks
   BlockType,
@@ -91,10 +113,7 @@ export type {
   CityServicesBlock,
   
   // Globals
-  SiteGlobals,
-  
-  // Globals
-  SiteGlobals,
+  SiteSettings,
 } from './types';
 
 export type { TenantContext, TenantMapping } from './tenant-resolver';
@@ -107,7 +126,7 @@ export {
   usePages,
   usePOI,
   usePOIs,
-  useTenantHierarchy,
-  useCMSHealth,
+  useFeaturedPOIs,
+  useSearchPOIs,
   cmsQueryKeys,
 } from './hooks';

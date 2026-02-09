@@ -1,46 +1,14 @@
 /**
- * CMS Components
+ * CMS Components Index
  * 
- * Export all CMS-related components for Payload integration.
+ * Exports all CMS-related components.
  */
 
-// Block system
-export { BlockRenderer, RichText, registerBlock, blockComponents } from './blocks';
-
-// Page rendering
-export {
-  PageRenderer,
-  PageHeader,
-  PageSkeleton,
-  PageError,
-  Breadcrumbs,
-  getPageMeta,
-} from './page-renderer';
+// Page Renderer
+export { PageRenderer } from './page-renderer'
 
 // Navigation
-export {
-  NavItem,
-  HeaderNav,
-  FooterNav,
-  MobileNav,
-  Megamenu,
-  UtilityNav,
-} from './navigation';
+export { MainMenu, FooterMenu, MobileMenu } from './navigation'
 
-// POI components
-export { POICard, POIGrid, POIList, POIDetail, POIMap } from './poi';
-
-// Types
-export type {
-  PageRendererProps,
-  PageHeaderProps,
-  BreadcrumbsProps,
-} from './page-renderer';
-
-export type {
-  NavItemProps,
-  HeaderNavProps,
-  FooterNavProps,
-  MobileNavProps,
-  MegamenuProps,
-} from './navigation';
+// POI (Points of Interest)
+export { POICard, POIGrid, POIDetail, POIList } from './poi'

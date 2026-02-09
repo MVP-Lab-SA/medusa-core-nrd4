@@ -1,10 +1,10 @@
 /**
- * Default Content
+ * Default CMS Content
  * 
- * Fallback content when CMS is unavailable.
- * This ensures the site remains functional even if Payload CMS is down.
+ * These defaults are used when CMS content is not available.
+ * They provide a complete fallback for all dynamic content.
  * 
- * IMPORTANT: These defaults are designed to be generic and reusable.
+ * NOTE: These should be generic enough to work for any tenant/vertical.
  * Tenant-specific content should come from the CMS.
  */
 
@@ -13,14 +13,10 @@ import type {
   Navigation,
   Announcement,
   HomePage,
-  HeroSlide,
-  FeaturesSection,
-  TestimonialsSection,
-  StatsSection,
-  TrustBadgesSection,
   FAQSection,
   LoyaltyProgram,
   GiftCardConfig,
+  Labels,
 } from './types'
 
 // =============================================================================
@@ -28,22 +24,24 @@ import type {
 // =============================================================================
 
 export const defaultSiteSettings: SiteSettings = {
-  siteName: 'CityOS Store',
-  tagline: 'Smart City Solutions',
-  description: 'Your destination for smart city infrastructure and IoT solutions.',
+  siteName: 'Store',
+  tagline: 'Welcome to our store',
+  description: 'Your one-stop shop for quality products and services.',
   socialMedia: {
-    twitter: 'https://twitter.com',
-    linkedin: 'https://linkedin.com',
-    instagram: 'https://instagram.com',
+    twitter: '',
+    facebook: '',
+    instagram: '',
+    linkedin: '',
+    youtube: '',
   },
   contactInfo: {
-    email: 'contact@example.com',
+    email: 'contact@store.com',
     phone: '+1 (555) 000-0000',
     address: '123 Main Street',
     city: 'City',
     country: 'Country',
     postalCode: '00000',
-    businessHours: 'Mon-Fri: 9AM - 6PM',
+    businessHours: 'Sunday - Thursday: 9AM - 6PM',
   },
   defaultCurrency: 'USD',
   defaultLocale: 'en',
@@ -61,29 +59,37 @@ export const defaultNavigation: Navigation = {
       id: 'shop',
       label: 'Shop',
       items: [
-        { id: 'all-products', label: 'All Products', href: '/products' },
+        { id: 'all-products', label: 'All Products', href: '/store' },
         { id: 'categories', label: 'Categories', href: '/categories' },
-        { id: 'new-arrivals', label: 'New Arrivals', href: '/products?sort=newest' },
-        { id: 'best-sellers', label: 'Best Sellers', href: '/products?sort=bestselling' },
-        { id: 'sale', label: 'Sale', href: '/products?sale=true', badge: 'Sale' },
+        { id: 'new-arrivals', label: 'New Arrivals', href: '/store?sort=newest' },
+        { id: 'best-sellers', label: 'Best Sellers', href: '/store?sort=popular' },
       ],
     },
     {
       id: 'services',
       label: 'Services',
       items: [
-        { id: 'installation', label: 'Installation', href: '/services/installation' },
-        { id: 'support', label: 'Support', href: '/services/support' },
-        { id: 'consulting', label: 'Consulting', href: '/services/consulting' },
+        { id: 'all-services', label: 'All Services', href: '/services' },
+        { id: 'providers', label: 'Service Providers', href: '/providers' },
       ],
     },
     {
-      id: 'about',
-      label: 'About',
+      id: 'explore',
+      label: 'Explore',
       items: [
-        { id: 'about-us', label: 'About Us', href: '/about' },
+        { id: 'about', label: 'About Us', href: '/about' },
+        { id: 'blog', label: 'Blog', href: '/blog' },
         { id: 'contact', label: 'Contact', href: '/contact' },
+      ],
+    },
+    {
+      id: 'support',
+      label: 'Support',
+      items: [
+        { id: 'help', label: 'Help Center', href: '/help' },
         { id: 'faq', label: 'FAQ', href: '/faq' },
+        { id: 'track', label: 'Track Order', href: '/track' },
+        { id: 'returns', label: 'Returns', href: '/returns' },
       ],
     },
   ],
@@ -92,19 +98,17 @@ export const defaultNavigation: Navigation = {
       id: 'shop',
       title: 'Shop',
       links: [
-        { id: 'all-products', label: 'All Products', href: '/products' },
+        { id: 'all-products', label: 'All Products', href: '/store' },
         { id: 'categories', label: 'Categories', href: '/categories' },
-        { id: 'new-arrivals', label: 'New Arrivals', href: '/products?sort=newest' },
-        { id: 'sale', label: 'Sale', href: '/products?sale=true' },
+        { id: 'new-arrivals', label: 'New Arrivals', href: '/store?sort=newest' },
       ],
     },
     {
       id: 'account',
       title: 'Account',
       links: [
-        { id: 'sign-in', label: 'Sign In', href: '/account/login' },
         { id: 'my-account', label: 'My Account', href: '/account' },
-        { id: 'orders', label: 'Order History', href: '/account/orders' },
+        { id: 'orders', label: 'Orders', href: '/account/orders' },
         { id: 'wishlist', label: 'Wishlist', href: '/wishlist' },
       ],
     },
@@ -114,7 +118,6 @@ export const defaultNavigation: Navigation = {
       links: [
         { id: 'help', label: 'Help Center', href: '/help' },
         { id: 'contact', label: 'Contact Us', href: '/contact' },
-        { id: 'shipping', label: 'Shipping Info', href: '/shipping' },
         { id: 'returns', label: 'Returns', href: '/returns' },
       ],
     },
@@ -123,28 +126,29 @@ export const defaultNavigation: Navigation = {
       title: 'Company',
       links: [
         { id: 'about', label: 'About Us', href: '/about' },
+        { id: 'blog', label: 'Blog', href: '/blog' },
         { id: 'privacy', label: 'Privacy Policy', href: '/privacy' },
         { id: 'terms', label: 'Terms of Service', href: '/terms' },
       ],
     },
   ],
-  topBar: {
-    enabled: true,
-    announcements: [],
-    showSocialLinks: false,
-    showContactInfo: true,
-  },
+  mobileMenu: [
+    { id: 'home', label: 'Home', href: '/' },
+    { id: 'shop', label: 'Shop', href: '/store' },
+    { id: 'cart', label: 'Cart', href: '/cart' },
+    { id: 'account', label: 'Account', href: '/account' },
+  ],
 }
 
 // =============================================================================
-// ANNOUNCEMENTS DEFAULTS
+// ANNOUNCEMENT DEFAULTS
 // =============================================================================
 
 export const defaultAnnouncements: Announcement[] = [
   {
     id: 'welcome',
-    message: 'Welcome! Free shipping on orders over $100',
-    type: 'promo',
+    message: 'Welcome to our store!',
+    type: 'info',
     dismissible: true,
     priority: 1,
   },
@@ -154,120 +158,113 @@ export const defaultAnnouncements: Announcement[] = [
 // HOME PAGE DEFAULTS
 // =============================================================================
 
-export const defaultHeroSlides: HeroSlide[] = [
-  {
-    id: 'hero-1',
-    title: 'Welcome to Our Store',
-    subtitle: 'Discover our products',
-    description: 'Quality products for modern living.',
-    textPosition: 'center',
-    overlay: 'dark',
-    primaryCTA: {
-      label: 'Shop Now',
-      href: '/products',
-      variant: 'primary',
-    },
-    secondaryCTA: {
-      label: 'Learn More',
-      href: '/about',
-      variant: 'outline',
-    },
-  },
-]
-
-export const defaultFeaturesSection: FeaturesSection = {
-  id: 'features',
-  sectionType: 'features',
-  title: 'Why Choose Us',
-  subtitle: 'What makes us different',
-  features: [
-    {
-      id: 'feature-1',
-      title: 'Quality Products',
-      description: 'We source only the best quality products for our customers.',
-      icon: 'shield-check',
-    },
-    {
-      id: 'feature-2',
-      title: 'Fast Delivery',
-      description: 'Quick and reliable shipping to your doorstep.',
-      icon: 'truck',
-    },
-    {
-      id: 'feature-3',
-      title: 'Expert Support',
-      description: '24/7 customer support to help you with any questions.',
-      icon: 'headphones',
-    },
-  ],
-  layout: 'grid',
-  columns: 3,
-}
-
-export const defaultTestimonialsSection: TestimonialsSection = {
-  id: 'testimonials',
-  sectionType: 'testimonials',
-  title: 'What Our Customers Say',
-  testimonials: [
-    {
-      id: 'testimonial-1',
-      quote: 'Excellent products and outstanding customer service. Highly recommended!',
-      author: 'Customer Name',
-      role: 'Verified Buyer',
-      rating: 5,
-    },
-    {
-      id: 'testimonial-2',
-      quote: 'Fast shipping and great quality. Will definitely order again.',
-      author: 'Customer Name',
-      role: 'Verified Buyer',
-      rating: 5,
-    },
-    {
-      id: 'testimonial-3',
-      quote: 'The best shopping experience I have had. Professional and reliable.',
-      author: 'Customer Name',
-      role: 'Verified Buyer',
-      rating: 5,
-    },
-  ],
-  layout: 'carousel',
-}
-
-export const defaultStatsSection: StatsSection = {
-  id: 'stats',
-  sectionType: 'stats',
-  stats: [
-    { id: 'stat-1', value: '10K+', label: 'Happy Customers' },
-    { id: 'stat-2', value: '5K+', label: 'Products Sold' },
-    { id: 'stat-3', value: '99%', label: 'Satisfaction Rate' },
-    { id: 'stat-4', value: '24/7', label: 'Customer Support' },
-  ],
-  layout: 'inline',
-}
-
-export const defaultTrustBadgesSection: TrustBadgesSection = {
-  id: 'trust-badges',
-  sectionType: 'trust-badges',
-  badges: [
-    { id: 'badge-1', title: 'Secure Payments', icon: 'shield-check' },
-    { id: 'badge-2', title: 'Fast Shipping', icon: 'truck' },
-    { id: 'badge-3', title: 'Easy Returns', icon: 'refresh' },
-    { id: 'badge-4', title: '24/7 Support', icon: 'headphones' },
-  ],
-}
-
 export const defaultHomePage: HomePage = {
   hero: {
-    slides: defaultHeroSlides,
+    slides: [
+      {
+        id: 'hero-1',
+        title: 'Welcome to Our Store',
+        subtitle: 'Discover amazing products',
+        description: 'Shop our curated collection of quality products.',
+        primaryCTA: { label: 'Shop Now', href: '/store' },
+        secondaryCTA: { label: 'Learn More', href: '/about' },
+        textPosition: 'center',
+        textColor: 'light',
+        overlay: true,
+        overlayOpacity: 0.5,
+      },
+    ],
     autoplay: true,
     autoplayInterval: 5000,
   },
   sections: [
-    defaultStatsSection,
-    defaultFeaturesSection,
-    defaultTestimonialsSection,
-    defaultTrustBadgesSection,
+    {
+      id: 'features',
+      sectionType: 'features',
+      title: 'Why Choose Us',
+      subtitle: 'We are committed to providing the best experience',
+      features: [
+        {
+          id: 'feature-1',
+          title: 'Quality Products',
+          description: 'Carefully curated selection of premium products.',
+          icon: 'check-circle',
+        },
+        {
+          id: 'feature-2',
+          title: 'Fast Delivery',
+          description: 'Quick and reliable shipping to your doorstep.',
+          icon: 'truck',
+        },
+        {
+          id: 'feature-3',
+          title: 'Secure Payments',
+          description: 'Safe and encrypted payment processing.',
+          icon: 'shield-check',
+        },
+        {
+          id: 'feature-4',
+          title: '24/7 Support',
+          description: 'Our team is always here to help you.',
+          icon: 'headphones',
+        },
+      ],
+      layout: 'grid',
+      columns: 4,
+    },
+    {
+      id: 'products',
+      sectionType: 'product-grid',
+      title: 'Featured Products',
+      subtitle: 'Check out our most popular items',
+      limit: 8,
+      layout: 'grid',
+    },
+    {
+      id: 'testimonials',
+      sectionType: 'testimonials',
+      title: 'What Our Customers Say',
+      testimonials: [
+        {
+          id: 'testimonial-1',
+          quote: 'Great products and excellent customer service!',
+          author: 'Happy Customer',
+          rating: 5,
+        },
+        {
+          id: 'testimonial-2',
+          quote: 'Fast shipping and quality items. Highly recommend!',
+          author: 'Satisfied Buyer',
+          rating: 5,
+        },
+        {
+          id: 'testimonial-3',
+          quote: 'Best online shopping experience I have had.',
+          author: 'Loyal Customer',
+          rating: 5,
+        },
+      ],
+      layout: 'carousel',
+    },
+    {
+      id: 'trust',
+      sectionType: 'trust-badges',
+      badges: [
+        { id: 'badge-1', title: 'Secure Payments', icon: 'shield-check', description: 'Your data is protected' },
+        { id: 'badge-2', title: 'Fast Shipping', icon: 'truck', description: 'Quick delivery' },
+        { id: 'badge-3', title: 'Easy Returns', icon: 'refresh', description: '30-day return policy' },
+        { id: 'badge-4', title: '24/7 Support', icon: 'headphones', description: 'Always here to help' },
+      ],
+    },
+    {
+      id: 'cta',
+      sectionType: 'cta',
+      heading: 'Ready to Get Started?',
+      description: 'Join thousands of satisfied customers today.',
+      primaryButton: { label: 'Browse Products', href: '/store' },
+      secondaryButton: { label: 'Contact Us', href: '/contact' },
+      layout: 'center',
+    },
   ],
 }
 
@@ -279,36 +276,26 @@ export const defaultFAQSection: FAQSection = {
   id: 'faq',
   sectionType: 'faq',
   title: 'Frequently Asked Questions',
+  subtitle: 'Find answers to common questions',
   categories: [
     {
-      id: 'general',
-      title: 'General',
+      id: 'orders',
+      title: 'Orders & Shipping',
       faqs: [
         {
           id: 'faq-1',
-          question: 'How do I place an order?',
-          answer: 'Browse our products, add items to your cart, and proceed to checkout.',
+          question: 'How can I track my order?',
+          answer: 'You can track your order by visiting the Track Order page and entering your order number.',
         },
         {
           id: 'faq-2',
-          question: 'What payment methods do you accept?',
-          answer: 'We accept all major credit cards, debit cards, and digital payment methods.',
+          question: 'What shipping options are available?',
+          answer: 'We offer standard and express shipping options. Delivery times vary by location.',
         },
-      ],
-    },
-    {
-      id: 'shipping',
-      title: 'Shipping & Delivery',
-      faqs: [
         {
           id: 'faq-3',
-          question: 'How long does shipping take?',
-          answer: 'Standard shipping takes 3-5 business days. Express options are available.',
-        },
-        {
-          id: 'faq-4',
           question: 'Do you ship internationally?',
-          answer: 'Yes, we ship to many countries worldwide. Shipping costs vary by location.',
+          answer: 'Yes, we ship to many countries worldwide. Shipping costs and delivery times vary by destination.',
         },
       ],
     },
@@ -317,14 +304,46 @@ export const defaultFAQSection: FAQSection = {
       title: 'Returns & Refunds',
       faqs: [
         {
-          id: 'faq-5',
+          id: 'faq-4',
           question: 'What is your return policy?',
-          answer: 'We offer 30-day returns for unused items in original packaging.',
+          answer: 'We accept returns within 30 days of purchase. Items must be unused and in original packaging.',
         },
         {
+          id: 'faq-5',
+          question: 'How long does a refund take?',
+          answer: 'Refunds are typically processed within 5-7 business days after we receive your return.',
+        },
+      ],
+    },
+    {
+      id: 'products',
+      title: 'Products',
+      faqs: [
+        {
           id: 'faq-6',
-          question: 'How do I request a refund?',
-          answer: 'Contact our support team with your order number to initiate a refund.',
+          question: 'Are your products authentic?',
+          answer: 'Yes, all our products are 100% authentic and sourced directly from manufacturers.',
+        },
+        {
+          id: 'faq-7',
+          question: 'Do you offer product warranties?',
+          answer: 'Many of our products come with manufacturer warranties. Check individual product pages for details.',
+        },
+      ],
+    },
+    {
+      id: 'account',
+      title: 'Account',
+      faqs: [
+        {
+          id: 'faq-8',
+          question: 'How do I create an account?',
+          answer: 'Click on "Sign In" and then "Create Account" to register. You can also checkout as a guest.',
+        },
+        {
+          id: 'faq-9',
+          question: 'I forgot my password. What should I do?',
+          answer: 'Click on "Forgot Password" on the login page to reset your password via email.',
         },
       ],
     },
@@ -337,48 +356,79 @@ export const defaultFAQSection: FAQSection = {
 // =============================================================================
 
 export const defaultLoyaltyProgram: LoyaltyProgram = {
+  enabled: true,
   name: 'Rewards Program',
-  description: 'Earn points on every purchase and unlock exclusive benefits.',
+  description: 'Earn points with every purchase and redeem them for exclusive rewards.',
+  pointsPerDollar: 1,
+  welcomeBonus: 100,
+  referralBonus: 500,
   tiers: [
     {
       id: 'bronze',
       name: 'Bronze',
       minPoints: 0,
+      benefits: ['1x points on purchases', 'Birthday reward', 'Member-only offers'],
       multiplier: 1,
-      benefits: ['Earn 1 point per $1 spent', 'Member-only offers'],
+      icon: 'medal',
+      color: '#CD7F32',
     },
     {
       id: 'silver',
       name: 'Silver',
-      minPoints: 500,
+      minPoints: 1000,
+      benefits: ['1.5x points on purchases', 'Free shipping', 'Early access to sales'],
       multiplier: 1.5,
-      benefits: ['Earn 1.5 points per $1 spent', 'Free shipping on orders over $50', 'Early access to sales'],
+      icon: 'medal',
+      color: '#C0C0C0',
     },
     {
       id: 'gold',
       name: 'Gold',
-      minPoints: 2000,
+      minPoints: 5000,
+      benefits: ['2x points on purchases', 'Priority support', 'Exclusive products'],
       multiplier: 2,
-      benefits: ['Earn 2 points per $1 spent', 'Free shipping on all orders', 'Exclusive member events'],
+      icon: 'medal',
+      color: '#FFD700',
     },
     {
       id: 'platinum',
       name: 'Platinum',
-      minPoints: 5000,
+      minPoints: 10000,
+      benefits: ['3x points on purchases', 'Personal shopper', 'VIP events'],
       multiplier: 3,
-      benefits: ['Earn 3 points per $1 spent', 'Priority support', 'Birthday rewards'],
+      icon: 'crown',
+      color: '#E5E4E2',
     },
   ],
   rewards: [
-    { id: 'reward-1', name: '$5 Off', description: 'Redeem for $5 discount', pointsCost: 500 },
-    { id: 'reward-2', name: '$10 Off', description: 'Redeem for $10 discount', pointsCost: 1000 },
-    { id: 'reward-3', name: '$25 Off', description: 'Redeem for $25 discount', pointsCost: 2500 },
-    { id: 'reward-4', name: 'Free Shipping', description: 'Free shipping on next order', pointsCost: 300 },
-  ],
-  howItWorks: [
-    { id: 'step-1', title: 'Shop', description: 'Make purchases to earn points', icon: 'shopping-bag' },
-    { id: 'step-2', title: 'Earn', description: 'Accumulate points with every order', icon: 'star' },
-    { id: 'step-3', title: 'Redeem', description: 'Use points for rewards and discounts', icon: 'gift' },
+    {
+      id: 'reward-1',
+      name: '$5 Off',
+      description: 'Get $5 off your next purchase',
+      pointsCost: 500,
+      available: true,
+    },
+    {
+      id: 'reward-2',
+      name: '$10 Off',
+      description: 'Get $10 off your next purchase',
+      pointsCost: 1000,
+      available: true,
+    },
+    {
+      id: 'reward-3',
+      name: 'Free Shipping',
+      description: 'Free shipping on your next order',
+      pointsCost: 300,
+      available: true,
+    },
+    {
+      id: 'reward-4',
+      name: '$25 Off',
+      description: 'Get $25 off your next purchase',
+      pointsCost: 2500,
+      available: true,
+    },
   ],
 }
 
@@ -387,26 +437,116 @@ export const defaultLoyaltyProgram: LoyaltyProgram = {
 // =============================================================================
 
 export const defaultGiftCardConfig: GiftCardConfig = {
-  amounts: [25, 50, 75, 100, 150, 200],
-  customAmountEnabled: true,
+  defaultAmounts: [25, 50, 75, 100, 150, 200],
+  allowCustomAmount: true,
   minCustomAmount: 10,
   maxCustomAmount: 500,
-  currency: 'USD',
-  faqs: [
+  designs: [
     {
-      id: 'gc-faq-1',
-      question: 'Do gift cards expire?',
-      answer: 'No, our gift cards never expire.',
+      id: 'default',
+      name: 'Classic',
+      image: { id: 'default', url: '', alt: 'Classic gift card design' },
     },
     {
-      id: 'gc-faq-2',
-      question: 'Can I use multiple gift cards?',
-      answer: 'Yes, you can combine multiple gift cards on a single order.',
+      id: 'birthday',
+      name: 'Birthday',
+      image: { id: 'birthday', url: '', alt: 'Birthday gift card design' },
+      occasion: 'birthday',
     },
     {
-      id: 'gc-faq-3',
-      question: 'Can gift cards be refunded?',
-      answer: 'Gift cards are non-refundable once purchased.',
+      id: 'holiday',
+      name: 'Holiday',
+      image: { id: 'holiday', url: '', alt: 'Holiday gift card design' },
+      occasion: 'holiday',
     },
   ],
+}
+
+// =============================================================================
+// LABELS DEFAULTS
+// =============================================================================
+
+export const defaultLabels: Labels = {
+  nav: {
+    shop: 'Shop',
+    categories: 'Categories',
+    allProducts: 'All Products',
+    services: 'Services',
+    programs: 'Programs',
+    explore: 'Explore',
+    support: 'Support',
+    account: 'Account',
+    cart: 'Cart',
+    search: 'Search',
+    signIn: 'Sign In',
+    signOut: 'Sign Out',
+    createAccount: 'Create Account',
+  },
+  common: {
+    loading: 'Loading...',
+    error: 'Something went wrong',
+    retry: 'Retry',
+    cancel: 'Cancel',
+    save: 'Save',
+    delete: 'Delete',
+    edit: 'Edit',
+    add: 'Add',
+    remove: 'Remove',
+    close: 'Close',
+    back: 'Back',
+    next: 'Next',
+    previous: 'Previous',
+    submit: 'Submit',
+    search: 'Search',
+    filter: 'Filter',
+    sort: 'Sort',
+    clearAll: 'Clear All',
+    viewAll: 'View All',
+    learnMore: 'Learn More',
+    readMore: 'Read More',
+    showMore: 'Show More',
+    showLess: 'Show Less',
+  },
+  product: {
+    addToCart: 'Add to Cart',
+    addToWishlist: 'Add to Wishlist',
+    removeFromWishlist: 'Remove from Wishlist',
+    outOfStock: 'Out of Stock',
+    inStock: 'In Stock',
+    lowStock: 'Low Stock',
+    freeShipping: 'Free Shipping',
+    reviews: 'Reviews',
+    specifications: 'Specifications',
+    description: 'Description',
+    relatedProducts: 'Related Products',
+    recentlyViewed: 'Recently Viewed',
+  },
+  cart: {
+    title: 'Shopping Cart',
+    empty: 'Your cart is empty',
+    continueShopping: 'Continue Shopping',
+    checkout: 'Checkout',
+    subtotal: 'Subtotal',
+    shipping: 'Shipping',
+    tax: 'Tax',
+    total: 'Total',
+    applyCoupon: 'Apply Coupon',
+    removeCoupon: 'Remove',
+    updateQuantity: 'Update Quantity',
+  },
+  account: {
+    myAccount: 'My Account',
+    orders: 'Orders',
+    addresses: 'Addresses',
+    profile: 'Profile',
+    settings: 'Settings',
+    wishlist: 'Wishlist',
+    logout: 'Log Out',
+  },
+  footer: {
+    copyright: 'All rights reserved.',
+    privacyPolicy: 'Privacy Policy',
+    termsOfService: 'Terms of Service',
+    cookiePolicy: 'Cookie Policy',
+  },
 }
