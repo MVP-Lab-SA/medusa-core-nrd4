@@ -43,9 +43,9 @@ function BusinessRegister() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-black py-12">
       <div className="max-w-2xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-900 text-center mb-8">
+        <h1 className="text-3xl font-bold text-white text-center mb-8">
           Register Your Business
         </h1>
 
@@ -55,49 +55,49 @@ function BusinessRegister() {
             <div key={s} className="flex items-center">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                  s <= step ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-500"
+                  s <= step ? "bg-cyan-500 text-black" : "bg-gray-800 text-gray-500"
                 }`}
               >
                 {s}
               </div>
               {s < 3 && (
-                <div className={`w-20 h-1 ${s < step ? "bg-blue-600" : "bg-gray-200"}`} />
+                <div className={`w-20 h-1 ${s < step ? "bg-cyan-500" : "bg-gray-800"}`} />
               )}
             </div>
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm p-8">
+        <form onSubmit={handleSubmit} className="bg-gray-900 border border-gray-800 rounded-xl p-8">
           {step === 1 && (
             <div className="space-y-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Company Information</h2>
+              <h2 className="text-xl font-bold text-white mb-4">Company Information</h2>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Company Name</label>
                 <input
                   type="text"
                   value={formData.companyName}
                   onChange={(e) => updateField("companyName", e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                   required
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Tax ID / EIN</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Tax ID / EIN</label>
                   <input
                     type="text"
                     value={formData.taxId}
                     onChange={(e) => updateField("taxId", e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Industry</label>
                   <select
                     value={formData.industry}
                     onChange={(e) => updateField("industry", e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                     required
                   >
                     <option value="">Select industry</option>
@@ -111,11 +111,11 @@ function BusinessRegister() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Number of Employees</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Number of Employees</label>
                 <select
                   value={formData.employees}
                   onChange={(e) => updateField("employees", e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                   required
                 >
                   <option value="">Select range</option>
@@ -131,57 +131,57 @@ function BusinessRegister() {
 
           {step === 2 && (
             <div className="space-y-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Business Address</h2>
+              <h2 className="text-xl font-bold text-white mb-4">Business Address</h2>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Street Address</label>
                 <input
                   type="text"
                   value={formData.address}
                   onChange={(e) => updateField("address", e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                   required
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">City</label>
                   <input
                     type="text"
                     value={formData.city}
                     onChange={(e) => updateField("city", e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">State</label>
                   <input
                     type="text"
                     value={formData.state}
                     onChange={(e) => updateField("state", e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                     required
                   />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">ZIP Code</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">ZIP Code</label>
                   <input
                     type="text"
                     value={formData.zip}
                     onChange={(e) => updateField("zip", e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Country</label>
                   <input
                     type="text"
                     value={formData.country}
                     onChange={(e) => updateField("country", e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                     required
                   />
                 </div>
@@ -191,46 +191,46 @@ function BusinessRegister() {
 
           {step === 3 && (
             <div className="space-y-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Contact Information</h2>
+              <h2 className="text-xl font-bold text-white mb-4">Contact Information</h2>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Contact Name</label>
                 <input
                   type="text"
                   value={formData.contactName}
                   onChange={(e) => updateField("contactName", e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                   required
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
                   <input
                     type="email"
                     value={formData.contactEmail}
                     onChange={(e) => updateField("contactEmail", e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Phone</label>
                   <input
                     type="tel"
                     value={formData.contactPhone}
                     onChange={(e) => updateField("contactPhone", e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                     required
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Website (optional)</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Website (optional)</label>
                 <input
                   type="url"
                   value={formData.website}
                   onChange={(e) => updateField("website", e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg"
                 />
               </div>
             </div>
@@ -241,14 +241,14 @@ function BusinessRegister() {
               <button
                 type="button"
                 onClick={() => setStep(step - 1)}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                className="px-6 py-2 border border-gray-700 text-white rounded-lg hover:bg-gray-800"
               >
                 Back
               </button>
             )}
             <button
               type="submit"
-              className="ml-auto px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700"
+              className="ml-auto px-6 py-2 bg-cyan-500 text-black font-medium rounded-lg hover:bg-cyan-400"
             >
               {step === 3 ? "Submit Application" : "Continue"}
             </button>
