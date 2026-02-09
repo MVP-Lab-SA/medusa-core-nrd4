@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { useVendor, useVendorProducts } from "~/lib/hooks/use-marketplace"
-import { VendorHeader } from "~/components/marketplace/VendorHeader"
-import { VendorProducts } from "~/components/marketplace/VendorProducts"
+import { useVendor, useVendorProducts } from "@/lib/hooks/use-marketplace"
+import { VendorHeader } from "@/components/marketplace/VendorHeader"
+import { VendorProducts } from "@/components/marketplace/VendorProducts"
 
 export const Route = createFileRoute("/$countryCode/vendors/$handle/products")({
   component: VendorProductsPage,

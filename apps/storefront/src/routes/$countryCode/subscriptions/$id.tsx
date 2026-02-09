@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { SubscriptionPlanCard, PlanComparison } from "~/components/subscriptions"
+import { SubscriptionPlanCard, PlanComparison } from "@/components/subscriptions"
 import { Check, ArrowLeftMini, Calendar, ShoppingBag, ShieldCheck, Clock } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/subscriptions/$id")({

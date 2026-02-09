@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
-import { useDeliveryTracking } from "~/lib/hooks/use-fleetbase"
-import { DeliveryTracker } from "~/components/delivery/DeliveryTracker"
-import { LiveMap } from "~/components/delivery/LiveMap"
-import { DriverCard } from "~/components/delivery/DriverCard"
-import { ProofOfDelivery } from "~/components/delivery/ProofOfDelivery"
+import { useDeliveryTracking } from "@/lib/hooks/use-fleetbase"
+import { DeliveryTracker } from "@/components/delivery/DeliveryTracker"
+import { LiveMap } from "@/components/delivery/LiveMap"
+import { DriverCard } from "@/components/delivery/DriverCard"
+import { ProofOfDelivery } from "@/components/delivery/ProofOfDelivery"
 import { ArrowLeft, Phone, ChatBubble, MapPin, Clock, CubeSolid, Check } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/account/deliveries/$id")({

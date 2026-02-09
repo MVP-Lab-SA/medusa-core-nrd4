@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { LiveMap, DriverCard } from "~/components/ui/delivery-tracker"
+import { LiveMap, DriverCard } from "@/components/delivery"
 import { ShoppingBag, MapPin, Clock, Phone } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/track/$id")({

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { useVendor, useVendorReviews } from "~/lib/hooks/use-marketplace"
-import { VendorHeader } from "~/components/marketplace/VendorHeader"
-import { ReviewCard } from "~/components/reviews/ReviewCard"
+import { useVendor, useVendorReviews } from "@/lib/hooks/use-marketplace"
+import { VendorHeader } from "@/components/marketplace/VendorHeader"
+import { ReviewCard } from "@/components/reviews/ReviewCard"
 import { Star } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/vendors/$handle/reviews")({

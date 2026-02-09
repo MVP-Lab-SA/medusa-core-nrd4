@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
-import { DeliverySlots } from "~/components/ui/delivery-slots"
+import { DeliverySlots } from "@/components/ui/delivery-slots"
 import { Calendar, Clock, TruckFast, MapPin, CheckCircleSolid } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/delivery-slots")({

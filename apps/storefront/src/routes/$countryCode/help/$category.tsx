@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { FAQAccordion } from "~/components/content"
+import { FAQAccordion } from "@/components/content"
 import { MagnifyingGlass, ArrowLeftMini, ChatBubble, Phone, EnvelopeSolid } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/help/$category")({

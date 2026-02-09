@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { WishlistCard, WishlistShareModal } from "~/components/wishlists"
+import { WishlistCard, WishlistShareModal } from "@/components/wishlists"
 import { Heart, Share, ShoppingCart, Trash, ArrowLeftMini, LockClosedSolid, GlobeEurope, PencilSquare } from "@medusajs/icons"
 import { useState } from "react"
 

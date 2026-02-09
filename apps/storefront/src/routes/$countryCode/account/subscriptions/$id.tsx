@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { NextBillingCard, SubscriptionStatus } from "~/components/subscriptions"
-import { Package, Calendar, CreditCard, Settings, ArrowLeft, Pause, X, RefreshCw } from "lucide-react"
+import { NextBillingCard, SubscriptionStatus } from "@/components/subscriptions"
+import { CubeSolid, Calendar, CreditCard, CogSixTooth, ArrowLeft, PauseSolid, XMark, ArrowPath } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/account/subscriptions/$id")({
   component: SubscriptionDetailPage,

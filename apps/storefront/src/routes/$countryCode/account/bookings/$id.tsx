@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { BookingConfirmation } from "~/components/bookings"
-import { Calendar, Clock, MapPin, User, ArrowLeft, Phone, MessageSquare, X, RefreshCw } from "lucide-react"
+import { BookingConfirmation } from "@/components/bookings"
+import { Calendar, Clock, MapPin, User, ArrowLeft, Phone, ChatBubble, XMark, ArrowPath } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/account/bookings/$id")({
   component: BookingDetailPage,

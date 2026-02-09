@@ -26,8 +26,10 @@
     "clsx": "^2.1.1",
     "dotenv": "17.2.1",
     "lodash-es": "4.17.21",
+    "lucide-react": "^0.563.0",
     "react": "19.1.1",
     "react-dom": "19.1.1",
+    "tailwind-merge": "^3.4.0",
     "tailwindcss": "4.1.12",
     "tailwindcss-animate": "^1.0.7",
     "vite-tsconfig-paths": "5.1.4"
