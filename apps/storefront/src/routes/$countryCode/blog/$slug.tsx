@@ -6,7 +6,7 @@ export const Route = createFileRoute("/$countryCode/blog/$slug")({
 })
 
 function BlogPostPage() {
-  const { slug } = Route.useParams()
+  const { slug, countryCode } = Route.useParams()
 
   // Mock blog post data
   const post = {
@@ -50,105 +50,107 @@ function BlogPostPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <a href="/blog" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
-        <ArrowLeft className="w-4 h-4" />
-        Back to Blog
-      </a>
+    <div className="min-h-screen bg-black">
+      <div className="container mx-auto px-4 py-8">
+        <a href={`/${countryCode}/blog`} className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Blog
+        </a>
 
-      <article className="max-w-3xl mx-auto">
-        {/* Header */}
-        <header className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-              {post.category}
-            </span>
+        <article className="max-w-3xl mx-auto">
+          {/* Header */}
+          <header className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-sm">
+                {post.category}
+              </span>
+            </div>
+            <h1 className="text-4xl font-bold text-white mb-4">{post.title}</h1>
+            <div className="flex items-center gap-6 text-gray-400">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 bg-cyan-500 text-black rounded-full flex items-center justify-center font-medium">
+                  {post.author.avatar}
+                </div>
+                <div>
+                  <p className="font-medium text-white">{post.author.name}</p>
+                  <p className="text-sm text-gray-500">{post.author.role}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
+                {post.publishedDate}
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                {post.readTime}
+              </div>
+            </div>
+          </header>
+
+          {/* Featured Image */}
+          <div className="aspect-video bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl mb-8 flex items-center justify-center">
+            <span className="text-white/50 text-lg">Featured Image</span>
           </div>
-          <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-          <div className="flex items-center gap-6 text-gray-600">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-medium">
+
+          {/* Content */}
+          <div 
+            className="prose prose-invert prose-lg max-w-none mb-8 prose-headings:text-white prose-p:text-gray-300 prose-li:text-gray-300 prose-strong:text-white prose-blockquote:border-cyan-500 prose-blockquote:text-gray-400"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+
+          {/* Tags */}
+          <div className="flex items-center gap-2 mb-8 pt-8 border-t border-gray-800">
+            <Tag className="w-4 h-4 text-gray-500" />
+            {post.tags.map((tag) => (
+              <span key={tag} className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* Share */}
+          <div className="flex items-center justify-between p-4 bg-gray-900 border border-gray-800 rounded-xl mb-8">
+            <p className="font-medium text-white">Found this article helpful?</p>
+            <button className="flex items-center gap-2 px-4 py-2 bg-cyan-500 text-black rounded-lg hover:bg-cyan-400 transition-colors">
+              <ShareIcon className="w-4 h-4" />
+              Share Article
+            </button>
+          </div>
+
+          {/* Author Box */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 bg-cyan-500 text-black rounded-full flex items-center justify-center text-xl font-medium">
                 {post.author.avatar}
               </div>
               <div>
-                <p className="font-medium text-gray-900">{post.author.name}</p>
-                <p className="text-sm">{post.author.role}</p>
+                <p className="text-sm text-gray-500">Written by</p>
+                <p className="font-semibold text-lg text-white">{post.author.name}</p>
+                <p className="text-gray-400">{post.author.role}</p>
+                <p className="text-sm text-gray-500 mt-2">
+                  Passionate about the intersection of technology and local commerce.
+                </p>
               </div>
             </div>
-            <div className="flex items-center gap-1">
-              <Calendar className="w-4 h-4" />
-              {post.publishedDate}
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              {post.readTime}
+          </div>
+
+          {/* Related Posts */}
+          <div>
+            <h2 className="text-xl font-semibold text-white mb-4">Related Articles</h2>
+            <div className="grid md:grid-cols-3 gap-4">
+              {post.relatedPosts.map((related) => (
+                <a
+                  key={related.slug}
+                  href={`/${countryCode}/blog/${related.slug}`}
+                  className="p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-cyan-500/50 transition-colors"
+                >
+                  <p className="font-medium text-white">{related.title}</p>
+                </a>
+              ))}
             </div>
           </div>
-        </header>
-
-        {/* Featured Image */}
-        <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl mb-8 flex items-center justify-center">
-          <span className="text-white/50 text-lg">Featured Image</span>
-        </div>
-
-        {/* Content */}
-        <div 
-          className="prose prose-lg max-w-none mb-8"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
-
-        {/* Tags */}
-        <div className="flex items-center gap-2 mb-8 pt-8 border-t">
-          <Tag className="w-4 h-4 text-gray-400" />
-          {post.tags.map((tag) => (
-            <span key={tag} className="px-3 py-1 bg-gray-100 rounded-full text-sm">
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Share */}
-        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl mb-8">
-          <p className="font-medium">Found this article helpful?</p>
-          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            <ShareIcon className="w-4 h-4" />
-            Share Article
-          </button>
-        </div>
-
-        {/* Author Box */}
-        <div className="bg-white border rounded-xl p-6 mb-8">
-          <div className="flex items-start gap-4">
-            <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-medium">
-              {post.author.avatar}
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Written by</p>
-              <p className="font-semibold text-lg">{post.author.name}</p>
-              <p className="text-gray-600">{post.author.role}</p>
-              <p className="text-sm text-gray-500 mt-2">
-                Passionate about the intersection of technology and local commerce.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Related Posts */}
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Related Articles</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            {post.relatedPosts.map((related) => (
-              <a
-                key={related.slug}
-                href={`/blog/${related.slug}`}
-                className="p-4 border rounded-xl hover:border-blue-500 transition-colors"
-              >
-                <p className="font-medium">{related.title}</p>
-              </a>
-            ))}
-          </div>
-        </div>
-      </article>
+        </article>
+      </div>
     </div>
   )
 }

@@ -90,114 +90,116 @@ function BundleDetailPage() {
   const bundle = bundleData[handle] || bundleData["smart-home-starter-kit"]
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Link 
-        to="/$countryCode/bundles" 
-        params={{ countryCode }} 
-        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Bundles
-      </Link>
+    <div className="min-h-screen bg-black">
+      <div className="container mx-auto px-4 py-8">
+        <Link 
+          to="/$countryCode/bundles" 
+          params={{ countryCode }} 
+          className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Bundles
+        </Link>
 
-      <div className="grid lg:grid-cols-2 gap-12">
-        {/* Images */}
-        <div>
-          <div className="aspect-square bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mb-4 relative">
-            <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full font-bold text-sm">
-              Save {bundle.savingsPercent}%
-            </div>
-            <ShoppingBag className="w-32 h-32 text-white/50" />
-          </div>
-          <div className="grid grid-cols-6 gap-2">
-            {bundle.items.map((item: any, index: number) => (
-              <div key={index} className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
-                <ShoppingBag className="w-6 h-6 text-gray-400" />
+        <div className="grid lg:grid-cols-2 gap-12">
+          {/* Images */}
+          <div>
+            <div className="aspect-square bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl flex items-center justify-center mb-4 relative">
+              <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full font-bold text-sm">
+                Save {bundle.savingsPercent}%
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Details */}
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="flex items-center gap-1">
-              <span className="text-amber-400">&#9733;</span>
-              <span className="font-semibold">{bundle.rating}</span>
+              <ShoppingBag className="w-32 h-32 text-white/50" />
             </div>
-            <span className="text-gray-500">({bundle.reviewCount} reviews)</span>
-          </div>
-
-          <h1 className="text-3xl font-bold mb-4">{bundle.name}</h1>
-          <p className="text-gray-600 mb-6">{bundle.description}</p>
-
-          {/* Pricing */}
-          <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-6">
-            <div className="flex items-center gap-4 mb-2">
-              <span className="text-4xl font-bold text-green-600">${bundle.bundlePrice}</span>
-              <span className="text-xl text-gray-400 line-through">${bundle.originalPrice}</span>
-            </div>
-            <p className="text-green-700 flex items-center gap-1">
-              <Tag className="w-4 h-4" />
-              You save ${bundle.savings} ({bundle.savingsPercent}% off)
-            </p>
-          </div>
-
-          {/* Bundle Items */}
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold mb-4">What's Included ({bundle.items.length} items)</h2>
-            <div className="space-y-3">
+            <div className="grid grid-cols-6 gap-2">
               {bundle.items.map((item: any, index: number) => (
-                <div key={index} className="flex items-center justify-between py-2 border-b">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <ShoppingBag className="w-6 h-6 text-gray-400" />
+                <div key={index} className="aspect-square bg-gray-800 rounded-lg flex items-center justify-center">
+                  <ShoppingBag className="w-6 h-6 text-gray-500" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Details */}
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-1">
+                <span className="text-amber-400">&#9733;</span>
+                <span className="font-semibold text-white">{bundle.rating}</span>
+              </div>
+              <span className="text-gray-500">({bundle.reviewCount} reviews)</span>
+            </div>
+
+            <h1 className="text-3xl font-bold text-white mb-4">{bundle.name}</h1>
+            <p className="text-gray-400 mb-6">{bundle.description}</p>
+
+            {/* Pricing */}
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+              <div className="flex items-center gap-4 mb-2">
+                <span className="text-4xl font-bold text-emerald-400">${bundle.bundlePrice}</span>
+                <span className="text-xl text-gray-500 line-through">${bundle.originalPrice}</span>
+              </div>
+              <p className="text-emerald-400 flex items-center gap-1">
+                <Tag className="w-4 h-4" />
+                You save ${bundle.savings} ({bundle.savingsPercent}% off)
+              </p>
+            </div>
+
+            {/* Bundle Items */}
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-white mb-4">What's Included ({bundle.items.length} items)</h2>
+              <div className="space-y-3">
+                {bundle.items.map((item: any, index: number) => (
+                  <div key={index} className="flex items-center justify-between py-2 border-b border-gray-800">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center">
+                        <ShoppingBag className="w-6 h-6 text-gray-500" />
+                      </div>
+                      <span className="text-white">{item.name}</span>
                     </div>
-                    <span>{item.name}</span>
+                    <span className="text-gray-500">${item.price}</span>
                   </div>
-                  <span className="text-gray-500">${item.price}</span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Features */}
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold mb-3">Why This Bundle?</h2>
-            <div className="space-y-2">
-              {bundle.features.map((feature: string, index: number) => (
-                <div key={index} className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-500" />
-                  <span>{feature}</span>
-                </div>
-              ))}
+            {/* Features */}
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-white mb-3">Why This Bundle?</h2>
+              <div className="space-y-2">
+                {bundle.features.map((feature: string, index: number) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <Check className="w-5 h-5 text-emerald-400" />
+                    <span className="text-gray-300">{feature}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Quantity & Add to Cart */}
-          <div className="flex items-center gap-4 mb-4">
-            <div className="flex items-center border rounded-lg">
-              <button 
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="px-4 py-2 hover:bg-gray-100"
-              >
-                -
-              </button>
-              <span className="px-4 py-2 font-medium">{quantity}</span>
-              <button 
-                onClick={() => setQuantity(quantity + 1)}
-                className="px-4 py-2 hover:bg-gray-100"
-              >
-                +
-              </button>
+            {/* Quantity & Add to Cart */}
+            <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center border border-gray-700 rounded-lg">
+                <button 
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="px-4 py-2 text-gray-300 hover:bg-gray-800 transition-colors"
+                >
+                  -
+                </button>
+                <span className="px-4 py-2 font-medium text-white">{quantity}</span>
+                <button 
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="px-4 py-2 text-gray-300 hover:bg-gray-800 transition-colors"
+                >
+                  +
+                </button>
+              </div>
+              <p className="text-sm text-gray-500">{bundle.stock} bundles in stock</p>
             </div>
-            <p className="text-sm text-gray-500">{bundle.stock} bundles in stock</p>
-          </div>
 
-          <button className="w-full bg-blue-600 text-white py-4 rounded-xl hover:bg-blue-700 flex items-center justify-center gap-2 text-lg font-semibold">
-            <ShoppingCart className="w-5 h-5" />
-            Add Bundle to Cart - ${(bundle.bundlePrice * quantity).toFixed(2)}
-          </button>
+            <button className="w-full bg-cyan-500 text-black py-4 rounded-xl hover:bg-cyan-400 flex items-center justify-center gap-2 text-lg font-semibold transition-colors">
+              <ShoppingCart className="w-5 h-5" />
+              Add Bundle to Cart - ${(bundle.bundlePrice * quantity).toFixed(2)}
+            </button>
+          </div>
         </div>
       </div>
     </div>
