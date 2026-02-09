@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
-import { Package, ChevronRight, Camera, AlertCircle, CheckCircle } from "lucide-react"
+import { CubeSolid, ChevronRight, Camera, ExclamationCircleSolid, CheckCircleSolid } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/returns/create")({
   component: CreateReturnPage,
@@ -62,7 +62,7 @@ function CreateReturnPage() {
             <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${
               step >= s.num ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-500"
             }`}>
-              {step > s.num ? <CheckCircle className="w-5 h-5" /> : s.num}
+              {step > s.num ? <CheckCircleSolid className="w-5 h-5" /> : s.num}
             </div>
             <span className={`ml-2 ${step >= s.num ? "text-blue-600" : "text-gray-500"}`}>{s.label}</span>
             {index < 3 && <ChevronRight className="w-5 h-5 text-gray-300 mx-4" />}
@@ -136,7 +136,7 @@ function CreateReturnPage() {
                       className="w-5 h-5 text-blue-600 rounded"
                     />
                     <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <Package className="w-8 h-8 text-gray-400" />
+                      <CubeSolid className="w-8 h-8 text-gray-400" />
                     </div>
                     <div className="flex-1">
                       <p className="font-semibold">{item.name}</p>
@@ -248,7 +248,7 @@ function CreateReturnPage() {
             <div className="bg-white border rounded-xl p-6">
               <div className="text-center py-8">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
+                  <CheckCircleSolid className="w-8 h-8 text-green-600" />
                 </div>
                 <h2 className="text-xl font-semibold mb-2">Return Request Submitted</h2>
                 <p className="text-gray-600 mb-6">Your return request has been created successfully.</p>
@@ -298,7 +298,7 @@ function CreateReturnPage() {
             )}
 
             <div className="mt-4 p-3 bg-amber-50 rounded-lg flex items-start gap-2">
-              <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+              <ExclamationCircleSolid className="w-5 h-5 text-amber-600 flex-shrink-0" />
               <p className="text-sm text-amber-800">
                 Refunds are processed within 5-7 business days after we receive your return.
               </p>

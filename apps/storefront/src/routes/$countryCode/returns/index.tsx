@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
-import { Package, ArrowLeft, Search, Clock, CheckCircle, Truck } from "lucide-react"
+import { CubeSolid, ArrowLeft, MagnifyingGlass, Clock, CheckCircleSolid, ArrowPath } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/returns/")({
   component: ReturnsPage,
@@ -17,8 +17,8 @@ function ReturnsPage() {
 
   const statusConfig: Record<string, { label: string; color: string; icon: React.ElementType }> = {
     pending: { label: "Awaiting Shipment", color: "bg-amber-100 text-amber-700", icon: Clock },
-    shipped: { label: "In Transit", color: "bg-blue-100 text-blue-700", icon: Truck },
-    completed: { label: "Refund Completed", color: "bg-green-100 text-green-700", icon: CheckCircle },
+    shipped: { label: "In Transit", color: "bg-blue-100 text-blue-700", icon: ArrowPath },
+    completed: { label: "Refund Completed", color: "bg-green-100 text-green-700", icon: CheckCircleSolid },
   }
 
   return (
@@ -39,7 +39,7 @@ function ReturnsPage() {
 
       {/* Search */}
       <div className="relative mb-6">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
         <input
           type="text"
           placeholder="Search returns by ID or order number..."
@@ -60,7 +60,7 @@ function ReturnsPage() {
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-gray-100 rounded-lg">
-                    <Package className="w-6 h-6 text-gray-600" />
+                    <CubeSolid className="w-6 h-6 text-gray-600" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-lg">{ret.id}</h3>

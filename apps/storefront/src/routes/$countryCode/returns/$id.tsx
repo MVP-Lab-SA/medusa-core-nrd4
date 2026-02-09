@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { Package, Truck, CheckCircle, MapPin, Calendar, DollarSign, Download, ArrowLeft } from "lucide-react"
+import { CubeSolid, ArrowPath, CheckCircleSolid, MapPin, Calendar, CurrencyDollar, ArrowDownTray, ArrowLeft } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/returns/$id")({
   component: ReturnDetailPage,
@@ -88,7 +88,7 @@ function ReturnDetailPage() {
               {returnData.items.map((item, index) => (
                 <div key={index} className="flex items-center gap-4 py-3 border-b last:border-0">
                   <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <Package className="w-8 h-8 text-gray-400" />
+                    <CubeSolid className="w-8 h-8 text-gray-400" />
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">{item.name}</p>
@@ -105,12 +105,12 @@ function ReturnDetailPage() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Tracking Information</h2>
               <button className="text-blue-600 text-sm hover:underline flex items-center gap-1">
-                <Download className="w-4 h-4" />
+                <ArrowDownTray className="w-4 h-4" />
                 Download Label
               </button>
             </div>
             <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-              <Truck className="w-5 h-5 text-gray-500" />
+              <ArrowPath className="w-5 h-5 text-gray-500" />
               <div>
                 <p className="text-sm text-gray-500">Tracking Number</p>
                 <p className="font-mono font-medium">{returnData.trackingNumber}</p>
@@ -139,7 +139,7 @@ function ReturnDetailPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Package className="w-5 h-5 text-gray-400 mt-0.5" />
+                <CubeSolid className="w-5 h-5 text-gray-400 mt-0.5" />
                 <div>
                   <p className="text-sm text-gray-500">Reason</p>
                   <p className="font-medium">{returnData.reason}</p>
@@ -162,7 +162,7 @@ function ReturnDetailPage() {
               <div className="flex justify-between items-center">
                 <span className="font-semibold">Total Refund</span>
                 <div className="flex items-center gap-1 text-green-600 font-bold text-xl">
-                  <DollarSign className="w-5 h-5" />
+                  <CurrencyDollar className="w-5 h-5" />
                   {returnData.refundAmount}
                 </div>
               </div>
