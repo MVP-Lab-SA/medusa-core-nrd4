@@ -3,6 +3,7 @@ import { Newsletter } from "@/components/newsletter"
 import { useCategories } from "@/lib/hooks/use-categories"
 import { useRegions } from "@/lib/hooks/use-regions"
 import { useCityOSOptional } from "@/lib/cityos"
+import { useSiteSettings, useFooterMenu } from "@/lib/cms"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
 import { Link, useLocation } from "@tanstack/react-router"
 import { ShieldCheck, GlobeEurope, Buildings } from "@medusajs/icons"
@@ -11,6 +12,10 @@ const Footer = () => {
   const location = useLocation()
   const countryCode = getCountryCodeFromPath(location.pathname) || "us"
   const cityOS = useCityOSOptional()
+  
+  // CMS data with fallbacks
+  const { data: siteSettings } = useSiteSettings()
+  const { data: footerMenu } = useFooterMenu()
 
   const { data: categories } = useCategories({
     fields: "name,handle",
@@ -38,10 +43,10 @@ const Footer = () => {
               params={{ countryCode }}
               className="text-2xl font-bold text-city-white hover:text-city-cyan transition-colors w-fit tracking-tight"
             >
-              DAKKAH<span className="text-city-cyan">.</span>
+              {siteSettings?.siteName?.toUpperCase() || 'DAKKAH'}<span className="text-city-cyan">.</span>
             </Link>
             <p className="text-city-gray max-w-md text-base leading-relaxed">
-              Precision infrastructure for smart cities. Powering Saudi Arabia's urban transformation with cutting-edge IoT technology.
+              {siteSettings?.description || 'Precision infrastructure for smart cities. Powering urban transformation with cutting-edge IoT technology.'}
             </p>
             <CountrySelect regions={regions ?? []} />
           </div>

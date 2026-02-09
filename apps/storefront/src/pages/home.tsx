@@ -1,5 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
+import { useHomePage, useAnnouncements, defaultHomePage } from "@/lib/cms"
 import { ArrowRight, BuildingsSolid, LightBulbSolid, ShieldCheck, Star } from "@medusajs/icons"
 import { useState, useEffect } from "react"
 
@@ -60,16 +61,28 @@ const TestimonialCard = ({ name, role, company, content }: { name: string; role:
 // Sale end date - 7 days from now
 const saleEndDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
+// Default slides used when CMS is unavailable
+const defaultSlides = [
+  { id: 'slide-1', title: "Smart City Infrastructure", subtitle: "Precision sensors and monitoring systems", image: { url: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1920&h=800&fit=crop", alt: "Smart City" } },
+  { id: 'slide-2', title: "New Urban Tech Collection", subtitle: "Advanced IoT devices for modern cities", image: { url: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1920&h=800&fit=crop", alt: "Urban Tech" } },
+  { id: 'slide-3', title: "Enterprise Solutions", subtitle: "Scalable infrastructure for government projects", image: { url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=800&fit=crop", alt: "Enterprise" } },
+]
+
 const Home = () => {
   const location = useLocation()
   const countryCode = getCountryCodeFromPath(location.pathname) || "us"
   const [currentSlide, setCurrentSlide] = useState(0)
   
-  const slides = [
-    { title: "Smart City Infrastructure", subtitle: "Precision sensors and monitoring systems", image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1920&h=800&fit=crop" },
-    { title: "New Urban Tech Collection", subtitle: "Advanced IoT devices for modern cities", image: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1920&h=800&fit=crop" },
-    { title: "Enterprise Solutions", subtitle: "Scalable infrastructure for government projects", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=800&fit=crop" },
-  ]
+  // CMS data with automatic fallback
+  const { data: homePage } = useHomePage()
+  
+  // Use CMS slides if available, otherwise use defaults
+  const slides = (homePage?.hero?.slides?.length ? homePage.hero.slides : defaultSlides).map(slide => ({
+    id: slide.id,
+    title: slide.title,
+    subtitle: slide.subtitle,
+    image: typeof slide.image === 'string' ? slide.image : slide.image?.url || '',
+  }))
   
   useEffect(() => {
     const timer = setInterval(() => {
@@ -87,7 +100,7 @@ const Home = () => {
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? "opacity-100" : "opacity-0"}`}
           >
-            <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+            {slide.image && <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />}
             <div className="absolute inset-0 bg-gradient-to-r from-city-dark/90 via-city-dark/60 to-transparent" />
             <div className="absolute inset-0 flex items-center">
               <div className="content-container">

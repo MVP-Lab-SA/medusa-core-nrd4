@@ -12,12 +12,15 @@ import {
 import { useCategories } from "@/lib/hooks/use-categories"
 import { useCustomer } from "@/lib/context/customer-context"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
+import { useSiteSettings } from "@/lib/cms"
 import { User } from "@medusajs/icons"
 import * as NavigationMenu from "@radix-ui/react-navigation-menu"
 import { Link, useLocation } from "@tanstack/react-router"
 import { useState } from "react"
 
 export const Navbar = () => {
+  // CMS site settings for dynamic branding
+  const { data: siteSettings } = useSiteSettings()
   const location = useLocation()
   const countryCode = getCountryCodeFromPath(location.pathname) || "us"
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -47,7 +50,7 @@ export const Navbar = () => {
                 params={{ countryCode }}
                 className="text-xl font-bold tracking-tight text-city-white hover:text-city-cyan transition-colors"
               >
-                DAKKAH<span className="text-city-cyan">.</span>
+                {siteSettings?.siteName?.toUpperCase() || 'DAKKAH'}<span className="text-city-cyan">.</span>
               </Link>
             </div>
 

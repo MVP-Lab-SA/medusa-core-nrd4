@@ -6,43 +6,53 @@ import { ToastProvider } from "@/lib/context/toast-context"
 import { CustomerProvider } from "@/lib/context/customer-context"
 import { WishlistProvider } from "@/components/wishlist"
 import { ThemeProvider } from "@/lib/theme"
+import { useAnnouncements, defaultAnnouncements } from "@/lib/cms"
 import { Outlet } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
 import { XMark } from "@medusajs/icons"
 import { Link } from "@tanstack/react-router"
 
-// Announcement Bar Component (inline)
+// Announcement Bar Component - CMS-driven with fallback
 const AnnouncementBar = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(true)
   
-  const announcements = [
-    { text: "Free shipping on orders over $100", link: "/us/store" },
-    { text: "New arrivals just dropped - Urban Tech Collection", link: "/us/store" },
-    { text: "Sign up for 10% off your first order", link: "/us/account/register" },
-  ]
+  // Fetch announcements from CMS with fallback
+  const { data: cmsAnnouncements } = useAnnouncements()
+  
+  // Use CMS announcements if available, otherwise use defaults
+  const announcements = (cmsAnnouncements?.length ? cmsAnnouncements : defaultAnnouncements).map(a => ({
+    text: a.message,
+    link: a.link || '/us/store',
+    dismissible: a.dismissible ?? true,
+  }))
   
   useEffect(() => {
+    if (announcements.length <= 1) return
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % announcements.length)
     }, 5000)
     return () => clearInterval(interval)
-  }, [])
+  }, [announcements.length])
   
-  if (!isVisible) return null
+  if (!isVisible || announcements.length === 0) return null
+  
+  const current = announcements[currentIndex]
   
   return (
     <div className="bg-city-cyan text-city-dark py-2 px-4 relative">
       <div className="content-container flex items-center justify-center">
-        <Link to={announcements[currentIndex].link as any} className="text-sm font-medium hover:underline">
-          {announcements[currentIndex].text}
+        <Link to={current.link as any} className="text-sm font-medium hover:underline">
+          {current.text}
         </Link>
-        <button 
-          onClick={() => setIsVisible(false)}
-          className="absolute right-4 p-1 hover:opacity-70"
-        >
-          <XMark className="w-4 h-4" />
-        </button>
+        {current.dismissible && (
+          <button 
+            onClick={() => setIsVisible(false)}
+            className="absolute right-4 p-1 hover:opacity-70"
+          >
+            <XMark className="w-4 h-4" />
+          </button>
+        )}
       </div>
     </div>
   )
