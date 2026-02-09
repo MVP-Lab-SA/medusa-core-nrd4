@@ -19,7 +19,7 @@ export function LoyaltyPointsCard({ account, onRedeem, onViewHistory }: LoyaltyP
   const pointsToNextTier = account.nextTierPoints ? account.nextTierPoints - account.points : null
 
   return (
-    <div className="bg-gradient-to-br from-yellow-500 to-orange-500 text-white rounded-xl p-6">
+    <div className="bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded-xl p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-white/20 rounded-lg">
@@ -63,7 +63,7 @@ export function LoyaltyPointsCard({ account, onRedeem, onViewHistory }: LoyaltyP
         {onRedeem && (
           <button
             onClick={onRedeem}
-            className="flex-1 py-3 px-4 bg-white text-orange-600 font-medium rounded-lg hover:bg-gray-100 flex items-center justify-center gap-2"
+            className="flex-1 py-3 px-4 bg-black text-amber-400 font-medium rounded-lg hover:bg-gray-900 flex items-center justify-center gap-2"
           >
             <Gift className="w-4 h-4" />
             Redeem Points

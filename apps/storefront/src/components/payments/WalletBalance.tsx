@@ -14,7 +14,7 @@ interface WalletBalanceProps {
 
 export function WalletBalance({ wallet, onTopUp, onTransfer }: WalletBalanceProps) {
   return (
-    <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-xl p-6">
+    <div className="bg-gradient-to-br from-cyan-600 to-blue-600 text-white rounded-xl p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-white/20 rounded-lg">
@@ -48,7 +48,7 @@ export function WalletBalance({ wallet, onTopUp, onTransfer }: WalletBalanceProp
         {onTopUp && (
           <button
             onClick={onTopUp}
-            className="flex-1 py-3 px-4 bg-white text-blue-600 font-medium rounded-lg hover:bg-gray-100 flex items-center justify-center gap-2"
+            className="flex-1 py-3 px-4 bg-black text-cyan-400 font-medium rounded-lg hover:bg-gray-900 flex items-center justify-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Top Up

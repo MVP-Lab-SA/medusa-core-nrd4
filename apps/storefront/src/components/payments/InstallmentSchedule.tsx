@@ -47,22 +47,22 @@ export function InstallmentSchedule({
   const getStatusIcon = (status: Installment["status"]) => {
     switch (status) {
       case "paid":
-        return <Check className="w-4 h-4 text-green-600" />;
+        return <Check className="w-4 h-4 text-emerald-400" />;
       case "pending":
-        return <Clock className="w-4 h-4 text-blue-600" />;
+        return <Clock className="w-4 h-4 text-cyan-400" />;
       case "overdue":
-        return <ExclamationCircle className="w-4 h-4 text-red-600" />;
+        return <ExclamationCircle className="w-4 h-4 text-red-400" />;
       case "upcoming":
-        return <Calendar className="w-4 h-4 text-gray-400" />;
+        return <Calendar className="w-4 h-4 text-gray-500" />;
     }
   };
 
   const getStatusBadge = (status: Installment["status"]) => {
     const styles = {
-      paid: "bg-green-100 text-green-700",
-      pending: "bg-blue-100 text-blue-700",
-      overdue: "bg-red-100 text-red-700",
-      upcoming: "bg-gray-100 text-gray-600",
+      paid: "bg-emerald-500/20 text-emerald-400",
+      pending: "bg-cyan-500/20 text-cyan-400",
+      overdue: "bg-red-500/20 text-red-400",
+      upcoming: "bg-gray-700 text-gray-400",
     };
     const labels = {
       paid: "Paid",
@@ -78,18 +78,18 @@ export function InstallmentSchedule({
   };
 
   return (
-    <div className="bg-white rounded-xl border overflow-hidden">
+    <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
       {/* Progress Header */}
-      <div className="p-4 bg-gray-50 border-b">
+      <div className="p-4 bg-gray-800/50 border-b border-gray-800">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-600">Payment Progress</span>
-          <span className="text-sm font-medium text-gray-900">
+          <span className="text-sm text-gray-400">Payment Progress</span>
+          <span className="text-sm font-medium text-white">
             {formatCurrency(paidAmount)} of {formatCurrency(totalAmount)}
           </span>
         </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
           <div
-            className="h-full bg-green-500 rounded-full transition-all duration-500"
+            className="h-full bg-emerald-500 rounded-full transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -99,12 +99,12 @@ export function InstallmentSchedule({
       </div>
 
       {/* Installment List */}
-      <div className="divide-y">
+      <div className="divide-y divide-gray-800">
         {installments.map((installment, index) => (
           <div
             key={installment.id}
             className={`p-4 flex items-center justify-between ${
-              installment.status === "overdue" ? "bg-red-50" : ""
+              installment.status === "overdue" ? "bg-red-500/10" : ""
             }`}
           >
             <div className="flex items-center gap-3">
@@ -112,12 +112,12 @@ export function InstallmentSchedule({
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center ${
                   installment.status === "paid"
-                    ? "bg-green-100"
+                    ? "bg-emerald-500/20"
                     : installment.status === "overdue"
-                    ? "bg-red-100"
+                    ? "bg-red-500/20"
                     : installment.status === "pending"
-                    ? "bg-blue-100"
-                    : "bg-gray-100"
+                    ? "bg-cyan-500/20"
+                    : "bg-gray-800"
                 }`}
               >
                 {getStatusIcon(installment.status)}
@@ -126,12 +126,12 @@ export function InstallmentSchedule({
               {/* Installment Details */}
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-white">
                     Payment {installment.number}
                   </span>
                   {getStatusBadge(installment.status)}
                 </div>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-400">
                   {installment.status === "paid" && installment.paidDate
                     ? `Paid on ${formatDate(installment.paidDate)}`
                     : `Due ${formatDate(installment.dueDate)}`}
@@ -141,7 +141,7 @@ export function InstallmentSchedule({
 
             {/* Amount & Action */}
             <div className="text-right">
-              <div className="font-medium text-gray-900">
+              <div className="font-medium text-white">
                 {formatCurrency(installment.amount)}
               </div>
               {(installment.status === "pending" || installment.status === "overdue") &&
@@ -150,8 +150,8 @@ export function InstallmentSchedule({
                     onClick={() => onPayNow(installment.id)}
                     className={`text-sm font-medium mt-1 ${
                       installment.status === "overdue"
-                        ? "text-red-600 hover:text-red-700"
-                        : "text-blue-600 hover:text-blue-700"
+                        ? "text-red-400 hover:text-red-300"
+                        : "text-cyan-400 hover:text-cyan-300"
                     }`}
                   >
                     Pay Now
@@ -163,10 +163,10 @@ export function InstallmentSchedule({
       </div>
 
       {/* Footer */}
-      <div className="p-4 bg-gray-50 border-t">
+      <div className="p-4 bg-gray-800/50 border-t border-gray-800">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-600">Next payment due</span>
-          <span className="font-medium text-gray-900">
+          <span className="text-gray-400">Next payment due</span>
+          <span className="font-medium text-white">
             {(() => {
               const nextPayment = installments.find(
                 (i) => i.status === "pending" || i.status === "overdue"

@@ -34,19 +34,19 @@ export function DisputeForm({ transactionId, onSubmit, isSubmitting }: DisputeFo
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="p-4 bg-gray-50 rounded-lg">
-        <p className="text-sm text-gray-500">Transaction ID</p>
-        <p className="font-mono text-gray-900">{transactionId}</p>
+      <div className="p-4 bg-gray-800 rounded-lg">
+        <p className="text-sm text-gray-400">Transaction ID</p>
+        <p className="font-mono text-white">{transactionId}</p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Reason for Dispute
         </label>
         <select
           value={reason}
           onChange={(e) => setReason(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
           required
         >
           <option value="">Select a reason</option>
@@ -57,27 +57,27 @@ export function DisputeForm({ transactionId, onSubmit, isSubmitting }: DisputeFo
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Describe the Issue
         </label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
           placeholder="Please provide details about your dispute..."
           required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
           Supporting Evidence (optional)
         </label>
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-          <ArrowUpTray className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-sm text-gray-600 mb-2">Upload screenshots, receipts, or other evidence</p>
-          <label className="inline-block px-4 py-2 bg-gray-100 text-gray-700 rounded-lg cursor-pointer hover:bg-gray-200">
+        <div className="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center">
+          <ArrowUpTray className="w-8 h-8 text-gray-500 mx-auto mb-2" />
+          <p className="text-sm text-gray-400 mb-2">Upload screenshots, receipts, or other evidence</p>
+          <label className="inline-block px-4 py-2 bg-gray-800 text-gray-300 rounded-lg cursor-pointer hover:bg-gray-700">
             <input
               type="file"
               accept="image/*,.pdf"
@@ -89,7 +89,7 @@ export function DisputeForm({ transactionId, onSubmit, isSubmitting }: DisputeFo
           </label>
         </div>
         {evidence.length > 0 && (
-          <ul className="mt-2 text-sm text-gray-600">
+          <ul className="mt-2 text-sm text-gray-400">
             {evidence.map((file, index) => (
               <li key={index}>{file.name}</li>
             ))}
@@ -100,7 +100,7 @@ export function DisputeForm({ transactionId, onSubmit, isSubmitting }: DisputeFo
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full py-3 px-4 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 disabled:opacity-50"
+        className="w-full py-3 px-4 bg-red-600 text-white font-medium rounded-lg hover:bg-red-500 disabled:opacity-50"
       >
         {isSubmitting ? "Submitting..." : "Submit Dispute"}
       </button>
