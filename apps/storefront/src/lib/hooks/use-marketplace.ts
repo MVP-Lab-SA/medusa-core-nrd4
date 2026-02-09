@@ -555,3 +555,59 @@ export function useDigitalAssets() {
     },
   })
 }
+
+// ==================== LICENSE KEYS ====================
+
+export function useLicenseKeys() {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "license-keys"] as const,
+    queryFn: async () => {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 300))
+      return [
+        {
+          id: "lic-1",
+          key: "XXXX-XXXX-XXXX-7A9B",
+          product: {
+            id: "prod-1",
+            title: "SmartHome Hub Pro",
+            thumbnail: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KH0W4EG3RC1BMTN3C5B4WCMB-01KH0W4EG4CG8TGGG0EG71HYPG.jpeg",
+          },
+          status: "active",
+          activatedAt: "2024-01-15",
+          expiresAt: "2025-01-15",
+          deviceLimit: 5,
+          devicesUsed: 2,
+        },
+        {
+          id: "lic-2",
+          key: "XXXX-XXXX-XXXX-3C2D",
+          product: {
+            id: "prod-2",
+            title: "Smart Security Camera",
+            thumbnail: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KH0W484Q762BGTQ0A8Q9CRVF-01KH0W484R9PRJ6K9AECWV4Q2K.jpeg",
+          },
+          status: "active",
+          activatedAt: "2024-01-10",
+          expiresAt: null,
+          deviceLimit: 1,
+          devicesUsed: 1,
+        },
+        {
+          id: "lic-3",
+          key: "XXXX-XXXX-XXXX-8E4F",
+          product: {
+            id: "prod-3",
+            title: "Smart Lock Pro",
+            thumbnail: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KH0W3ZN17W4PT9HNKWVTDX02-01KH0W3ZN1Q4JRFES9PPD1BKV5.jpeg",
+          },
+          status: "expired",
+          activatedAt: "2023-01-08",
+          expiresAt: "2024-01-08",
+          deviceLimit: 3,
+          devicesUsed: 3,
+        },
+      ]
+    },
+  })
+}
