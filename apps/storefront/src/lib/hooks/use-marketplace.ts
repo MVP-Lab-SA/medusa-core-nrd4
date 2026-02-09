@@ -496,3 +496,62 @@ export function useProvider(id: string) {
     enabled: !!id,
   })
 }
+
+// ==================== DIGITAL ASSETS ====================
+
+export function useDigitalAssets() {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "digital-assets"] as const,
+    queryFn: async () => {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 300))
+      return [
+        {
+          id: "asset-1",
+          name: "SmartHome Hub Pro Firmware v3.2",
+          type: "firmware",
+          size: "24.5 MB",
+          downloadedAt: "2024-01-15",
+          expiresAt: null,
+          downloadUrl: "#",
+          version: "3.2.0",
+          product: {
+            id: "prod-1",
+            title: "SmartHome Hub Pro",
+            thumbnail: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KH0W4EG3RC1BMTN3C5B4WCMB-01KH0W4EG4CG8TGGG0EG71HYPG.jpeg",
+          },
+        },
+        {
+          id: "asset-2",
+          name: "Security Camera User Manual",
+          type: "document",
+          size: "8.2 MB",
+          downloadedAt: "2024-01-10",
+          expiresAt: null,
+          downloadUrl: "#",
+          version: "1.0",
+          product: {
+            id: "prod-2",
+            title: "Smart Security Camera",
+            thumbnail: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KH0W484Q762BGTQ0A8Q9CRVF-01KH0W484R9PRJ6K9AECWV4Q2K.jpeg",
+          },
+        },
+        {
+          id: "asset-3",
+          name: "SmartLock Configuration Tool",
+          type: "software",
+          size: "156 MB",
+          downloadedAt: "2024-01-08",
+          expiresAt: "2025-01-08",
+          downloadUrl: "#",
+          version: "2.1.4",
+          product: {
+            id: "prod-3",
+            title: "Smart Lock Pro",
+            thumbnail: "https://cdn.mignite.app/ws/works_01KGWXWAS7AR3JBVNAVFVWNRD4/generated-01KH0W3ZN17W4PT9HNKWVTDX02-01KH0W3ZN1Q4JRFES9PPD1BKV5.jpeg",
+          },
+        },
+      ]
+    },
+  })
+}
