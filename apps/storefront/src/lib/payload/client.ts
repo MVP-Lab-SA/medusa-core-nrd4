@@ -8,22 +8,25 @@
 import type {
   Page,
   POI,
-  POICategory,
+  POIPrimaryCategory,
   Navigation,
-  NavigationType,
   Tenant,
   Node,
   NodeType,
   PageTemplate,
   PayloadPaginatedResponse,
-  SiteGlobals,
+  SiteSettings,
+  PlatformContext,
+  PlatformContextResponse,
 } from './types';
 
 // =============================================================================
 // CONFIGURATION
 // =============================================================================
 
-const PAYLOAD_API_URL = process.env.PAYLOAD_CMS_URL || 'https://cms.cityos.dev';
+// Default to the Replit Payload CMS URL
+const PAYLOAD_API_URL = process.env.PAYLOAD_CMS_URL || 
+  'https://9e78ac41-ae95-440f-9196-e9263c6eadda-00-130jbk279zua2.janeway.replit.dev';
 const PAYLOAD_API_KEY = process.env.PAYLOAD_API_KEY;
 
 // Cache configuration
@@ -60,7 +63,7 @@ export class PayloadClient {
   }
 
   /**
-   * Build request headers with tenant context
+   * Build request headers with CityOS tenant context
    */
   private getHeaders(): HeadersInit {
     const headers: HeadersInit = {
@@ -73,10 +76,13 @@ export class PayloadClient {
       headers['Authorization'] = `Bearer ${PAYLOAD_API_KEY}`;
     }
 
+    // CityOS platform headers
     if (this.tenant) {
-      headers['X-Tenant-ID'] = this.tenant;
-      headers['X-Tenant-Slug'] = this.tenant;
+      headers['X-CityOS-Tenant-Id'] = this.tenant;
     }
+    
+    headers['X-CityOS-Locale'] = this.locale;
+    headers['X-CityOS-Channel'] = 'storefront';
 
     return headers;
   }
@@ -148,6 +154,45 @@ export class PayloadClient {
         `Failed to fetch from Payload: ${error instanceof Error ? error.message : 'Unknown error'}`,
         500
       );
+    }
+  }
+
+  // ===========================================================================
+  // PLATFORM CONTEXT METHODS (CityOS)
+  // ===========================================================================
+
+  /**
+   * Get full platform context for a tenant
+   * Returns tenant config, ancestry, governance chain, capabilities, and systems
+   */
+  async getPlatformContext(tenantSlug?: string): Promise<PlatformContext | null> {
+    try {
+      const tenant = tenantSlug || this.tenant || 'platform';
+      const response = await this.fetch<PlatformContextResponse>(
+        '/api/platform/context',
+        {
+          params: { tenant },
+          cache: true,
+          revalidate: 5 * 60 * 1000, // 5 minutes for context
+        }
+      );
+      return response.success ? response.data || null : null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Get tenant hierarchy for multi-site navigation
+   */
+  async getTenantHierarchy(): Promise<Tenant[]> {
+    try {
+      const result = await this.fetch<{ tenants: Tenant[] }>(
+        '/api/platform/tenants/hierarchy'
+      );
+      return result.tenants || [];
+    } catch {
+      return [];
     }
   }
 
@@ -287,11 +332,11 @@ export class PayloadClient {
    * Get POIs by category
    */
   async getPOIsByCategory(
-    category: POICategory,
+    category: POIPrimaryCategory,
     options: { limit?: number; page?: number; nodeId?: string } = {}
   ): Promise<PayloadPaginatedResponse<POI>> {
     const params: Record<string, string | number | undefined> = {
-      'where[category][equals]': category,
+      'where[primaryCategory][equals]': category,
       'where[status][equals]': 'active',
       depth: 1,
       limit: options.limit || 10,
@@ -310,7 +355,7 @@ export class PayloadClient {
    */
   async getPOIsByNode(
     nodeId: string,
-    options: { limit?: number; page?: number; category?: POICategory } = {}
+    options: { limit?: number; page?: number; category?: POIPrimaryCategory } = {}
   ): Promise<PayloadPaginatedResponse<POI>> {
     const params: Record<string, string | number | undefined> = {
       'where[node][equals]': nodeId,
@@ -321,7 +366,7 @@ export class PayloadClient {
     };
 
     if (options.category) {
-      params['where[category][equals]'] = options.category;
+      params['where[primaryCategory][equals]'] = options.category;
     }
 
     return this.fetch<PayloadPaginatedResponse<POI>>('/api/pois', { params });
@@ -350,7 +395,7 @@ export class PayloadClient {
    */
   async searchPOIs(
     query: string,
-    options: { limit?: number; category?: POICategory } = {}
+    options: { limit?: number; category?: POIPrimaryCategory } = {}
   ): Promise<POI[]> {
     const params: Record<string, string | number | undefined> = {
       'where[name][contains]': query,
@@ -360,7 +405,7 @@ export class PayloadClient {
     };
 
     if (options.category) {
-      params['where[category][equals]'] = options.category;
+      params['where[primaryCategory][equals]'] = options.category;
     }
 
     const result = await this.fetch<PayloadPaginatedResponse<POI>>(
@@ -467,58 +512,37 @@ export class PayloadClient {
   }
 
   // ===========================================================================
-  // NAVIGATION METHODS
+  // NAVIGATION METHODS (Global)
   // ===========================================================================
 
   /**
-   * Get navigation by type
+   * Get navigation global
+   * Navigation is a Payload global, not a collection
    */
-  async getNavigation(type: NavigationType): Promise<Navigation | null> {
+  async getNavigation(): Promise<Navigation | null> {
     try {
-      const result = await this.fetch<PayloadPaginatedResponse<Navigation>>(
-        '/api/navigation',
-        {
-          params: {
-            'where[type][equals]': type,
-            depth: 3,
-            limit: 1,
-          },
-        }
-      );
-      return result.docs[0] || null;
+      return await this.fetch<Navigation>('/api/globals/navigation', {
+        params: { depth: 3 },
+      });
     } catch {
       return null;
     }
   }
 
   /**
-   * Get header navigation
+   * Get main menu items
    */
-  async getHeaderNavigation(): Promise<Navigation | null> {
-    return this.getNavigation('header');
+  async getMainMenu(): Promise<Navigation['mainMenu']> {
+    const nav = await this.getNavigation();
+    return nav?.mainMenu || [];
   }
 
   /**
-   * Get footer navigation
+   * Get footer menu items
    */
-  async getFooterNavigation(): Promise<Navigation | null> {
-    return this.getNavigation('footer');
-  }
-
-  /**
-   * Get all navigations
-   */
-  async getAllNavigations(): Promise<Navigation[]> {
-    const result = await this.fetch<PayloadPaginatedResponse<Navigation>>(
-      '/api/navigation',
-      {
-        params: {
-          depth: 3,
-          limit: 10,
-        },
-      }
-    );
-    return result.docs;
+  async getFooterMenu(): Promise<Navigation['footerMenu']> {
+    const nav = await this.getNavigation();
+    return nav?.footerMenu || [];
   }
 
   // ===========================================================================
@@ -551,11 +575,11 @@ export class PayloadClient {
   // ===========================================================================
 
   /**
-   * Get site globals
+   * Get site settings global
    */
-  async getSiteGlobals(): Promise<SiteGlobals | null> {
+  async getSiteSettings(): Promise<SiteSettings | null> {
     try {
-      return await this.fetch<SiteGlobals>('/api/globals/site-settings');
+      return await this.fetch<SiteSettings>('/api/globals/site-settings');
     } catch {
       return null;
     }

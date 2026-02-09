@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import React from 'react';
 import type {
   LayoutBlock,
   HeroBlock,
@@ -462,35 +461,38 @@ const POIGridBlockComponent: React.FC<{ block: POIGridBlock }> = ({ block }) => 
         <div className={`grid gap-6 ${columnClasses[block.columns]}`}>
           {pois.map((poi) => {
             if (typeof poi === 'string') return null;
+            const featuredImage = poi.images?.[0];
+            const imageUrl = typeof featuredImage === 'string' ? featuredImage : featuredImage?.url;
+            const imageAlt = typeof featuredImage === 'string' ? poi.name : featuredImage?.alt || poi.name;
             return (
               <a
                 key={poi.id}
                 href={`/poi/${poi.slug}`}
                 className="group block bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
               >
-                {poi.media?.featured && (
+                {imageUrl && (
                   <div className="aspect-video overflow-hidden">
                     <img
-                      src={poi.media.featured.url}
-                      alt={poi.media.featured.alt || poi.name}
+                      src={imageUrl}
+                      alt={imageAlt}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                 )}
                 <div className="p-4">
                   <span className="text-xs font-medium text-primary uppercase tracking-wide">
-                    {poi.category}
+                    {poi.primaryCategory}
                   </span>
                   <h3 className="text-lg font-semibold mt-1 group-hover:text-primary transition-colors">
                     {poi.name}
                   </h3>
-                  {poi.location?.address && (
-                    <p className="text-sm text-gray-500 mt-1">{poi.location.address}</p>
+                  {poi.address && (
+                    <p className="text-sm text-gray-500 mt-1">{poi.address}</p>
                   )}
                   {poi.rating && (
                     <div className="flex items-center mt-2">
-                      <span className="text-yellow-500">{'*'.repeat(Math.round(poi.rating.average))}</span>
-                      <span className="text-sm text-gray-500 ml-1">({poi.rating.count})</span>
+                      <span className="text-yellow-500">{'*'.repeat(Math.round(poi.rating))}</span>
+                      <span className="text-sm text-gray-500 ml-1">({poi.totalReviews || 0})</span>
                     </div>
                   )}
                 </div>

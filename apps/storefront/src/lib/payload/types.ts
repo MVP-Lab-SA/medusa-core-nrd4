@@ -1,13 +1,16 @@
 /**
  * Payload CMS Types
  * 
- * These types align with our Payload CMS collections:
- * - Pages: Main content pages
- * - POIs: Points of Interest for smart city
+ * These types align with Dakkah CityOS Payload CMS collections.
+ * Based on actual schema from: https://github.com/Qahtani1979/Dakkah-CityOS-CMS
+ * 
+ * Collections:
+ * - Pages: Main content pages with Lexical rich text + layout blocks
+ * - POIs: Points of Interest (53 fields, Google Maps API v1 complete)
  * - Templates: Page rendering templates
- * - Navigation: Menu structures
- * - Tenants: Multi-tenant configuration
- * - Nodes: Hierarchical location structure
+ * - Navigation: Menu structures (global)
+ * - Tenants: Multi-tenant configuration with hierarchical tiers
+ * - Nodes: Hierarchical location structure (GLOBAL > CONTINENT > REGION > COUNTRY > CITY > DISTRICT > ZONE > FACILITY > ASSET)
  */
 
 // =============================================================================
@@ -56,53 +59,186 @@ export interface RichTextNode {
 }
 
 // =============================================================================
-// TENANT & NODE TYPES
+// TENANT TYPES (Hierarchical Multi-Tenancy)
 // =============================================================================
 
-export interface Tenant extends PayloadDocument {
-  slug: string;
-  name: string;
-  domain: string;
-  subdomains?: string[];
-  status: 'active' | 'inactive' | 'suspended';
-  config: {
-    locale: string;
-    timezone: string;
-    currency: string;
-    branding?: {
-      logo?: PayloadMedia;
-      favicon?: PayloadMedia;
-      primaryColor?: string;
-      secondaryColor?: string;
-    };
-  };
-  governance?: {
-    region: string;
-    country: string;
-    authority?: string;
-  };
+export type TenantTier = 'MASTER' | 'GLOBAL' | 'REGIONAL' | 'COUNTRY' | 'CITY';
+
+export type ResidencyZone = 'GCC' | 'EU' | 'MENA' | 'APAC' | 'AMERICAS' | 'GLOBAL';
+
+export interface TenantSettings {
+  defaultLocale?: string;
+  supportedLocales?: { locale: string }[];
+  timezone?: string;
+  currency?: string;
 }
 
-export type NodeType = 'CITY' | 'DISTRICT' | 'ZONE' | 'FACILITY' | 'ASSET';
+export interface Tenant extends PayloadDocument {
+  name: string;
+  slug: string;
+  tenantTier: TenantTier;
+  parentTenant?: Tenant | string | null;
+  domain?: string;
+  customDomains?: { domain: string }[];
+  status: 'active' | 'inactive' | 'suspended';
+  settings?: TenantSettings;
+  metadata?: Record<string, unknown>;
+  residencyZone?: ResidencyZone;
+  country?: string; // relationship to countries
+  governanceAuthority?: string; // relationship to governance-authorities
+  description?: string;
+  defaultPersona?: string; // relationship to personas
+}
+
+export interface TenantConfig {
+  id: string;
+  name: string;
+  slug: string;
+  domain: string;
+  tenantTier: string;
+  parentTenant?: string | null;
+  residencyZone: string;
+  status: string;
+  description?: string;
+  settings: TenantSettings;
+}
+
+export interface TenantAncestor {
+  id: string;
+  name: string;
+  slug: string;
+  tenantTier: string;
+  domain: string;
+}
+
+// =============================================================================
+// NODE TYPES (Hierarchical Location Structure)
+// =============================================================================
+
+export type NodeType = 
+  | 'GLOBAL'
+  | 'CONTINENT'
+  | 'REGION'
+  | 'COUNTRY'
+  | 'CITY'
+  | 'DISTRICT'
+  | 'ZONE'
+  | 'FACILITY'
+  | 'ASSET';
 
 export interface Node extends PayloadDocument {
-  slug: string;
   name: string;
+  slug: string;
   type: NodeType;
   code: string;
   parent?: Node | string;
-  children?: (Node | string)[];
-  tenant: Tenant | string;
+  status: 'active' | 'inactive' | 'maintenance';
   coordinates?: {
     lat: number;
     lng: number;
   };
-  boundary?: {
-    type: 'Polygon';
-    coordinates: number[][][];
-  };
   metadata?: Record<string, unknown>;
-  status: 'active' | 'inactive' | 'maintenance';
+  tenant?: Tenant | string;
+}
+
+export interface NodeHierarchy {
+  id: string;
+  name: string;
+  code: string;
+  type: string;
+  slug: string;
+  status: string;
+  coordinates?: { lat: number; lng: number };
+  parent?: string;
+  children?: NodeHierarchy[];
+}
+
+// =============================================================================
+// GOVERNANCE TYPES
+// =============================================================================
+
+export interface GovernanceChain {
+  region?: {
+    id: string;
+    name: string;
+    code: string;
+    residencyZone: string;
+  };
+  country?: {
+    id: string;
+    name: string;
+    code: string;
+    settings?: Record<string, unknown>;
+  };
+  authorities?: Array<{
+    id: string;
+    name: string;
+    code: string;
+    type: string;
+    jurisdiction?: Record<string, unknown>;
+  }>;
+  policies?: {
+    dataResidency?: Record<string, unknown>;
+    compliance?: Record<string, unknown>;
+    classification?: Record<string, unknown>;
+  };
+}
+
+// =============================================================================
+// PLATFORM CAPABILITIES
+// =============================================================================
+
+export interface PlatformCapabilities {
+  plugins: {
+    official: string[];
+    community: string[];
+    custom: string[];
+  };
+  features: Record<string, boolean | unknown>;
+  endpoints: Record<string, string>;
+}
+
+export interface SystemInfo {
+  id: string;
+  name: string;
+  type: string;
+  category: string;
+  status: string;
+  capabilities: string[];
+  hasBaseUrl: boolean;
+}
+
+export interface SystemsOverview {
+  total: number;
+  active: number;
+  external: number;
+  registry: SystemInfo[];
+}
+
+// =============================================================================
+// PLATFORM CONTEXT (Full API Response)
+// =============================================================================
+
+export interface PlatformContext {
+  tenant: TenantConfig;
+  tenantAncestry: TenantAncestor[];
+  masterTenant: TenantAncestor;
+  nodeHierarchy: NodeHierarchy[];
+  governanceChain: GovernanceChain;
+  capabilities: PlatformCapabilities;
+  systems: SystemsOverview;
+  contextHeaders: string[];
+  hierarchyLevels: string[];
+  tenantTiers: string[];
+  resolvedAt: string;
+  isDefaultTenant: boolean;
+}
+
+export interface PlatformContextResponse {
+  success: boolean;
+  data?: PlatformContext;
+  error?: string;
+  message?: string;
 }
 
 // =============================================================================
@@ -111,27 +247,26 @@ export interface Node extends PayloadDocument {
 
 export type PageStatus = 'draft' | 'published' | 'archived';
 
+export type ReviewStatus = 'none' | 'pending-review' | 'approved' | 'rejected';
+
 export interface Page extends PayloadDocument {
-  slug: string;
   title: string;
-  description?: string;
-  template: PageTemplate | string;
-  tenant: Tenant | string;
-  node?: Node | string;
+  slug: string;
   status: PageStatus;
-  publishedAt?: string;
-  meta?: {
-    title?: string;
-    description?: string;
-    image?: PayloadMedia;
-    noIndex?: boolean;
-  };
-  hero?: HeroBlock;
-  layout: LayoutBlock[];
-  breadcrumb?: {
-    enabled: boolean;
-    items?: BreadcrumbItem[];
-  };
+  content?: PayloadRichText;
+  featuredImage?: PayloadMedia | string;
+  author?: string; // relationship to users
+  version: number;
+  publishedVersion?: number;
+  versionNotes?: string;
+  lastPublishedAt?: string;
+  layout?: LayoutBlock[];
+  scheduledPublishAt?: string;
+  scheduledUnpublishAt?: string;
+  reviewStatus?: ReviewStatus;
+  reviewedBy?: string;
+  reviewNotes?: string;
+  tenant?: Tenant | string;
 }
 
 export interface BreadcrumbItem {
@@ -170,61 +305,170 @@ export interface TemplateRegion {
 }
 
 // =============================================================================
-// POI (Points of Interest) TYPES
+// POI (Points of Interest) TYPES - Google Maps API v1 Complete
 // =============================================================================
 
-export type POICategory = 
-  | 'attraction'
+export type POIType = 'place' | 'event-venue' | 'facility' | 'asset' | 'virtual';
+
+export type POIPrimaryCategory = 
+  | 'mosque'
   | 'restaurant'
-  | 'hotel'
-  | 'shopping'
+  | 'park'
+  | 'museum'
+  | 'hospital'
+  | 'school'
   | 'transport'
-  | 'service'
-  | 'event'
-  | 'healthcare'
-  | 'education'
-  | 'government';
+  | 'shopping'
+  | 'government'
+  | 'utility'
+  | 'landmark'
+  | 'hotel'
+  | 'cafe'
+  | 'entertainment'
+  | 'sports'
+  | 'cultural'
+  | 'religious'
+  | 'emergency'
+  | 'parking'
+  | 'charging-station'
+  | 'other';
+
+export type POISource = 'imported' | 'user-created' | 'partner-created' | 'authority-created';
+
+export type BusinessStatus = 'OPERATIONAL' | 'CLOSED_TEMPORARILY' | 'CLOSED_PERMANENTLY';
+
+export type PriceLevel = 'FREE' | 'INEXPENSIVE' | 'MODERATE' | 'EXPENSIVE' | 'VERY_EXPENSIVE';
+
+export type StewardshipState = 'unclaimed' | 'claim-pending' | 'claimed' | 'disputed' | 'reverted';
+
+export interface POIStewardship {
+  stewardshipState: StewardshipState;
+  currentSteward?: string; // relationship to governance-authorities
+  currentOwner?: string; // relationship to users
+  claimedAt?: string;
+  disputeReason?: string;
+}
 
 export interface POI extends PayloadDocument {
-  slug: string;
   name: string;
+  slug: string;
+  type: POIType;
+  primaryCategory?: POIPrimaryCategory;
+  node?: Node | string;
   description?: string;
-  category: POICategory;
-  subcategory?: string;
-  tenant: Tenant | string;
-  node: Node | string;
-  location: {
-    address: string;
-    coordinates: {
-      lat: number;
-      lng: number;
-    };
-    floor?: number;
-    unit?: string;
+  
+  // Location
+  coordinates?: {
+    lat: number;
+    lng: number;
   };
-  contact?: {
-    phone?: string;
-    email?: string;
-    website?: string;
-  };
-  hours?: OperatingHours[];
-  media?: {
-    featured?: PayloadMedia;
-    gallery?: PayloadMedia[];
-  };
-  amenities?: string[];
+  address?: string;
+  formattedAddress?: string;
+  shortAddress?: string;
+  addressComponents?: Record<string, unknown>;
+  plusCode?: Record<string, unknown>;
+  viewport?: Record<string, unknown>;
+  
+  // Contact
+  phone?: string;
+  website?: string;
+  email?: string;
+  internationalPhoneNumber?: string;
+  nationalPhoneNumber?: string;
+  
+  // Ratings & Reviews
+  rating?: number;
+  totalReviews?: number;
+  reviews?: Record<string, unknown>;
+  
+  // Hours & Status
+  openingHours?: Record<string, unknown>;
+  businessStatus?: BusinessStatus;
+  status: 'active' | 'inactive' | 'pending' | 'hidden' | 'archived';
+  
+  // Pricing
+  priceLevel?: PriceLevel;
+  priceRange?: Record<string, unknown>;
+  
+  // Editorial
+  editorialSummary?: string;
+  areaSummary?: string;
+  
+  // Social & Digital
+  socialMedia?: Record<string, unknown>;
+  googlePlaceId?: string;
+  googleMapsUri?: string;
+  
+  // Features & Amenities (booleans)
+  allowsDogs?: boolean;
+  goodForChildren?: boolean;
+  goodForGroups?: boolean;
+  liveMusic?: boolean;
+  outdoorSeating?: boolean;
+  restroom?: boolean;
+  reservable?: boolean;
+  dineIn?: boolean;
+  delivery?: boolean;
+  takeout?: boolean;
+  curbsidePickup?: boolean;
+  
+  // Food & Drink Service
+  servesBreakfast?: boolean;
+  servesLunch?: boolean;
+  servesDinner?: boolean;
+  servesBrunch?: boolean;
+  servesBeer?: boolean;
+  servesWine?: boolean;
+  servesCocktails?: boolean;
+  servesCoffee?: boolean;
+  servesVegetarianFood?: boolean;
+  servesDessert?: boolean;
+  menuForChildren?: boolean;
+  
+  // Facilities
+  parkingOptions?: Record<string, unknown>;
+  paymentOptions?: Record<string, unknown>;
+  evChargeOptions?: Record<string, unknown>;
+  fuelOptions?: Record<string, unknown>;
+  accessibility?: Record<string, unknown>;
+  
+  // Additional Info
+  capacity?: number;
+  elevationMeters?: number;
+  timezone?: string;
+  utcOffsetMinutes?: number;
+  languagesSpoken?: string[];
+  currenciesAccepted?: string[];
+  emergencyContact?: string;
+  
+  // Metadata
   tags?: string[];
-  rating?: {
-    average: number;
-    count: number;
-  };
-  status: 'active' | 'inactive' | 'coming-soon';
-  meta?: {
-    title?: string;
-    description?: string;
-  };
-  relatedProducts?: string[]; // Medusa product IDs
-  relatedPOIs?: (POI | string)[];
+  source?: POISource;
+  canonicalConfidence?: number;
+  geoPolygon?: Record<string, unknown>;
+  containingPlaces?: Record<string, unknown>;
+  attributes?: Record<string, unknown>;
+  
+  // Rich content
+  yearEstablished?: number;
+  managedBy?: string;
+  totalArea?: string;
+  transportLinks?: Record<string, unknown>;
+  awards?: Record<string, unknown>;
+  keyFeatures?: Record<string, unknown>;
+  visitorInfo?: Record<string, unknown>;
+  architecturalStyle?: string;
+  sustainabilityCertifications?: Record<string, unknown>;
+  historicalSignificance?: string;
+  
+  // Stewardship
+  stewardship?: POIStewardship;
+  
+  // Media
+  images?: (PayloadMedia | string)[];
+  
+  // Tenant
+  tenant?: Tenant | string;
 }
 
 export interface OperatingHours {
@@ -235,39 +479,31 @@ export interface OperatingHours {
 }
 
 // =============================================================================
-// NAVIGATION TYPES
+// NAVIGATION TYPES (Global)
 // =============================================================================
 
-export type NavigationType = 'header' | 'footer' | 'sidebar' | 'mobile' | 'utility';
+export type NavigationItemType = 'link' | 'external' | 'page';
 
-export interface Navigation extends PayloadDocument {
-  slug: string;
-  name: string;
-  type: NavigationType;
-  tenant: Tenant | string;
-  items: NavigationItem[];
-}
-
-export interface NavigationItem {
-  id: string;
+export interface NavigationMainMenuItem {
   label: string;
-  type: 'link' | 'page' | 'poi' | 'node' | 'dropdown' | 'megamenu';
+  type: NavigationItemType;
   url?: string;
   page?: Page | string;
-  poi?: POI | string;
-  node?: Node | string;
-  target?: '_self' | '_blank';
-  icon?: string;
-  children?: NavigationItem[];
-  featured?: {
-    image?: PayloadMedia;
-    title?: string;
-    description?: string;
-  };
+  openInNewTab?: boolean;
+}
+
+export interface NavigationFooterMenuItem {
+  label: string;
+  url: string;
+}
+
+export interface Navigation {
+  mainMenu?: NavigationMainMenuItem[];
+  footerMenu?: NavigationFooterMenuItem[];
 }
 
 // =============================================================================
-// BLOCK TYPES (Payload Layout Builder)
+// BLOCK TYPES (Payload Layout Builder with ALL_BLOCKS)
 // =============================================================================
 
 export type BlockType =
@@ -416,7 +652,7 @@ export interface POIGridBlock extends BaseBlock {
   heading?: string;
   source: 'manual' | 'category' | 'node' | 'featured';
   pois?: (POI | string)[];
-  category?: POICategory;
+  category?: POIPrimaryCategory;
   node?: Node | string;
   limit?: number;
   columns: 2 | 3 | 4;
@@ -428,7 +664,7 @@ export interface POIMapBlock extends BaseBlock {
   heading?: string;
   source: 'manual' | 'category' | 'node' | 'all';
   pois?: (POI | string)[];
-  category?: POICategory;
+  category?: POIPrimaryCategory;
   node?: Node | string;
   center?: {
     lat: number;
@@ -599,11 +835,11 @@ export interface PayloadResponse<T> {
 }
 
 // =============================================================================
-// GLOBAL TYPES
+// GLOBAL TYPES (Site Settings)
 // =============================================================================
 
-export interface SiteGlobals {
-  siteName: string;
+export interface SiteSettings {
+  siteName?: string;
   siteDescription?: string;
   logo?: PayloadMedia;
   favicon?: PayloadMedia;
@@ -622,3 +858,29 @@ export interface SiteGlobals {
     bodyEnd?: string;
   };
 }
+
+// =============================================================================
+// CONTEXT HEADERS (CityOS Platform)
+// =============================================================================
+
+export const CITYOS_HEADERS = [
+  'X-CityOS-Correlation-Id',
+  'X-CityOS-Tenant-Id',
+  'X-CityOS-Node-Id',
+  'X-CityOS-Node-Type',
+  'X-CityOS-Locale',
+  'X-CityOS-User-Id',
+  'X-CityOS-Channel',
+  'X-Idempotency-Key',
+  'X-CityOS-Region',
+  'X-CityOS-Country',
+  'X-CityOS-Tenant-Tier',
+  'X-CityOS-Master-Tenant-Id',
+  'X-CityOS-Platform-Tenant-Id',
+] as const;
+
+export type CityOSHeader = typeof CITYOS_HEADERS[number];
+
+export const HIERARCHY_LEVELS = ['GLOBAL', 'CONTINENT', 'REGION', 'COUNTRY', 'CITY', 'DISTRICT', 'ZONE', 'FACILITY', 'ASSET'] as const;
+
+export const TENANT_TIERS = ['MASTER', 'GLOBAL', 'REGIONAL', 'COUNTRY', 'CITY'] as const;
