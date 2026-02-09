@@ -158,23 +158,23 @@ function DynamicCMSPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500" />
       </div>
     );
   }
 
   if (!page) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
-        <DocumentText className="w-16 h-16 text-gray-300 mb-4" />
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Page Not Found</h1>
-        <p className="text-gray-600 mb-6 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-black px-4">
+        <DocumentText className="w-16 h-16 text-gray-700 mb-4" />
+        <h1 className="text-2xl font-bold text-white mb-2">Page Not Found</h1>
+        <p className="text-gray-400 mb-6 text-center">
           The page you are looking for does not exist or has been moved.
         </p>
         <a
           href="/"
-          className="flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+          className="flex items-center gap-2 bg-cyan-500 text-black px-6 py-3 rounded-lg hover:bg-cyan-400 transition-colors font-medium"
         >
           <BuildingStorefront className="w-4 h-4" />
           Back to Home
@@ -184,18 +184,18 @@ function DynamicCMSPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black">
       {/* Breadcrumbs */}
-      <div className="bg-gray-50 border-b">
+      <div className="bg-gray-900 border-b border-gray-800">
         <div className="max-w-5xl mx-auto px-4 py-3">
           <nav className="flex items-center gap-2 text-sm">
             {page.breadcrumbs.map((crumb, idx) => (
               <span key={crumb.href} className="flex items-center gap-2">
-                {idx > 0 && <span className="text-gray-400">/</span>}
+                {idx > 0 && <span className="text-gray-600">/</span>}
                 {idx === page.breadcrumbs.length - 1 ? (
-                  <span className="text-gray-900">{crumb.label}</span>
+                  <span className="text-white">{crumb.label}</span>
                 ) : (
-                  <a href={crumb.href} className="text-gray-500 hover:text-gray-900">
+                  <a href={crumb.href} className="text-gray-400 hover:text-white">
                     {crumb.label}
                   </a>
                 )}
@@ -219,16 +219,16 @@ function ContentBlockRenderer({ block }: { block: ContentBlock }) {
   switch (block.type) {
     case "hero":
       return (
-        <div className="bg-gradient-to-r from-gray-900 to-gray-700 rounded-2xl p-12 mb-8 text-white">
+        <div className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-12 mb-8 text-white">
           <h1 className="text-4xl font-bold mb-4">{block.data.title as string}</h1>
-          <p className="text-xl text-gray-300">{block.data.subtitle as string}</p>
+          <p className="text-xl text-white/80">{block.data.subtitle as string}</p>
         </div>
       );
 
     case "text":
       return (
-        <div className="prose prose-lg max-w-none mb-8">
-          <p className="text-gray-600 leading-relaxed">{block.data.content as string}</p>
+        <div className="prose prose-lg prose-invert max-w-none mb-8">
+          <p className="text-gray-400 leading-relaxed">{block.data.content as string}</p>
         </div>
       );
 
@@ -237,8 +237,8 @@ function ContentBlockRenderer({ block }: { block: ContentBlock }) {
       return (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
           {statsItems.map((stat) => (
-            <div key={stat.label} className="text-center p-6 bg-gray-50 rounded-xl">
-              <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
+            <div key={stat.label} className="text-center p-6 bg-gray-900 border border-gray-800 rounded-xl">
+              <div className="text-3xl font-bold text-cyan-400">{stat.value}</div>
               <div className="text-sm text-gray-500 mt-1">{stat.label}</div>
             </div>
           ))}
@@ -252,15 +252,15 @@ function ContentBlockRenderer({ block }: { block: ContentBlock }) {
           {jobItems.map((job) => (
             <div
               key={job.title}
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer"
+              className="flex items-center justify-between p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-gray-700 transition-colors cursor-pointer"
             >
               <div>
-                <h3 className="font-medium text-gray-900">{job.title}</h3>
+                <h3 className="font-medium text-white">{job.title}</h3>
                 <p className="text-sm text-gray-500">
                   {job.department} - {job.location}
                 </p>
               </div>
-              <ArrowRight className="w-5 h-5 text-gray-400" />
+              <ArrowRight className="w-5 h-5 text-gray-600" />
             </div>
           ))}
         </div>
@@ -273,10 +273,10 @@ function ContentBlockRenderer({ block }: { block: ContentBlock }) {
           {pressItems.map((item) => (
             <div
               key={item.title}
-              className="flex items-center justify-between p-4 border rounded-xl hover:border-gray-300 transition-colors cursor-pointer"
+              className="flex items-center justify-between p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-gray-700 transition-colors cursor-pointer"
             >
               <div>
-                <h3 className="font-medium text-gray-900">{item.title}</h3>
+                <h3 className="font-medium text-white">{item.title}</h3>
                 <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
                   <span className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
@@ -285,7 +285,7 @@ function ContentBlockRenderer({ block }: { block: ContentBlock }) {
                   <span>{item.outlet}</span>
                 </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-gray-400" />
+              <ArrowRight className="w-5 h-5 text-gray-600" />
             </div>
           ))}
         </div>

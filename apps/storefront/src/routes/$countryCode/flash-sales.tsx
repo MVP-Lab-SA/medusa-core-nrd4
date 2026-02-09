@@ -15,7 +15,7 @@ function FlashSalesPage() {
   const upcomingSales = sales?.filter((s) => s.status === "upcoming") || []
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-black">
       {/* Hero */}
       <div className="bg-gradient-to-r from-red-600 to-orange-500 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -31,7 +31,7 @@ function FlashSalesPage() {
         {isLoading ? (
           <div className="grid md:grid-cols-2 gap-8">
             {[1, 2].map((i) => (
-              <div key={i} className="h-64 bg-gray-800 rounded-xl animate-pulse" />
+              <div key={i} className="h-64 bg-gray-900 rounded-xl animate-pulse" />
             ))}
           </div>
         ) : (
@@ -59,7 +59,7 @@ function FlashSalesPage() {
                         <span className="text-3xl font-bold">Up to {sale.discountPercent}% OFF</span>
                         <Link
                           to={`/${countryCode}/collections/${sale.collectionHandle || "sale"}`}
-                          className="px-6 py-2 bg-white text-red-600 font-bold rounded-lg hover:bg-gray-100"
+                          className="px-6 py-2 bg-black text-white font-bold rounded-lg hover:bg-gray-900"
                         >
                           Shop Now
                         </Link>
@@ -78,7 +78,7 @@ function FlashSalesPage() {
                   {upcomingSales.map((sale) => (
                     <div
                       key={sale.id}
-                      className="bg-gray-800 rounded-xl p-6 text-white"
+                      className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-white"
                     >
                       <h3 className="text-xl font-bold mb-2">{sale.name}</h3>
                       <p className="text-gray-400 mb-4">{sale.description}</p>
@@ -93,7 +93,7 @@ function FlashSalesPage() {
 
             {activeSales.length === 0 && upcomingSales.length === 0 && (
               <div className="text-center py-12">
-                <Bolt className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                <Bolt className="w-16 h-16 text-gray-700 mx-auto mb-4" />
                 <p className="text-gray-400 text-xl">No flash sales at the moment</p>
                 <p className="text-gray-500 mt-2">Check back soon for exciting deals!</p>
               </div>
