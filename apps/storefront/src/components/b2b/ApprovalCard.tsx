@@ -29,24 +29,24 @@ const typeLabels: Record<string, string> = {
 
 export function ApprovalCard({ request, onApprove, onReject, canAction = true }: ApprovalCardProps) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4">
+    <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
       <div className="flex items-start justify-between mb-3">
         <div>
           <span className="text-xs font-medium text-gray-500 uppercase">
             {typeLabels[request.type] || request.type}
           </span>
-          <h4 className="font-medium text-gray-900">{request.title}</h4>
+          <h4 className="font-medium text-white">{request.title}</h4>
         </div>
         {request.status === "pending" ? (
-          <Clock className="w-5 h-5 text-yellow-500" />
+          <Clock className="w-5 h-5 text-amber-400" />
         ) : request.status === "approved" ? (
-          <CheckCircle className="w-5 h-5 text-green-500" />
+          <CheckCircle className="w-5 h-5 text-emerald-400" />
         ) : (
-          <XCircle className="w-5 h-5 text-red-500" />
+          <XCircle className="w-5 h-5 text-red-400" />
         )}
       </div>
       
-      <p className="text-sm text-gray-600 mb-3">{request.description}</p>
+      <p className="text-sm text-gray-400 mb-3">{request.description}</p>
       
       <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
         <span>Requested by {request.requestedBy}</span>
@@ -54,9 +54,9 @@ export function ApprovalCard({ request, onApprove, onReject, canAction = true }:
       </div>
 
       {request.amount && (
-        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+        <div className="mb-4 p-3 bg-gray-800 rounded-lg">
           <span className="text-sm text-gray-500">Amount</span>
-          <p className="text-lg font-semibold">
+          <p className="text-lg font-semibold text-white">
             {new Intl.NumberFormat("en", {
               style: "currency",
               currency: request.currency || "USD",
@@ -69,7 +69,7 @@ export function ApprovalCard({ request, onApprove, onReject, canAction = true }:
         <div className="flex gap-3">
           <button
             onClick={() => onApprove?.(request.id)}
-            className="flex-1 py-2 px-4 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700"
+            className="flex-1 py-2 px-4 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700"
           >
             Approve
           </button>

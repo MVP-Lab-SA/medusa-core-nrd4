@@ -67,9 +67,9 @@ export function BulkOrderForm({ onSubmit, isSubmitting }: BulkOrderFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-        <ArrowUpTray className="w-8 h-8 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-600 mb-2">Upload a CSV file with SKU and Quantity</p>
+      <div className="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center">
+        <ArrowUpTray className="w-8 h-8 text-gray-500 mx-auto mb-4" />
+        <p className="text-gray-400 mb-2">Upload a CSV file with SKU and Quantity</p>
         <p className="text-sm text-gray-500 mb-4">Format: SKU, Quantity (one per line)</p>
         <label className="inline-block">
           <input
@@ -78,14 +78,14 @@ export function BulkOrderForm({ onSubmit, isSubmitting }: BulkOrderFormProps) {
             onChange={handleFileUpload}
             className="hidden"
           />
-          <span className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg cursor-pointer hover:bg-blue-700">
+          <span className="px-4 py-2 bg-cyan-500 text-black font-medium rounded-lg cursor-pointer hover:bg-cyan-400">
             Choose File
           </span>
         </label>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-400 mb-1">
           Or paste CSV data directly
         </label>
         <textarea
@@ -95,39 +95,39 @@ export function BulkOrderForm({ onSubmit, isSubmitting }: BulkOrderFormProps) {
             parseCSV(e.target.value)
           }}
           rows={6}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md font-mono text-sm"
+          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md font-mono text-sm text-white placeholder-gray-500"
           placeholder="SKU001, 10&#10;SKU002, 5&#10;SKU003, 20"
         />
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
           {error}
         </div>
       )}
 
       {items.length > 0 && (
-        <div className="border border-gray-200 rounded-lg overflow-hidden">
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-            <h4 className="font-medium text-gray-900">Preview ({items.length} items)</h4>
+        <div className="border border-gray-800 rounded-lg overflow-hidden">
+          <div className="bg-gray-800 px-4 py-3 border-b border-gray-700 flex items-center justify-between">
+            <h4 className="font-medium text-white">Preview ({items.length} items)</h4>
           </div>
           <div className="max-h-48 overflow-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-800">
                 <tr>
-                  <th className="text-left py-2 px-4">SKU</th>
-                  <th className="text-right py-2 px-4">Quantity</th>
+                  <th className="text-left py-2 px-4 text-gray-400">SKU</th>
+                  <th className="text-right py-2 px-4 text-gray-400">Quantity</th>
                 </tr>
               </thead>
               <tbody>
                 {items.slice(0, 10).map((item, index) => (
-                  <tr key={index} className="border-t border-gray-100">
-                    <td className="py-2 px-4 font-mono">{item.sku}</td>
-                    <td className="py-2 px-4 text-right">{item.quantity}</td>
+                  <tr key={index} className="border-t border-gray-800">
+                    <td className="py-2 px-4 font-mono text-white">{item.sku}</td>
+                    <td className="py-2 px-4 text-right text-white">{item.quantity}</td>
                   </tr>
                 ))}
                 {items.length > 10 && (
-                  <tr className="border-t border-gray-100">
+                  <tr className="border-t border-gray-800">
                     <td colSpan={2} className="py-2 px-4 text-center text-gray-500">
                       ...and {items.length - 10} more items
                     </td>
@@ -142,7 +142,7 @@ export function BulkOrderForm({ onSubmit, isSubmitting }: BulkOrderFormProps) {
       <button
         type="submit"
         disabled={isSubmitting || items.length === 0}
-        className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 px-4 bg-cyan-500 text-black font-medium rounded-lg hover:bg-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting ? "Processing..." : `Add ${items.length} Items to Cart`}
       </button>
