@@ -107,6 +107,7 @@ import { Route as CountryCodeAccountReviewsRouteImport } from './routes/$country
 import { Route as CountryCodeAccountRegisterRouteImport } from './routes/$countryCode/account/register'
 import { Route as CountryCodeAccountReferralsRouteImport } from './routes/$countryCode/account/referrals'
 import { Route as CountryCodeAccountPaymentMethodsRouteImport } from './routes/$countryCode/account/payment-methods'
+import { Route as CountryCodeAccountOrdersRouteImport } from './routes/$countryCode/account/orders'
 import { Route as CountryCodeAccountLoyaltyRouteImport } from './routes/$countryCode/account/loyalty'
 import { Route as CountryCodeAccountLoginRouteImport } from './routes/$countryCode/account/login'
 import { Route as CountryCodeAccountLicensesRouteImport } from './routes/$countryCode/account/licenses'
@@ -665,6 +666,12 @@ const CountryCodeAccountPaymentMethodsRoute =
     path: '/account/payment-methods',
     getParentRoute: () => CountryCodeRoute,
   } as any)
+const CountryCodeAccountOrdersRoute =
+  CountryCodeAccountOrdersRouteImport.update({
+    id: '/account/orders',
+    path: '/account/orders',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
 const CountryCodeAccountLoyaltyRoute =
   CountryCodeAccountLoyaltyRouteImport.update({
     id: '/account/loyalty',
@@ -832,6 +839,7 @@ export interface FileRoutesByFullPath {
   '/$countryCode/account/licenses': typeof CountryCodeAccountLicensesRoute
   '/$countryCode/account/login': typeof CountryCodeAccountLoginRoute
   '/$countryCode/account/loyalty': typeof CountryCodeAccountLoyaltyRoute
+  '/$countryCode/account/orders': typeof CountryCodeAccountOrdersRoute
   '/$countryCode/account/payment-methods': typeof CountryCodeAccountPaymentMethodsRoute
   '/$countryCode/account/referrals': typeof CountryCodeAccountReferralsRoute
   '/$countryCode/account/register': typeof CountryCodeAccountRegisterRoute
@@ -949,6 +957,7 @@ export interface FileRoutesByTo {
   '/$countryCode/account/licenses': typeof CountryCodeAccountLicensesRoute
   '/$countryCode/account/login': typeof CountryCodeAccountLoginRoute
   '/$countryCode/account/loyalty': typeof CountryCodeAccountLoyaltyRoute
+  '/$countryCode/account/orders': typeof CountryCodeAccountOrdersRoute
   '/$countryCode/account/payment-methods': typeof CountryCodeAccountPaymentMethodsRoute
   '/$countryCode/account/referrals': typeof CountryCodeAccountReferralsRoute
   '/$countryCode/account/register': typeof CountryCodeAccountRegisterRoute
@@ -1070,6 +1079,7 @@ export interface FileRoutesById {
   '/$countryCode/account/licenses': typeof CountryCodeAccountLicensesRoute
   '/$countryCode/account/login': typeof CountryCodeAccountLoginRoute
   '/$countryCode/account/loyalty': typeof CountryCodeAccountLoyaltyRoute
+  '/$countryCode/account/orders': typeof CountryCodeAccountOrdersRoute
   '/$countryCode/account/payment-methods': typeof CountryCodeAccountPaymentMethodsRoute
   '/$countryCode/account/referrals': typeof CountryCodeAccountReferralsRoute
   '/$countryCode/account/register': typeof CountryCodeAccountRegisterRoute
@@ -1192,6 +1202,7 @@ export interface FileRouteTypes {
     | '/$countryCode/account/licenses'
     | '/$countryCode/account/login'
     | '/$countryCode/account/loyalty'
+    | '/$countryCode/account/orders'
     | '/$countryCode/account/payment-methods'
     | '/$countryCode/account/referrals'
     | '/$countryCode/account/register'
@@ -1309,6 +1320,7 @@ export interface FileRouteTypes {
     | '/$countryCode/account/licenses'
     | '/$countryCode/account/login'
     | '/$countryCode/account/loyalty'
+    | '/$countryCode/account/orders'
     | '/$countryCode/account/payment-methods'
     | '/$countryCode/account/referrals'
     | '/$countryCode/account/register'
@@ -1429,6 +1441,7 @@ export interface FileRouteTypes {
     | '/$countryCode/account/licenses'
     | '/$countryCode/account/login'
     | '/$countryCode/account/loyalty'
+    | '/$countryCode/account/orders'
     | '/$countryCode/account/payment-methods'
     | '/$countryCode/account/referrals'
     | '/$countryCode/account/register'
@@ -2201,6 +2214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeAccountPaymentMethodsRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/account/orders': {
+      id: '/$countryCode/account/orders'
+      path: '/account/orders'
+      fullPath: '/$countryCode/account/orders'
+      preLoaderRoute: typeof CountryCodeAccountOrdersRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/account/loyalty': {
       id: '/$countryCode/account/loyalty'
       path: '/account/loyalty'
@@ -2536,6 +2556,7 @@ interface CountryCodeRouteChildren {
   CountryCodeAccountLicensesRoute: typeof CountryCodeAccountLicensesRoute
   CountryCodeAccountLoginRoute: typeof CountryCodeAccountLoginRoute
   CountryCodeAccountLoyaltyRoute: typeof CountryCodeAccountLoyaltyRoute
+  CountryCodeAccountOrdersRoute: typeof CountryCodeAccountOrdersRoute
   CountryCodeAccountPaymentMethodsRoute: typeof CountryCodeAccountPaymentMethodsRoute
   CountryCodeAccountReferralsRoute: typeof CountryCodeAccountReferralsRoute
   CountryCodeAccountRegisterRoute: typeof CountryCodeAccountRegisterRoute
@@ -2636,6 +2657,7 @@ const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodeAccountLicensesRoute: CountryCodeAccountLicensesRoute,
   CountryCodeAccountLoginRoute: CountryCodeAccountLoginRoute,
   CountryCodeAccountLoyaltyRoute: CountryCodeAccountLoyaltyRoute,
+  CountryCodeAccountOrdersRoute: CountryCodeAccountOrdersRoute,
   CountryCodeAccountPaymentMethodsRoute: CountryCodeAccountPaymentMethodsRoute,
   CountryCodeAccountReferralsRoute: CountryCodeAccountReferralsRoute,
   CountryCodeAccountRegisterRoute: CountryCodeAccountRegisterRoute,
