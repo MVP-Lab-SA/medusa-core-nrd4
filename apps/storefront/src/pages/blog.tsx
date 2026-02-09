@@ -89,12 +89,12 @@ export default function BlogPage({ countryCode }: BlogPageProps) {
   const regularPosts = filteredPosts.filter(p => !p.featured)
 
   return (
-    <div className="py-12">
+    <div className="min-h-screen bg-black py-12">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">CityOS Blog</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-white mb-4">CityOS Blog</h1>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
             Insights, tutorials, and news about smart city technology and IoT innovation
           </p>
         </div>
@@ -102,13 +102,13 @@ export default function BlogPage({ countryCode }: BlogPageProps) {
         {/* Search and Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <div className="relative flex-1 max-w-md">
-            <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search articles..."
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
             />
           </div>
 
@@ -119,8 +119,8 @@ export default function BlogPage({ countryCode }: BlogPageProps) {
                 onClick={() => setSelectedCategory(category === "All" ? null : category)}
                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                   (category === "All" && !selectedCategory) || selectedCategory === category
-                    ? "bg-cyan-500 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "bg-cyan-500 text-black"
+                    : "bg-gray-900 text-gray-300 border border-gray-700 hover:bg-gray-800"
                 }`}
               >
                 {category}
@@ -145,7 +145,7 @@ export default function BlogPage({ countryCode }: BlogPageProps) {
 
         {filteredPosts.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500">No articles found matching your criteria</p>
+            <p className="text-gray-400">No articles found matching your criteria</p>
           </div>
         )}
 
@@ -157,7 +157,7 @@ export default function BlogPage({ countryCode }: BlogPageProps) {
         </div>
 
         {/* Newsletter */}
-        <div className="mt-16 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl p-8 md:p-12 text-center text-white">
+        <div className="mt-16 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-8 md:p-12 text-center text-white">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">Stay Updated</h2>
           <p className="text-white/80 mb-6 max-w-xl mx-auto">
             Get the latest insights on smart city technology delivered to your inbox weekly.
@@ -166,9 +166,9 @@ export default function BlogPage({ countryCode }: BlogPageProps) {
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+              className="flex-1 px-4 py-3 rounded-lg text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-white"
             />
-            <Button className="bg-white text-cyan-600 hover:bg-white/90">
+            <Button className="bg-black text-white hover:bg-gray-900">
               Subscribe
             </Button>
           </div>

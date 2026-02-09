@@ -24,20 +24,20 @@ export default function HelpCenterPage({ countryCode }: HelpCenterPageProps) {
     : faqs
 
   const topicIcons: Record<string, React.ReactNode> = {
-    Orders: <Package className="w-6 h-6" />,
-    Shipping: <Truck className="w-6 h-6" />,
-    Returns: <RotateCcw className="w-6 h-6" />,
+    Orders: <ShoppingBag className="w-6 h-6" />,
+    Shipping: <ArrowRightOnRectangle className="w-6 h-6" />,
+    Returns: <ArrowPath className="w-6 h-6" />,
     Payments: <CreditCard className="w-6 h-6" />,
     Support: <ChatBubble className="w-6 h-6" />,
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white py-20">
+      <div className="bg-gradient-to-br from-cyan-600 to-blue-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold">Help Center</h1>
-          <p className="text-blue-100 mt-4 text-lg max-w-2xl mx-auto">
+          <p className="text-cyan-100 mt-4 text-lg max-w-2xl mx-auto">
             Find answers to common questions or get in touch with our support team
           </p>
 
@@ -63,12 +63,12 @@ export default function HelpCenterPage({ countryCode }: HelpCenterPageProps) {
             <Link
               key={i}
               to={item.href}
-              className="bg-white rounded-xl p-6 flex flex-col items-center gap-3 border border-gray-200 hover:shadow-lg transition-shadow"
+              className="bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col items-center gap-3 hover:border-cyan-500/50 transition-colors"
             >
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+              <div className="w-12 h-12 bg-cyan-500/20 rounded-full flex items-center justify-center text-cyan-400">
                 {item.icon}
               </div>
-              <span className="font-medium text-gray-900">{item.label}</span>
+              <span className="font-medium text-white">{item.label}</span>
             </Link>
           ))}
         </div>
@@ -76,15 +76,15 @@ export default function HelpCenterPage({ countryCode }: HelpCenterPageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Categories Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl p-6 sticky top-24">
-              <h2 className="font-semibold text-gray-900 mb-4">Topics</h2>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 sticky top-24">
+              <h2 className="font-semibold text-white mb-4">Topics</h2>
               <nav className="space-y-1">
                 <button
                   onClick={() => setSelectedCategory(undefined)}
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
                     !selectedCategory
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-50"
+                      ? "bg-cyan-500/20 text-cyan-400"
+                      : "text-gray-400 hover:bg-gray-800"
                   }`}
                 >
                   <BookOpen className="w-5 h-5" />
@@ -96,8 +96,8 @@ export default function HelpCenterPage({ countryCode }: HelpCenterPageProps) {
                     onClick={() => setSelectedCategory(category)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
                       selectedCategory === category
-                        ? "bg-blue-50 text-blue-600"
-                        : "text-gray-600 hover:bg-gray-50"
+                        ? "bg-cyan-500/20 text-cyan-400"
+                        : "text-gray-400 hover:bg-gray-800"
                     }`}
                   >
                     {topicIcons[category] || <BookOpen className="w-5 h-5" />}
@@ -110,8 +110,8 @@ export default function HelpCenterPage({ countryCode }: HelpCenterPageProps) {
 
           {/* FAQ Content */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-xl p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h2 className="text-xl font-semibold text-white mb-6">
                 {selectedCategory
                   ? `${selectedCategory} FAQs`
                   : searchQuery
@@ -122,14 +122,14 @@ export default function HelpCenterPage({ countryCode }: HelpCenterPageProps) {
               {isLoading ? (
                 <div className="space-y-4">
                   {[1, 2, 3, 4, 5].map((i) => (
-                    <div key={i} className="h-16 bg-gray-100 rounded-lg animate-pulse" />
+                    <div key={i} className="h-16 bg-gray-800 rounded-lg animate-pulse" />
                   ))}
                 </div>
               ) : filteredFaqs && filteredFaqs.length > 0 ? (
                 <FAQAccordion faqs={filteredFaqs} />
               ) : (
                 <div className="text-center py-12">
-                  <p className="text-gray-500">No FAQs found.</p>
+                  <p className="text-gray-400">No FAQs found.</p>
                 </div>
               )}
             </div>
@@ -138,7 +138,7 @@ export default function HelpCenterPage({ countryCode }: HelpCenterPageProps) {
 
         {/* Contact Section */}
         <div className="mt-16">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
+          <h2 className="text-2xl font-bold text-white text-center mb-8">
             Still Need Help?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -167,17 +167,17 @@ export default function HelpCenterPage({ countryCode }: HelpCenterPageProps) {
             ].map((item, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-6 border border-gray-200 text-center"
+                className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center"
               >
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mx-auto">
+                <div className="w-12 h-12 bg-cyan-500/20 rounded-full flex items-center justify-center text-cyan-400 mx-auto">
                   {item.icon}
                 </div>
-                <h3 className="font-semibold text-gray-900 mt-4">{item.title}</h3>
-                <p className="text-sm text-gray-500 mt-1">{item.description}</p>
-                <button className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                <h3 className="font-semibold text-white mt-4">{item.title}</h3>
+                <p className="text-sm text-gray-400 mt-1">{item.description}</p>
+                <button className="mt-4 px-6 py-2 bg-cyan-500 text-black rounded-lg font-medium hover:bg-cyan-400 transition-colors">
                   {item.action}
                 </button>
-                <p className="text-xs text-gray-400 mt-2">{item.available}</p>
+                <p className="text-xs text-gray-500 mt-2">{item.available}</p>
               </div>
             ))}
           </div>

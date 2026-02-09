@@ -22,12 +22,12 @@ export default function VendorsPage({ countryCode }: VendorsPageProps) {
   )
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-16">
+      <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-16">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-bold text-center">Marketplace Vendors</h1>
-          <p className="text-blue-100 text-center mt-2 text-lg">
+          <p className="text-cyan-100 text-center mt-2 text-lg">
             Discover trusted sellers and unique products
           </p>
 
@@ -40,7 +40,7 @@ export default function VendorsPage({ countryCode }: VendorsPageProps) {
                 placeholder="Search vendors..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-300"
+                className="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -54,8 +54,8 @@ export default function VendorsPage({ countryCode }: VendorsPageProps) {
             onClick={() => setSelectedCategory(undefined)}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
               !selectedCategory
-                ? "bg-blue-500 text-white"
-                : "bg-white text-gray-600 hover:bg-gray-100"
+                ? "bg-cyan-500 text-black"
+                : "bg-gray-900 text-gray-300 border border-gray-700 hover:bg-gray-800"
             }`}
           >
             All Vendors
@@ -66,8 +66,8 @@ export default function VendorsPage({ countryCode }: VendorsPageProps) {
               onClick={() => setSelectedCategory(category)}
               className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                 selectedCategory === category
-                  ? "bg-blue-500 text-white"
-                  : "bg-white text-gray-600 hover:bg-gray-100"
+                  ? "bg-cyan-500 text-black"
+                  : "bg-gray-900 text-gray-300 border border-gray-700 hover:bg-gray-800"
               }`}
             >
               {category}
@@ -81,13 +81,13 @@ export default function VendorsPage({ countryCode }: VendorsPageProps) {
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
-                className="bg-white rounded-lg border border-gray-200 h-72 animate-pulse"
+                className="bg-gray-900 rounded-lg border border-gray-800 h-72 animate-pulse"
               />
             ))}
           </div>
         ) : filteredVendors && filteredVendors.length > 0 ? (
           <>
-            <p className="text-gray-500 mb-4">
+            <p className="text-gray-400 mb-4">
               {filteredVendors.length} vendor{filteredVendors.length !== 1 ? "s" : ""} found
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -98,7 +98,7 @@ export default function VendorsPage({ countryCode }: VendorsPageProps) {
           </>
         ) : (
           <div className="text-center py-16">
-            <p className="text-gray-500">No vendors found matching your criteria.</p>
+            <p className="text-gray-400">No vendors found matching your criteria.</p>
           </div>
         )}
       </div>

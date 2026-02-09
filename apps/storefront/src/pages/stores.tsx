@@ -67,16 +67,15 @@ export default function StoresPage({ countryCode }: StoresPageProps) {
 
   const handleSearch = (query: string) => {
     console.log("Searching for:", query)
-    // In a real app, this would filter stores by location
   }
 
   return (
-    <div className="py-12">
+    <div className="min-h-screen bg-black py-12">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Find a Store</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-white mb-4">Find a Store</h1>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
             Visit one of our experience centers to see CityOS products in action
           </p>
         </div>
@@ -89,8 +88,8 @@ export default function StoresPage({ countryCode }: StoresPageProps) {
         />
 
         {/* Store Services */}
-        <div className="bg-gray-50 rounded-2xl p-8 md:p-12">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 md:p-12">
+          <h2 className="text-2xl font-bold text-white text-center mb-8">
             Services Available at Our Stores
           </h2>
           <div className="grid md:grid-cols-4 gap-6">
@@ -134,11 +133,11 @@ export default function StoresPage({ countryCode }: StoresPageProps) {
               }
             ].map((service, idx) => (
               <div key={idx} className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600">
+                <div className="w-16 h-16 mx-auto mb-4 bg-cyan-500/20 rounded-full flex items-center justify-center text-cyan-400">
                   {service.icon}
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{service.title}</h3>
-                <p className="text-sm text-gray-600">{service.description}</p>
+                <h3 className="font-semibold text-white mb-2">{service.title}</h3>
+                <p className="text-sm text-gray-400">{service.description}</p>
               </div>
             ))}
           </div>

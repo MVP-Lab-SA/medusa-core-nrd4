@@ -20,13 +20,13 @@ export default function TrackOrderPage({ countryCode, initialOrderId }: TrackOrd
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white py-16">
+      <div className="bg-gradient-to-br from-cyan-600 to-blue-600 text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <ShoppingBag className="w-16 h-16 mx-auto mb-4 opacity-80" />
           <h1 className="text-4xl font-bold">Track Your Order</h1>
-          <p className="text-orange-100 mt-2 text-lg">
+          <p className="text-cyan-100 mt-2 text-lg">
             Enter your order ID to see real-time delivery status
           </p>
 
@@ -40,12 +40,12 @@ export default function TrackOrderPage({ countryCode, initialOrderId }: TrackOrd
                   placeholder="Enter order ID or tracking number..."
                   value={orderId}
                   onChange={(e) => setOrderId(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-300"
+                  className="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
               </div>
               <button
                 type="submit"
-                className="px-6 py-3 bg-white text-orange-600 rounded-lg font-medium hover:bg-orange-50 transition-colors"
+                className="px-6 py-3 bg-cyan-500 text-black rounded-lg font-medium hover:bg-cyan-400 transition-colors"
               >
                 Track
               </button>
@@ -57,19 +57,19 @@ export default function TrackOrderPage({ countryCode, initialOrderId }: TrackOrd
       <div className="container mx-auto px-4 py-12">
         {isLoading && (
           <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-lg h-64 animate-pulse" />
+            <div className="bg-gray-900 border border-gray-800 rounded-lg h-64 animate-pulse" />
           </div>
         )}
 
         {error && (
           <div className="max-w-2xl mx-auto text-center py-12">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
-              <ShoppingBag className="w-8 h-8 text-red-500" />
+            <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto">
+              <ShoppingBag className="w-8 h-8 text-red-400" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mt-4">
+            <h2 className="text-xl font-semibold text-white mt-4">
               Order Not Found
             </h2>
-            <p className="text-gray-500 mt-2">
+            <p className="text-gray-400 mt-2">
               We couldn't find an order with that ID. Please check and try again.
             </p>
           </div>
@@ -82,12 +82,12 @@ export default function TrackOrderPage({ countryCode, initialOrderId }: TrackOrd
 
             {/* Live Map Placeholder */}
             {delivery.status === "in_transit" && delivery.driver && (
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-white mb-4">
                   Live Location
                 </h3>
-                <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-500">
+                <div className="aspect-video bg-gray-800 rounded-lg flex items-center justify-center">
+                  <p className="text-gray-400">
                     Live map tracking would be displayed here
                   </p>
                 </div>
@@ -101,21 +101,21 @@ export default function TrackOrderPage({ countryCode, initialOrderId }: TrackOrd
 
         {!searchedId && (
           <div className="max-w-2xl mx-auto text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
-              <MagnifyingGlass className="w-8 h-8 text-gray-400" />
+            <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto">
+              <MagnifyingGlass className="w-8 h-8 text-gray-500" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mt-4">
+            <h2 className="text-xl font-semibold text-white mt-4">
               Enter Your Order ID
             </h2>
-            <p className="text-gray-500 mt-2">
+            <p className="text-gray-400 mt-2">
               You can find your order ID in your confirmation email or order history.
             </p>
           </div>
         )}
 
         {/* Help Section */}
-        <div className="max-w-3xl mx-auto mt-12 pt-12 border-t border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">
+        <div className="max-w-3xl mx-auto mt-12 pt-12 border-t border-gray-800">
+          <h2 className="text-xl font-semibold text-white mb-6 text-center">
             Need Help?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -136,10 +136,10 @@ export default function TrackOrderPage({ countryCode, initialOrderId }: TrackOrd
                 action: "Start Return",
               },
             ].map((item, i) => (
-              <div key={i} className="bg-white rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900">{item.title}</h3>
-                <p className="text-sm text-gray-500 mt-1">{item.description}</p>
-                <button className="text-orange-600 font-medium mt-3 hover:underline">
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+                <h3 className="font-semibold text-white">{item.title}</h3>
+                <p className="text-sm text-gray-400 mt-1">{item.description}</p>
+                <button className="text-cyan-400 font-medium mt-3 hover:text-cyan-300 transition-colors">
                   {item.action}
                 </button>
               </div>

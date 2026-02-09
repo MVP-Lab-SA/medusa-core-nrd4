@@ -17,7 +17,6 @@ export default function SubscriptionsPage({ countryCode }: SubscriptionsPageProp
 
   const handleSubscribe = async (planId: string) => {
     if (!customer) {
-      // Redirect to login
       window.location.href = `/${countryCode}/account/login`
       return
     }
@@ -34,9 +33,9 @@ export default function SubscriptionsPage({ countryCode }: SubscriptionsPageProp
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-purple-600 to-indigo-700 text-white py-20">
+      <div className="bg-gradient-to-br from-purple-600 to-cyan-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold">Subscription Plans</h1>
           <p className="text-purple-100 mt-4 text-lg max-w-2xl mx-auto">
@@ -50,7 +49,7 @@ export default function SubscriptionsPage({ countryCode }: SubscriptionsPageProp
         {/* Active Subscriptions */}
         {subscriptions && subscriptions.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Subscriptions</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">Your Subscriptions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {subscriptions.map((subscription) => (
                 <SubscriptionStatusCard
@@ -66,15 +65,15 @@ export default function SubscriptionsPage({ countryCode }: SubscriptionsPageProp
 
         {/* Available Plans */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Available Plans</h2>
-          <p className="text-gray-500 mb-8">Choose the plan that works best for you</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Available Plans</h2>
+          <p className="text-gray-400 mb-8">Choose the plan that works best for you</p>
 
           {plansLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="bg-white rounded-xl h-96 animate-pulse"
+                  className="bg-gray-900 border border-gray-800 rounded-xl h-96 animate-pulse"
                 />
               ))}
             </div>
@@ -98,7 +97,7 @@ export default function SubscriptionsPage({ countryCode }: SubscriptionsPageProp
 
         {/* Benefits Section */}
         <div className="mt-20">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-12">
+          <h2 className="text-2xl font-bold text-white text-center mb-12">
             Why Subscribe?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -129,12 +128,12 @@ export default function SubscriptionsPage({ countryCode }: SubscriptionsPageProp
               },
             ].map((benefit, i) => (
               <div key={i} className="flex gap-4">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Check className="w-5 h-5 text-green-600" />
+                <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Check className="w-5 h-5 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">{benefit.title}</h3>
-                  <p className="text-sm text-gray-500 mt-1">{benefit.description}</p>
+                  <h3 className="font-semibold text-white">{benefit.title}</h3>
+                  <p className="text-sm text-gray-400 mt-1">{benefit.description}</p>
                 </div>
               </div>
             ))}
@@ -143,7 +142,7 @@ export default function SubscriptionsPage({ countryCode }: SubscriptionsPageProp
 
         {/* FAQ */}
         <div className="mt-20">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
+          <h2 className="text-2xl font-bold text-white text-center mb-8">
             Frequently Asked Questions
           </h2>
           <div className="max-w-2xl mx-auto space-y-4">
@@ -165,9 +164,9 @@ export default function SubscriptionsPage({ countryCode }: SubscriptionsPageProp
                 a: "We accept all major credit cards, PayPal, and Apple Pay for subscription payments.",
               },
             ].map((item, i) => (
-              <div key={i} className="bg-white rounded-lg p-6">
-                <h4 className="font-semibold text-gray-900">{item.q}</h4>
-                <p className="text-gray-600 mt-2">{item.a}</p>
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+                <h4 className="font-semibold text-white">{item.q}</h4>
+                <p className="text-gray-400 mt-2">{item.a}</p>
               </div>
             ))}
           </div>

@@ -29,12 +29,12 @@ export default function BlogListPage({ countryCode, initialCategory }: BlogListP
     : posts
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-20">
+      <div className="bg-gradient-to-br from-cyan-600 to-blue-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold">Blog</h1>
-          <p className="text-gray-300 mt-4 text-lg max-w-2xl mx-auto">
+          <p className="text-cyan-100 mt-4 text-lg max-w-2xl mx-auto">
             Stories, tips, and inspiration for your lifestyle
           </p>
 
@@ -47,7 +47,7 @@ export default function BlogListPage({ countryCode, initialCategory }: BlogListP
                 placeholder="Search articles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-gray-300"
+                className="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -62,8 +62,8 @@ export default function BlogListPage({ countryCode, initialCategory }: BlogListP
               onClick={() => setSelectedCategory(undefined)}
               className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                 !selectedCategory
-                  ? "bg-gray-900 text-white"
-                  : "bg-white text-gray-600 hover:bg-gray-100"
+                  ? "bg-cyan-500 text-black"
+                  : "bg-gray-900 text-gray-300 border border-gray-700 hover:bg-gray-800"
               }`}
             >
               All Posts
@@ -74,8 +74,8 @@ export default function BlogListPage({ countryCode, initialCategory }: BlogListP
                 onClick={() => setSelectedCategory(category.slug)}
                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                   selectedCategory === category.slug
-                    ? "bg-gray-900 text-white"
-                    : "bg-white text-gray-600 hover:bg-gray-100"
+                    ? "bg-cyan-500 text-black"
+                    : "bg-gray-900 text-gray-300 border border-gray-700 hover:bg-gray-800"
                 }`}
               >
                 {category.name} ({category.postCount})
@@ -88,12 +88,12 @@ export default function BlogListPage({ countryCode, initialCategory }: BlogListP
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white rounded-lg h-96 animate-pulse" />
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-lg h-96 animate-pulse" />
             ))}
           </div>
         ) : filteredPosts.length > 0 ? (
           <>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-400 mb-6">
               {filteredPosts.length} article{filteredPosts.length !== 1 ? "s" : ""}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -104,25 +104,25 @@ export default function BlogListPage({ countryCode, initialCategory }: BlogListP
           </>
         ) : (
           <div className="text-center py-16">
-            <p className="text-gray-500">No articles found.</p>
+            <p className="text-gray-400">No articles found.</p>
           </div>
         )}
 
         {/* Newsletter CTA */}
-        <div className="mt-16 bg-gray-900 rounded-2xl p-8 md:p-12 text-center text-white">
+        <div className="mt-16 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-8 md:p-12 text-center text-white">
           <h2 className="text-2xl md:text-3xl font-bold">Stay Updated</h2>
-          <p className="text-gray-300 mt-2 max-w-lg mx-auto">
+          <p className="text-cyan-100 mt-2 max-w-lg mx-auto">
             Subscribe to our newsletter for the latest articles, tips, and exclusive offers.
           </p>
           <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-6">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900"
+              className="flex-1 px-4 py-3 rounded-lg bg-white text-gray-900"
             />
             <button
               type="submit"
-              className="px-6 py-3 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+              className="px-6 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-900 transition-colors"
             >
               Subscribe
             </button>
