@@ -176,15 +176,133 @@ export const Navbar = () => {
                   </NavigationMenu.Content>
                 </NavigationMenu.Item>
 
-                {/* Business */}
+                {/* Programs dropdown - New commerce models */}
                 <NavigationMenu.Item className="h-full flex items-center">
-                  <Link
-                    to="/$countryCode/business"
-                    params={{ countryCode }}
-                    className="text-city-gray hover:text-city-cyan transition-colors font-medium"
-                  >
-                    Business
-                  </Link>
+                  <NavigationMenu.Trigger className="text-city-gray hover:text-city-cyan h-full flex items-center gap-1 select-none transition-colors font-medium">
+                    Programs
+                  </NavigationMenu.Trigger>
+                  <NavigationMenu.Content className="content-container py-12">
+                    <div className="grid grid-cols-4 gap-12">
+                      <div className="flex flex-col gap-6">
+                        <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                          Try & Buy
+                        </h3>
+                        <div className="flex flex-col gap-3">
+                          <NavigationMenu.Link asChild>
+                            <Link
+                              to="/$countryCode/rentals"
+                              params={{ countryCode }}
+                              className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
+                            >
+                              Device Rentals
+                            </Link>
+                          </NavigationMenu.Link>
+                          <NavigationMenu.Link asChild>
+                            <Link
+                              to="/$countryCode/try-before-you-buy"
+                              params={{ countryCode }}
+                              className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
+                            >
+                              Try Before You Buy
+                            </Link>
+                          </NavigationMenu.Link>
+                          <NavigationMenu.Link asChild>
+                            <Link
+                              to="/$countryCode/preorders"
+                              params={{ countryCode }}
+                              className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
+                            >
+                              Pre-Orders
+                            </Link>
+                          </NavigationMenu.Link>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-6">
+                        <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                          Membership
+                        </h3>
+                        <div className="flex flex-col gap-3">
+                          <NavigationMenu.Link asChild>
+                            <Link
+                              to="/$countryCode/memberships"
+                              params={{ countryCode }}
+                              className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
+                            >
+                              Premium Memberships
+                            </Link>
+                          </NavigationMenu.Link>
+                          <NavigationMenu.Link asChild>
+                            <Link
+                              to="/$countryCode/auctions"
+                              params={{ countryCode }}
+                              className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
+                            >
+                              Auctions
+                            </Link>
+                          </NavigationMenu.Link>
+                          <NavigationMenu.Link asChild>
+                            <Link
+                              to="/$countryCode/campaigns"
+                              params={{ countryCode }}
+                              className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
+                            >
+                              Crowdfunding
+                            </Link>
+                          </NavigationMenu.Link>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-6">
+                        <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                          Trade & Sell
+                        </h3>
+                        <div className="flex flex-col gap-3">
+                          <NavigationMenu.Link asChild>
+                            <Link
+                              to="/$countryCode/trade-in"
+                              params={{ countryCode }}
+                              className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
+                            >
+                              Trade-In Program
+                            </Link>
+                          </NavigationMenu.Link>
+                          <NavigationMenu.Link asChild>
+                            <Link
+                              to="/$countryCode/consignment"
+                              params={{ countryCode }}
+                              className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
+                            >
+                              Consignment
+                            </Link>
+                          </NavigationMenu.Link>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-6">
+                        <h3 className="text-city-cyan text-sm font-semibold uppercase tracking-widest">
+                          Business
+                        </h3>
+                        <div className="flex flex-col gap-3">
+                          <NavigationMenu.Link asChild>
+                            <Link
+                              to="/$countryCode/business"
+                              params={{ countryCode }}
+                              className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
+                            >
+                              B2B Portal
+                            </Link>
+                          </NavigationMenu.Link>
+                          <NavigationMenu.Link asChild>
+                            <Link
+                              to="/$countryCode/business/register"
+                              params={{ countryCode }}
+                              className="text-city-gray hover:text-city-cyan text-base font-medium transition-colors"
+                            >
+                              Register Business
+                            </Link>
+                          </NavigationMenu.Link>
+                        </div>
+                      </div>
+                    </div>
+                  </NavigationMenu.Content>
                 </NavigationMenu.Item>
 
                 {/* Events & Venues dropdown */}
@@ -473,6 +591,85 @@ export const Navbar = () => {
                         className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
                       >
                         Service Providers
+                      </Link>
+                    </DrawerClose>
+                  </div>
+
+                  {/* Programs Section */}
+                  <div className="px-6 py-4 text-city-cyan text-sm font-semibold uppercase tracking-widest mt-4">
+                    Programs
+                  </div>
+                  <div className="flex flex-col">
+                    <DrawerClose asChild>
+                      <Link
+                        to="/$countryCode/rentals"
+                        params={{ countryCode }}
+                        className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
+                      >
+                        Device Rentals
+                      </Link>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Link
+                        to="/$countryCode/try-before-you-buy"
+                        params={{ countryCode }}
+                        className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
+                      >
+                        Try Before You Buy
+                      </Link>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Link
+                        to="/$countryCode/preorders"
+                        params={{ countryCode }}
+                        className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
+                      >
+                        Pre-Orders
+                      </Link>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Link
+                        to="/$countryCode/memberships"
+                        params={{ countryCode }}
+                        className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
+                      >
+                        Memberships
+                      </Link>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Link
+                        to="/$countryCode/auctions"
+                        params={{ countryCode }}
+                        className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
+                      >
+                        Auctions
+                      </Link>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Link
+                        to="/$countryCode/campaigns"
+                        params={{ countryCode }}
+                        className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
+                      >
+                        Crowdfunding
+                      </Link>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Link
+                        to="/$countryCode/trade-in"
+                        params={{ countryCode }}
+                        className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
+                      >
+                        Trade-In
+                      </Link>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Link
+                        to="/$countryCode/consignment"
+                        params={{ countryCode }}
+                        className="px-10 py-3 text-city-gray hover:bg-city-slate/50 hover:text-city-cyan transition-colors"
+                      >
+                        Consignment
                       </Link>
                     </DrawerClose>
                   </div>
