@@ -9,10 +9,10 @@ interface WalletCardProps {
 
 export function WalletCard({ wallet, onTopUp }: WalletCardProps) {
   return (
-    <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+    <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl p-6 text-white">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-blue-100 text-sm">Available Balance</p>
+          <p className="text-cyan-100 text-sm">Available Balance</p>
           <p className="text-3xl font-bold mt-1">
             {wallet.currency} {wallet.balance.toFixed(2)}
           </p>
@@ -40,33 +40,33 @@ interface WalletTransactionsProps {
 
 export function WalletTransactions({ transactions }: WalletTransactionsProps) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="font-semibold text-gray-900">Recent Transactions</h3>
+    <div className="bg-gray-900 rounded-lg border border-gray-800">
+      <div className="p-4 border-b border-gray-800">
+        <h3 className="font-semibold text-white">Recent Transactions</h3>
       </div>
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-gray-800">
         {transactions.map((tx) => (
           <div key={tx.id} className="p-4 flex items-center gap-3">
             <div
               className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                tx.type === "credit" ? "bg-green-100" : "bg-red-100"
+                tx.type === "credit" ? "bg-emerald-500/20" : "bg-red-500/20"
               }`}
             >
               {tx.type === "credit" ? (
-                <ArrowDownMini className="w-5 h-5 text-green-600" />
+                <ArrowDownMini className="w-5 h-5 text-emerald-400" />
               ) : (
-                <ArrowUpRightMini className="w-5 h-5 text-red-600" />
+                <ArrowUpRightMini className="w-5 h-5 text-red-400" />
               )}
             </div>
             <div className="flex-1">
-              <p className="font-medium text-gray-900">{tx.description}</p>
+              <p className="font-medium text-white">{tx.description}</p>
               <p className="text-sm text-gray-500">
                 {new Date(tx.createdAt).toLocaleDateString()}
               </p>
             </div>
             <span
               className={`font-semibold ${
-                tx.type === "credit" ? "text-green-600" : "text-red-600"
+                tx.type === "credit" ? "text-emerald-400" : "text-red-400"
               }`}
             >
               {tx.type === "credit" ? "+" : "-"}
@@ -93,7 +93,7 @@ export function PaymentMethodCard({ method, onRemove, onSetDefault }: PaymentMet
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 flex items-center gap-4">
+    <div className="bg-gray-900 rounded-lg border border-gray-800 p-4 flex items-center gap-4">
       <div className="w-12 h-8 flex items-center justify-center">
         {method.brand && brandLogos[method.brand] ? (
           <img
@@ -102,11 +102,11 @@ export function PaymentMethodCard({ method, onRemove, onSetDefault }: PaymentMet
             className="max-w-full max-h-full object-contain"
           />
         ) : (
-          <CreditCard className="w-8 h-8 text-gray-400" />
+          <CreditCard className="w-8 h-8 text-gray-500" />
         )}
       </div>
       <div className="flex-1">
-        <p className="font-medium text-gray-900">
+        <p className="font-medium text-white">
           {method.brand ? method.brand.charAt(0).toUpperCase() + method.brand.slice(1) : method.type}{" "}
           ****{method.last4}
         </p>
@@ -117,7 +117,7 @@ export function PaymentMethodCard({ method, onRemove, onSetDefault }: PaymentMet
         )}
       </div>
       {method.isDefault && (
-        <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded">
+        <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-xs font-medium rounded">
           Default
         </span>
       )}
@@ -125,7 +125,7 @@ export function PaymentMethodCard({ method, onRemove, onSetDefault }: PaymentMet
         {!method.isDefault && onSetDefault && (
           <button
             onClick={onSetDefault}
-            className="text-sm text-blue-600 hover:underline"
+            className="text-sm text-cyan-400 hover:underline"
           >
             Set Default
           </button>
@@ -133,7 +133,7 @@ export function PaymentMethodCard({ method, onRemove, onSetDefault }: PaymentMet
         {onRemove && (
           <button
             onClick={onRemove}
-            className="text-sm text-red-600 hover:underline"
+            className="text-sm text-red-400 hover:underline"
           >
             Remove
           </button>
@@ -210,18 +210,18 @@ interface LoyaltyTransactionsProps {
 
 export function LoyaltyTransactions({ transactions }: LoyaltyTransactionsProps) {
   const typeColors = {
-    earn: "text-green-600 bg-green-100",
-    redeem: "text-red-600 bg-red-100",
-    expire: "text-gray-600 bg-gray-100",
-    bonus: "text-purple-600 bg-purple-100",
+    earn: "text-emerald-400 bg-emerald-500/20",
+    redeem: "text-red-400 bg-red-500/20",
+    expire: "text-gray-400 bg-gray-500/20",
+    bonus: "text-purple-400 bg-purple-500/20",
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="font-semibold text-gray-900">Points History</h3>
+    <div className="bg-gray-900 rounded-lg border border-gray-800">
+      <div className="p-4 border-b border-gray-800">
+        <h3 className="font-semibold text-white">Points History</h3>
       </div>
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-gray-800">
         {transactions.map((tx) => (
           <div key={tx.id} className="p-4 flex items-center gap-3">
             <div
@@ -232,14 +232,14 @@ export function LoyaltyTransactions({ transactions }: LoyaltyTransactionsProps) 
               {tx.type}
             </div>
             <div className="flex-1">
-              <p className="text-gray-900">{tx.description}</p>
+              <p className="text-white">{tx.description}</p>
               <p className="text-sm text-gray-500">
                 {new Date(tx.createdAt).toLocaleDateString()}
               </p>
             </div>
             <span
               className={`font-semibold ${
-                tx.points > 0 ? "text-green-600" : "text-red-600"
+                tx.points > 0 ? "text-emerald-400" : "text-red-400"
               }`}
             >
               {tx.points > 0 ? "+" : ""}
@@ -275,21 +275,21 @@ export function InstallmentCard({ plan }: InstallmentCardProps) {
   const progress = (paidCount / plan.numberOfInstallments) * 100
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4">
+    <div className="bg-gray-900 rounded-lg border border-gray-800 p-4">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm text-gray-500">Order #{plan.orderId.slice(-8)}</p>
-          <p className="text-lg font-semibold text-gray-900 mt-0.5">
+          <p className="text-lg font-semibold text-white mt-0.5">
             {plan.currency} {plan.totalAmount.toFixed(2)}
           </p>
         </div>
         <span
           className={`px-2 py-0.5 rounded-full text-xs font-medium ${
             plan.status === "completed"
-              ? "bg-green-100 text-green-700"
+              ? "bg-emerald-500/20 text-emerald-400"
               : plan.status === "defaulted"
-              ? "bg-red-100 text-red-700"
-              : "bg-blue-100 text-blue-700"
+              ? "bg-red-500/20 text-red-400"
+              : "bg-cyan-500/20 text-cyan-400"
           }`}
         >
           {plan.status}
@@ -303,9 +303,9 @@ export function InstallmentCard({ plan }: InstallmentCardProps) {
             {paidCount} of {plan.numberOfInstallments} payments made
           </span>
         </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
           <div
-            className="h-full bg-green-500 rounded-full transition-all"
+            className="h-full bg-emerald-500 rounded-full transition-all"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -313,7 +313,7 @@ export function InstallmentCard({ plan }: InstallmentCardProps) {
 
       {/* Next Payment */}
       {plan.status === "active" && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
+        <div className="mt-4 pt-4 border-t border-gray-800">
           {plan.installments
             .filter((i) => i.status !== "paid")
             .slice(0, 1)
@@ -321,7 +321,7 @@ export function InstallmentCard({ plan }: InstallmentCardProps) {
               <div key={installment.number} className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-500">Next Payment</p>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-white">
                     {plan.currency} {installment.amount.toFixed(2)}
                   </p>
                 </div>
@@ -329,7 +329,7 @@ export function InstallmentCard({ plan }: InstallmentCardProps) {
                   <p className="text-sm text-gray-500">Due Date</p>
                   <p
                     className={`font-medium ${
-                      installment.status === "overdue" ? "text-red-600" : "text-gray-900"
+                      installment.status === "overdue" ? "text-red-400" : "text-white"
                     }`}
                   >
                     {new Date(installment.dueDate).toLocaleDateString()}

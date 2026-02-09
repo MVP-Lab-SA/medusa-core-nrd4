@@ -10,9 +10,9 @@ interface CredentialCardProps {
 
 export function CredentialCard({ credential, onVerify }: CredentialCardProps) {
   const statusColors = {
-    valid: "bg-green-100 text-green-700",
-    expired: "bg-gray-100 text-gray-700",
-    revoked: "bg-red-100 text-red-700",
+    valid: "bg-emerald-500/20 text-emerald-400",
+    expired: "bg-gray-500/20 text-gray-400",
+    revoked: "bg-red-500/20 text-red-400",
   }
 
   const statusIcons = {
@@ -31,14 +31,14 @@ export function CredentialCard({ credential, onVerify }: CredentialCardProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4">
+    <div className="bg-gray-900 rounded-lg border border-gray-800 p-4">
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-          <LockClosedSolid className="w-5 h-5 text-blue-600" />
+        <div className="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+          <LockClosedSolid className="w-5 h-5 text-cyan-400" />
         </div>
         <div className="flex-1">
           <div className="flex items-center justify-between">
-            <h4 className="font-medium text-gray-900">
+            <h4 className="font-medium text-white">
               {typeLabels[credential.type] || credential.type}
             </h4>
             <span
@@ -62,13 +62,13 @@ export function CredentialCard({ credential, onVerify }: CredentialCardProps) {
 
       {/* Claims */}
       {Object.keys(credential.claims).length > 0 && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
+        <div className="mt-4 pt-4 border-t border-gray-800">
           <p className="text-xs font-medium text-gray-500 mb-2">Verified Claims</p>
           <div className="flex flex-wrap gap-2">
             {Object.entries(credential.claims).map(([key, value]) => (
               <span
                 key={key}
-                className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded"
               >
                 {key}: {String(value)}
               </span>
@@ -80,7 +80,7 @@ export function CredentialCard({ credential, onVerify }: CredentialCardProps) {
       {onVerify && credential.status === "valid" && (
         <button
           onClick={onVerify}
-          className="mt-4 w-full py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+          className="mt-4 w-full py-2 text-sm font-medium text-cyan-400 bg-cyan-500/10 rounded-lg hover:bg-cyan-500/20 transition-colors"
         >
           Verify Credential
         </button>
@@ -98,10 +98,10 @@ interface KYCStatusCardProps {
 
 export function KYCStatusCard({ kyc, onUploadDocument, onSubmit }: KYCStatusCardProps) {
   const statusColors = {
-    pending: "bg-yellow-100 text-yellow-700",
-    in_review: "bg-blue-100 text-blue-700",
-    approved: "bg-green-100 text-green-700",
-    rejected: "bg-red-100 text-red-700",
+    pending: "bg-yellow-500/20 text-yellow-400",
+    in_review: "bg-cyan-500/20 text-cyan-400",
+    approved: "bg-emerald-500/20 text-emerald-400",
+    rejected: "bg-red-500/20 text-red-400",
   }
 
   const levelLabels = {
@@ -128,10 +128,10 @@ export function KYCStatusCard({ kyc, onUploadDocument, onSubmit }: KYCStatusCard
   const required = requiredDocs[kyc.level]
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
+    <div className="bg-gray-900 rounded-lg border border-gray-800 p-6">
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">KYC Verification</h3>
+          <h3 className="text-lg font-semibold text-white">KYC Verification</h3>
           <p className="text-sm text-gray-500 mt-1">{levelLabels[kyc.level]}</p>
         </div>
         <span
@@ -145,7 +145,7 @@ export function KYCStatusCard({ kyc, onUploadDocument, onSubmit }: KYCStatusCard
 
       {/* Required Documents */}
       <div className="mt-6">
-        <h4 className="text-sm font-medium text-gray-700 mb-3">Required Documents</h4>
+        <h4 className="text-sm font-medium text-gray-400 mb-3">Required Documents</h4>
         <div className="space-y-3">
           {required.map((docType) => {
             const uploaded = kyc.documents.find((d) => d.type === docType)
@@ -154,22 +154,22 @@ export function KYCStatusCard({ kyc, onUploadDocument, onSubmit }: KYCStatusCard
             return (
               <div
                 key={docType}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                className="flex items-center justify-between p-3 bg-gray-800 rounded-lg"
               >
                 <div className="flex items-center gap-3">
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      isUploaded ? "bg-green-100" : "bg-gray-200"
+                      isUploaded ? "bg-emerald-500/20" : "bg-gray-700"
                     }`}
                   >
                     {isUploaded ? (
-                      <Check className="w-4 h-4 text-green-600" />
+                      <Check className="w-4 h-4 text-emerald-400" />
                     ) : (
                       <DocumentText className="w-4 h-4 text-gray-500" />
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{docLabels[docType]}</p>
+                    <p className="font-medium text-white">{docLabels[docType]}</p>
                     {uploaded && (
                       <p className="text-xs text-gray-500">
                         Uploaded {new Date(uploaded.uploadedAt).toLocaleDateString()}
@@ -180,7 +180,7 @@ export function KYCStatusCard({ kyc, onUploadDocument, onSubmit }: KYCStatusCard
                 {!isUploaded && onUploadDocument && (
                   <button
                     onClick={() => onUploadDocument(docType)}
-                    className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                    className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-cyan-400 bg-cyan-500/10 rounded-lg hover:bg-cyan-500/20 transition-colors"
                   >
                     <ArrowUpTray className="w-4 h-4" />
                     Upload
@@ -190,10 +190,10 @@ export function KYCStatusCard({ kyc, onUploadDocument, onSubmit }: KYCStatusCard
                   <span
                     className={`px-2 py-0.5 rounded text-xs font-medium ${
                       uploaded.status === "verified"
-                        ? "bg-green-100 text-green-700"
+                        ? "bg-emerald-500/20 text-emerald-400"
                         : uploaded.status === "rejected"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-yellow-100 text-yellow-700"
+                        ? "bg-red-500/20 text-red-400"
+                        : "bg-yellow-500/20 text-yellow-400"
                     }`}
                   >
                     {uploaded.status}
@@ -207,9 +207,9 @@ export function KYCStatusCard({ kyc, onUploadDocument, onSubmit }: KYCStatusCard
 
       {/* Rejection Reason */}
       {kyc.status === "rejected" && kyc.rejectionReason && (
-        <div className="mt-4 p-3 bg-red-50 rounded-lg">
-          <p className="text-sm font-medium text-red-700">Rejection Reason:</p>
-          <p className="text-sm text-red-600 mt-1">{kyc.rejectionReason}</p>
+        <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+          <p className="text-sm font-medium text-red-400">Rejection Reason:</p>
+          <p className="text-sm text-red-300 mt-1">{kyc.rejectionReason}</p>
         </div>
       )}
 
@@ -219,7 +219,7 @@ export function KYCStatusCard({ kyc, onUploadDocument, onSubmit }: KYCStatusCard
         onSubmit && (
           <button
             onClick={onSubmit}
-            className="mt-6 w-full py-2.5 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
+            className="mt-6 w-full py-2.5 text-sm font-medium text-black bg-cyan-500 rounded-lg hover:bg-cyan-400 transition-colors"
           >
             Submit for Review
           </button>
@@ -255,14 +255,14 @@ export function ConsentManager({ consents, onToggle }: ConsentManagerProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="font-semibold text-gray-900">Privacy Preferences</h3>
+    <div className="bg-gray-900 rounded-lg border border-gray-800">
+      <div className="p-4 border-b border-gray-800">
+        <h3 className="font-semibold text-white">Privacy Preferences</h3>
         <p className="text-sm text-gray-500 mt-1">
           Manage how we use your data
         </p>
       </div>
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-gray-800">
         {consents.map((consent) => {
           const info = purposeLabels[consent.purpose] || {
             label: consent.purpose,
@@ -272,7 +272,7 @@ export function ConsentManager({ consents, onToggle }: ConsentManagerProps) {
           return (
             <div key={consent.id} className="p-4 flex items-center justify-between">
               <div className="flex-1">
-                <p className="font-medium text-gray-900">{info.label}</p>
+                <p className="font-medium text-white">{info.label}</p>
                 <p className="text-sm text-gray-500 mt-0.5">{info.description}</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -282,7 +282,7 @@ export function ConsentManager({ consents, onToggle }: ConsentManagerProps) {
                   onChange={(e) => onToggle(consent.purpose, e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-500/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-500 peer-checked:after:bg-white"></div>
               </label>
             </div>
           )
@@ -315,28 +315,28 @@ export function AgeGate({ minimumAge, onVerify, onDecline }: AgeGateProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+      <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 max-w-md w-full mx-4">
         <div className="text-center">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-            <User className="w-8 h-8 text-blue-600" />
+          <div className="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto">
+            <User className="w-8 h-8 text-cyan-400" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900 mt-4">
+          <h2 className="text-xl font-semibold text-white mt-4">
             Age Verification Required
           </h2>
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-400 mt-2">
             You must be at least {minimumAge} years old to access this content.
           </p>
         </div>
 
         <div className="mt-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-400 mb-2">
             Select your birth year
           </label>
           <select
             value={birthYear}
             onChange={(e) => setBirthYear(e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
           >
             <option value="">Select year</option>
             {years.map((year) => (
@@ -350,20 +350,20 @@ export function AgeGate({ minimumAge, onVerify, onDecline }: AgeGateProps) {
         <div className="mt-6 flex gap-3">
           <button
             onClick={onDecline}
-            className="flex-1 py-2.5 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+            className="flex-1 py-2.5 text-gray-300 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-colors font-medium"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={!birthYear}
-            className="flex-1 py-2.5 text-white bg-blue-500 rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
+            className="flex-1 py-2.5 text-black bg-cyan-500 rounded-lg hover:bg-cyan-400 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors font-medium"
           >
             Verify
           </button>
         </div>
 
-        <p className="text-xs text-gray-400 text-center mt-4">
+        <p className="text-xs text-gray-600 text-center mt-4">
           By clicking Verify, you confirm that you are {minimumAge} years or older.
         </p>
       </div>
