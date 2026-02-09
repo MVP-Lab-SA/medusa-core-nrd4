@@ -101,6 +101,7 @@ import { Route as CountryCodeAccountWalletRouteImport } from './routes/$countryC
 import { Route as CountryCodeAccountTransactionsRouteImport } from './routes/$countryCode/account/transactions'
 import { Route as CountryCodeAccountTaxCertificatesRouteImport } from './routes/$countryCode/account/tax-certificates'
 import { Route as CountryCodeAccountSubscriptionsRouteImport } from './routes/$countryCode/account/subscriptions'
+import { Route as CountryCodeAccountStoreCreditsRouteImport } from './routes/$countryCode/account/store-credits'
 import { Route as CountryCodeAccountStatementsRouteImport } from './routes/$countryCode/account/statements'
 import { Route as CountryCodeAccountSettingsRouteImport } from './routes/$countryCode/account/settings'
 import { Route as CountryCodeAccountReviewsRouteImport } from './routes/$countryCode/account/reviews'
@@ -630,6 +631,12 @@ const CountryCodeAccountSubscriptionsRoute =
     path: '/account/subscriptions',
     getParentRoute: () => CountryCodeRoute,
   } as any)
+const CountryCodeAccountStoreCreditsRoute =
+  CountryCodeAccountStoreCreditsRouteImport.update({
+    id: '/account/store-credits',
+    path: '/account/store-credits',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
 const CountryCodeAccountStatementsRoute =
   CountryCodeAccountStatementsRouteImport.update({
     id: '/account/statements',
@@ -846,6 +853,7 @@ export interface FileRoutesByFullPath {
   '/$countryCode/account/reviews': typeof CountryCodeAccountReviewsRoute
   '/$countryCode/account/settings': typeof CountryCodeAccountSettingsRoute
   '/$countryCode/account/statements': typeof CountryCodeAccountStatementsRoute
+  '/$countryCode/account/store-credits': typeof CountryCodeAccountStoreCreditsRoute
   '/$countryCode/account/subscriptions': typeof CountryCodeAccountSubscriptionsRouteWithChildren
   '/$countryCode/account/tax-certificates': typeof CountryCodeAccountTaxCertificatesRoute
   '/$countryCode/account/transactions': typeof CountryCodeAccountTransactionsRoute
@@ -964,6 +972,7 @@ export interface FileRoutesByTo {
   '/$countryCode/account/reviews': typeof CountryCodeAccountReviewsRoute
   '/$countryCode/account/settings': typeof CountryCodeAccountSettingsRoute
   '/$countryCode/account/statements': typeof CountryCodeAccountStatementsRoute
+  '/$countryCode/account/store-credits': typeof CountryCodeAccountStoreCreditsRoute
   '/$countryCode/account/subscriptions': typeof CountryCodeAccountSubscriptionsRouteWithChildren
   '/$countryCode/account/tax-certificates': typeof CountryCodeAccountTaxCertificatesRoute
   '/$countryCode/account/transactions': typeof CountryCodeAccountTransactionsRoute
@@ -1086,6 +1095,7 @@ export interface FileRoutesById {
   '/$countryCode/account/reviews': typeof CountryCodeAccountReviewsRoute
   '/$countryCode/account/settings': typeof CountryCodeAccountSettingsRoute
   '/$countryCode/account/statements': typeof CountryCodeAccountStatementsRoute
+  '/$countryCode/account/store-credits': typeof CountryCodeAccountStoreCreditsRoute
   '/$countryCode/account/subscriptions': typeof CountryCodeAccountSubscriptionsRouteWithChildren
   '/$countryCode/account/tax-certificates': typeof CountryCodeAccountTaxCertificatesRoute
   '/$countryCode/account/transactions': typeof CountryCodeAccountTransactionsRoute
@@ -1209,6 +1219,7 @@ export interface FileRouteTypes {
     | '/$countryCode/account/reviews'
     | '/$countryCode/account/settings'
     | '/$countryCode/account/statements'
+    | '/$countryCode/account/store-credits'
     | '/$countryCode/account/subscriptions'
     | '/$countryCode/account/tax-certificates'
     | '/$countryCode/account/transactions'
@@ -1327,6 +1338,7 @@ export interface FileRouteTypes {
     | '/$countryCode/account/reviews'
     | '/$countryCode/account/settings'
     | '/$countryCode/account/statements'
+    | '/$countryCode/account/store-credits'
     | '/$countryCode/account/subscriptions'
     | '/$countryCode/account/tax-certificates'
     | '/$countryCode/account/transactions'
@@ -1448,6 +1460,7 @@ export interface FileRouteTypes {
     | '/$countryCode/account/reviews'
     | '/$countryCode/account/settings'
     | '/$countryCode/account/statements'
+    | '/$countryCode/account/store-credits'
     | '/$countryCode/account/subscriptions'
     | '/$countryCode/account/tax-certificates'
     | '/$countryCode/account/transactions'
@@ -2172,6 +2185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeAccountSubscriptionsRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/account/store-credits': {
+      id: '/$countryCode/account/store-credits'
+      path: '/account/store-credits'
+      fullPath: '/$countryCode/account/store-credits'
+      preLoaderRoute: typeof CountryCodeAccountStoreCreditsRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/account/statements': {
       id: '/$countryCode/account/statements'
       path: '/account/statements'
@@ -2563,6 +2583,7 @@ interface CountryCodeRouteChildren {
   CountryCodeAccountReviewsRoute: typeof CountryCodeAccountReviewsRoute
   CountryCodeAccountSettingsRoute: typeof CountryCodeAccountSettingsRoute
   CountryCodeAccountStatementsRoute: typeof CountryCodeAccountStatementsRoute
+  CountryCodeAccountStoreCreditsRoute: typeof CountryCodeAccountStoreCreditsRoute
   CountryCodeAccountSubscriptionsRoute: typeof CountryCodeAccountSubscriptionsRouteWithChildren
   CountryCodeAccountTaxCertificatesRoute: typeof CountryCodeAccountTaxCertificatesRoute
   CountryCodeAccountTransactionsRoute: typeof CountryCodeAccountTransactionsRoute
@@ -2664,6 +2685,7 @@ const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodeAccountReviewsRoute: CountryCodeAccountReviewsRoute,
   CountryCodeAccountSettingsRoute: CountryCodeAccountSettingsRoute,
   CountryCodeAccountStatementsRoute: CountryCodeAccountStatementsRoute,
+  CountryCodeAccountStoreCreditsRoute: CountryCodeAccountStoreCreditsRoute,
   CountryCodeAccountSubscriptionsRoute:
     CountryCodeAccountSubscriptionsRouteWithChildren,
   CountryCodeAccountTaxCertificatesRoute:
