@@ -8,7 +8,7 @@ import { Link, useNavigate } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
 import { sdk } from "@/lib/utils/sdk"
 import { formatPrice } from "@/lib/utils/price"
-import { ArrowRightMini, CubeSolid, MapPin, User, Heart, ChartBar, Cog } from "@medusajs/icons"
+import { ArrowRightMini, CubeSolid, MapPin, User, Heart, ChartBar, CogSixTooth } from "@medusajs/icons"
 import type { StoreOrder, StoreCustomerAddress } from "@medusajs/types"
 
 interface AccountDashboardProps {
@@ -139,7 +139,7 @@ const AccountDashboard = ({ countryCode }: AccountDashboardProps) => {
           <div className="flex items-center gap-3">
             <Link to={`/${countryCode}/account/settings`}>
               <Button variant="secondary" className="flex items-center gap-2">
-                <Cog className="w-4 h-4" />
+                <CogSixTooth className="w-4 h-4" />
                 Settings
               </Button>
             </Link>
