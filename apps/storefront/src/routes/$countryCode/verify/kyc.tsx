@@ -15,10 +15,10 @@ function KYCPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-black py-12">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-xl shadow-sm p-8">
-          <h1 className="text-2xl font-bold text-gray-900 text-center mb-8">
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-8">
+          <h1 className="text-2xl font-bold text-white text-center mb-8">
             Identity Verification
           </h1>
           <KYCFlow onComplete={handleComplete} />
