@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { FAQAccordion } from "~/components/content"
-import { Search, ArrowLeft, MessageCircle, Phone, Mail } from "lucide-react"
+import { MagnifyingGlass, ArrowLeftMini, ChatBubble, Phone, EnvelopeSolid } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/help/$category")({
   component: HelpCategoryPage,
@@ -63,50 +63,52 @@ function HelpCategoryPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <a href="/help" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
-        <ArrowLeft className="w-4 h-4" />
-        Back to Help Center
-      </a>
+    <div className="min-h-screen bg-city-dark">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <a href="/help" className="inline-flex items-center gap-2 text-city-gray hover:text-city-white transition-colors mb-6">
+          <ArrowLeftMini className="w-4 h-4" />
+          Back to Help Center
+        </a>
 
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">{categoryData.title}</h1>
-        <p className="text-gray-600 mb-8">{categoryData.description}</p>
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold text-city-white mb-2">{categoryData.title}</h1>
+          <p className="text-city-gray mb-8">{categoryData.description}</p>
 
-        {/* Search */}
-        <div className="relative mb-8">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder={`Search in ${categoryData.title}...`}
-            className="w-full pl-12 pr-4 py-3 border rounded-xl"
-          />
-        </div>
+          {/* Search */}
+          <div className="relative mb-8">
+            <MagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-city-muted" />
+            <input
+              type="text"
+              placeholder={`Search in ${categoryData.title}...`}
+              className="w-full pl-12 pr-4 py-3 bg-city-navy border border-city-steel rounded-xl text-city-white placeholder-city-muted focus:outline-none focus:border-city-cyan transition-colors"
+            />
+          </div>
 
-        {/* FAQs */}
-        <div className="space-y-4 mb-8">
-          {categoryData.faqs.map((faq, index) => (
-            <FAQAccordion key={index} question={faq.question} answer={faq.answer} />
-          ))}
-        </div>
+          {/* FAQs */}
+          <div className="space-y-4 mb-8">
+            {categoryData.faqs.map((faq, index) => (
+              <FAQAccordion key={index} question={faq.question} answer={faq.answer} />
+            ))}
+          </div>
 
-        {/* Still need help */}
-        <div className="bg-gray-50 rounded-xl p-8 text-center">
-          <h2 className="text-xl font-semibold mb-2">Still need help?</h2>
-          <p className="text-gray-600 mb-6">Our support team is ready to assist you</p>
-          <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <button className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-              <MessageCircle className="w-5 h-5" />
-              Start Live Chat
-            </button>
-            <a href="tel:+1234567890" className="flex items-center justify-center gap-2 px-6 py-3 border rounded-lg hover:bg-gray-100">
-              <Phone className="w-5 h-5" />
-              Call Support
-            </a>
-            <a href="mailto:support@example.com" className="flex items-center justify-center gap-2 px-6 py-3 border rounded-lg hover:bg-gray-100">
-              <Mail className="w-5 h-5" />
-              Email Us
-            </a>
+          {/* Still need help */}
+          <div className="bg-city-navy border border-city-steel rounded-xl p-8 text-center">
+            <h2 className="text-xl font-semibold text-city-white mb-2">Still need help?</h2>
+            <p className="text-city-gray mb-6">Our support team is ready to assist you</p>
+            <div className="flex flex-col md:flex-row gap-4 justify-center">
+              <button className="flex items-center justify-center gap-2 px-6 py-3 bg-city-cyan text-city-dark rounded-lg hover:bg-city-cyan-light transition-colors font-medium">
+                <ChatBubble className="w-5 h-5" />
+                Start Live Chat
+              </button>
+              <a href="tel:+1234567890" className="flex items-center justify-center gap-2 px-6 py-3 border border-city-steel text-city-white rounded-lg hover:bg-city-slate transition-colors">
+                <Phone className="w-5 h-5" />
+                Call Support
+              </a>
+              <a href="mailto:support@example.com" className="flex items-center justify-center gap-2 px-6 py-3 border border-city-steel text-city-white rounded-lg hover:bg-city-slate transition-colors">
+                <EnvelopeSolid className="w-5 h-5" />
+                Email Us
+              </a>
+            </div>
           </div>
         </div>
       </div>

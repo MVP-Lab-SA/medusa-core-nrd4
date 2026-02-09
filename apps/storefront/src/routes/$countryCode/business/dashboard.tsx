@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
-import { ShoppingCart, FileText, Users, CheckCircle, Clock, DollarSign, TrendingUp } from "lucide-react"
+import { ShoppingCart, DocumentText, Users, CheckCircleSolid, Clock, CurrencyDollar, ArrowTrendingUp } from "@medusajs/icons"
 import { BusinessLayout } from "../../../components/business/BusinessSidebar"
 
 export const Route = createFileRoute("/$countryCode/business/dashboard")({
@@ -19,10 +19,10 @@ function BusinessDashboard() {
   }
 
   const stats = [
-    { label: "Open Orders", value: 12, icon: ShoppingCart, color: "text-cyan-400", href: `/${countryCode}/business/orders` },
-    { label: "Pending Quotes", value: 5, icon: FileText, color: "text-amber-400", href: `/${countryCode}/business/quotes` },
+    { label: "Open Orders", value: 12, icon: ShoppingCart, color: "text-city-cyan", href: `/${countryCode}/business/orders` },
+    { label: "Pending Quotes", value: 5, icon: DocumentText, color: "text-amber-400", href: `/${countryCode}/business/quotes` },
     { label: "Awaiting Approval", value: 3, icon: Clock, color: "text-purple-400", href: `/${countryCode}/business/approvals` },
-    { label: "Team Members", value: 8, icon: Users, color: "text-green-400", href: `/${countryCode}/business/team` },
+    { label: "Team Members", value: 8, icon: Users, color: "text-emerald-400", href: `/${countryCode}/business/team` },
   ]
 
   const recentOrders = [
@@ -39,20 +39,20 @@ function BusinessDashboard() {
   return (
     <BusinessLayout currentPath={`/${countryCode}/business/dashboard`}>
       {/* Credit Status */}
-      <div className="bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 rounded-xl p-6 mb-8">
+      <div className="bg-gradient-to-r from-city-cyan/20 to-city-cyan/5 border border-city-cyan/30 rounded-xl p-6 mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-cyan-400 text-sm">Available Credit</p>
-            <p className="text-4xl font-bold text-white">${company.availableCredit.toLocaleString()}</p>
-            <p className="text-gray-400 text-sm mt-1">of ${company.creditLimit.toLocaleString()} limit</p>
+            <p className="text-city-cyan text-sm">Available Credit</p>
+            <p className="text-4xl font-bold text-city-white">${company.availableCredit.toLocaleString()}</p>
+            <p className="text-city-muted text-sm mt-1">of ${company.creditLimit.toLocaleString()} limit</p>
           </div>
           <div className="text-right">
-            <DollarSign className="w-16 h-16 text-cyan-500/50" />
+            <CurrencyDollar className="w-16 h-16 text-city-cyan/50" />
           </div>
         </div>
-        <div className="mt-4 bg-gray-800 rounded-full h-2">
+        <div className="mt-4 bg-city-slate rounded-full h-2">
           <div 
-            className="bg-cyan-500 rounded-full h-2" 
+            className="bg-city-cyan rounded-full h-2" 
             style={{ width: `${(company.availableCredit / company.creditLimit) * 100}%` }}
           />
         </div>
@@ -64,15 +64,15 @@ function BusinessDashboard() {
           <Link 
             key={stat.label} 
             to={stat.href}
-            className="bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-cyan-500/50 transition-colors"
+            className="bg-city-navy border border-city-steel rounded-xl p-6 hover:border-city-cyan/50 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg bg-gray-800 ${stat.color}`}>
+              <div className={`p-2 rounded-lg bg-city-slate ${stat.color}`}>
                 <stat.icon className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">{stat.value}</p>
-                <p className="text-sm text-gray-400">{stat.label}</p>
+                <p className="text-2xl font-bold text-city-white">{stat.value}</p>
+                <p className="text-sm text-city-gray">{stat.label}</p>
               </div>
             </div>
           </Link>
@@ -81,24 +81,24 @@ function BusinessDashboard() {
 
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Recent Orders */}
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+        <div className="bg-city-navy border border-city-steel rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-white">Recent Orders</h2>
-            <Link to={`/${countryCode}/business/orders`} className="text-cyan-400 text-sm hover:underline">View All</Link>
+            <h2 className="text-xl font-semibold text-city-white">Recent Orders</h2>
+            <Link to={`/${countryCode}/business/orders`} className="text-city-cyan text-sm hover:text-city-cyan-light transition-colors">View All</Link>
           </div>
           <div className="space-y-3">
             {recentOrders.map((order) => (
-              <div key={order.id} className="flex items-center justify-between py-3 border-b border-gray-800 last:border-0">
+              <div key={order.id} className="flex items-center justify-between py-3 border-b border-city-steel/50 last:border-0">
                 <div>
-                  <p className="font-medium text-white">{order.id}</p>
-                  <p className="text-sm text-gray-500">{order.date}</p>
+                  <p className="font-medium text-city-white">{order.id}</p>
+                  <p className="text-sm text-city-muted">{order.date}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold text-white">${order.total.toLocaleString()}</p>
+                  <p className="font-semibold text-city-white">${order.total.toLocaleString()}</p>
                   <span className={`text-xs px-2 py-1 rounded-full ${
-                    order.status === "Delivered" ? "bg-green-500/20 text-green-400" :
-                    order.status === "Shipped" ? "bg-blue-500/20 text-blue-400" :
-                    "bg-amber-500/20 text-amber-400"
+                    order.status === "Delivered" ? "bg-emerald-500/10 text-emerald-400" :
+                    order.status === "Shipped" ? "bg-city-cyan/10 text-city-cyan" :
+                    "bg-amber-500/10 text-amber-400"
                   }`}>
                     {order.status}
                   </span>
@@ -109,22 +109,22 @@ function BusinessDashboard() {
         </div>
 
         {/* Pending Approvals */}
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+        <div className="bg-city-navy border border-city-steel rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-white">Pending Approvals</h2>
-            <Link to={`/${countryCode}/business/approvals`} className="text-cyan-400 text-sm hover:underline">View All</Link>
+            <h2 className="text-xl font-semibold text-city-white">Pending Approvals</h2>
+            <Link to={`/${countryCode}/business/approvals`} className="text-city-cyan text-sm hover:text-city-cyan-light transition-colors">View All</Link>
           </div>
           <div className="space-y-3">
             {pendingApprovals.map((approval) => (
-              <div key={approval.id} className="flex items-center justify-between py-3 border-b border-gray-800 last:border-0">
+              <div key={approval.id} className="flex items-center justify-between py-3 border-b border-city-steel/50 last:border-0">
                 <div>
-                  <p className="font-medium text-white">{approval.requester}</p>
-                  <p className="text-sm text-gray-500">{approval.type}</p>
+                  <p className="font-medium text-city-white">{approval.requester}</p>
+                  <p className="text-sm text-city-muted">{approval.type}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <p className="font-semibold text-white">${approval.amount.toLocaleString()}</p>
-                  <button className="p-1 text-green-400 hover:bg-green-500/20 rounded">
-                    <CheckCircle className="w-5 h-5" />
+                  <p className="font-semibold text-city-white">${approval.amount.toLocaleString()}</p>
+                  <button className="p-1 text-emerald-400 hover:bg-emerald-500/20 rounded transition-colors">
+                    <CheckCircleSolid className="w-5 h-5" />
                   </button>
                 </div>
               </div>
@@ -137,31 +137,31 @@ function BusinessDashboard() {
       <div className="mt-8 grid grid-cols-2 gap-4">
         <Link 
           to={`/${countryCode}/business/orders`} 
-          className="flex items-center gap-3 p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-cyan-500/50 transition-colors"
+          className="flex items-center gap-3 p-4 bg-city-navy border border-city-steel rounded-xl hover:border-city-cyan/50 transition-colors"
         >
-          <ShoppingCart className="w-6 h-6 text-cyan-400" />
-          <span className="font-medium text-white">New Order</span>
+          <ShoppingCart className="w-6 h-6 text-city-cyan" />
+          <span className="font-medium text-city-white">New Order</span>
         </Link>
         <Link 
           to={`/${countryCode}/business/quotes`} 
-          className="flex items-center gap-3 p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-cyan-500/50 transition-colors"
+          className="flex items-center gap-3 p-4 bg-city-navy border border-city-steel rounded-xl hover:border-city-cyan/50 transition-colors"
         >
-          <FileText className="w-6 h-6 text-cyan-400" />
-          <span className="font-medium text-white">Request Quote</span>
+          <DocumentText className="w-6 h-6 text-city-cyan" />
+          <span className="font-medium text-city-white">Request Quote</span>
         </Link>
         <Link 
           to={`/${countryCode}/business/team`} 
-          className="flex items-center gap-3 p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-cyan-500/50 transition-colors"
+          className="flex items-center gap-3 p-4 bg-city-navy border border-city-steel rounded-xl hover:border-city-cyan/50 transition-colors"
         >
-          <Users className="w-6 h-6 text-cyan-400" />
-          <span className="font-medium text-white">Manage Team</span>
+          <Users className="w-6 h-6 text-city-cyan" />
+          <span className="font-medium text-city-white">Manage Team</span>
         </Link>
         <Link 
           to={`/${countryCode}/business/invoices`} 
-          className="flex items-center gap-3 p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-cyan-500/50 transition-colors"
+          className="flex items-center gap-3 p-4 bg-city-navy border border-city-steel rounded-xl hover:border-city-cyan/50 transition-colors"
         >
-          <TrendingUp className="w-6 h-6 text-cyan-400" />
-          <span className="font-medium text-white">View Invoices</span>
+          <ArrowTrendingUp className="w-6 h-6 text-city-cyan" />
+          <span className="font-medium text-city-white">View Invoices</span>
         </Link>
       </div>
     </BusinessLayout>

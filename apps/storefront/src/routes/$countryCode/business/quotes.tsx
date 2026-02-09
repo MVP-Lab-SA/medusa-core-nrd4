@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
-import { FileText, Clock, CheckCircle, XCircle, Eye, Plus, Send } from "lucide-react"
+import { DocumentText, Clock, CheckCircleSolid, XCircleSolid, Eye, Plus, PaperAirplane } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/business/quotes")({
   component: BusinessQuotes,
@@ -17,107 +17,109 @@ function BusinessQuotes() {
   ]
 
   const statusConfig: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-    pending: { label: "Awaiting Quote", color: "bg-yellow-100 text-yellow-700", icon: Clock },
-    quoted: { label: "Quote Received", color: "bg-blue-100 text-blue-700", icon: FileText },
-    accepted: { label: "Accepted", color: "bg-green-100 text-green-700", icon: CheckCircle },
-    expired: { label: "Expired", color: "bg-gray-100 text-gray-700", icon: XCircle },
+    pending: { label: "Awaiting Quote", color: "bg-amber-500/10 text-amber-400", icon: Clock },
+    quoted: { label: "Quote Received", color: "bg-city-cyan/10 text-city-cyan", icon: DocumentText },
+    accepted: { label: "Accepted", color: "bg-emerald-500/10 text-emerald-400", icon: CheckCircleSolid },
+    expired: { label: "Expired", color: "bg-city-slate text-city-muted", icon: XCircleSolid },
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold">Quote Requests</h1>
-          <p className="text-gray-600">Request and manage bulk pricing quotes</p>
+    <div className="min-h-screen bg-city-dark">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-city-white">Quote Requests</h1>
+            <p className="text-city-gray">Request and manage bulk pricing quotes</p>
+          </div>
+          <button className="bg-city-cyan text-city-dark px-4 py-2 rounded-lg hover:bg-city-cyan-light transition-colors flex items-center gap-2 font-medium">
+            <Plus className="w-4 h-4" />
+            New Quote Request
+          </button>
         </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2">
-          <Plus className="w-4 h-4" />
-          New Quote Request
-        </button>
-      </div>
 
-      {/* Tabs */}
-      <div className="flex gap-4 mb-6">
-        <button
-          onClick={() => setActiveTab("requests")}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            activeTab === "requests" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-          }`}
-        >
-          My Requests
-        </button>
-        <button
-          onClick={() => setActiveTab("received")}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            activeTab === "received" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-          }`}
-        >
-          Received Quotes
-        </button>
-      </div>
+        {/* Tabs */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setActiveTab("requests")}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === "requests" ? "bg-city-cyan text-city-dark" : "bg-city-slate text-city-gray hover:bg-city-steel"
+            }`}
+          >
+            My Requests
+          </button>
+          <button
+            onClick={() => setActiveTab("received")}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === "received" ? "bg-city-cyan text-city-dark" : "bg-city-slate text-city-gray hover:bg-city-steel"
+            }`}
+          >
+            Received Quotes
+          </button>
+        </div>
 
-      {/* Quote Cards */}
-      <div className="grid gap-4">
-        {quoteRequests.map((quote) => {
-          const status = statusConfig[quote.status]
-          const StatusIcon = status.icon
-          
-          return (
-            <div key={quote.id} className="bg-white border rounded-xl p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-gray-100 rounded-lg">
-                    <FileText className="w-6 h-6 text-gray-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">{quote.id}</h3>
-                    <p className="text-gray-600 text-sm">Requested on {quote.date}</p>
-                    <p className="text-gray-600 text-sm mt-1">{quote.items} items</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm ${status.color}`}>
-                    <StatusIcon className="w-4 h-4" />
-                    {status.label}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="mt-4 pt-4 border-t flex items-center justify-between">
-                <div className="flex gap-8">
-                  <div>
-                    <p className="text-sm text-gray-500">Estimated Value</p>
-                    <p className="font-semibold">${quote.estimatedValue.toLocaleString()}</p>
-                  </div>
-                  {quote.quotedPrice && (
-                    <div>
-                      <p className="text-sm text-gray-500">Quoted Price</p>
-                      <p className="font-semibold text-green-600">${quote.quotedPrice.toLocaleString()}</p>
+        {/* Quote Cards */}
+        <div className="grid gap-4">
+          {quoteRequests.map((quote) => {
+            const status = statusConfig[quote.status]
+            const StatusIcon = status.icon
+            
+            return (
+              <div key={quote.id} className="bg-city-navy border border-city-steel rounded-xl p-6 hover:border-city-cyan/50 transition-colors">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-city-slate rounded-lg">
+                      <DocumentText className="w-6 h-6 text-city-gray" />
                     </div>
-                  )}
+                    <div>
+                      <h3 className="font-semibold text-lg text-city-white">{quote.id}</h3>
+                      <p className="text-city-muted text-sm">Requested on {quote.date}</p>
+                      <p className="text-city-muted text-sm mt-1">{quote.items} items</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm ${status.color}`}>
+                      <StatusIcon className="w-4 h-4" />
+                      {status.label}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <button className="px-4 py-2 border rounded-lg hover:bg-gray-50 flex items-center gap-2">
-                    <Eye className="w-4 h-4" />
-                    View Details
-                  </button>
-                  {quote.status === "quoted" && (
-                    <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4" />
-                      Accept Quote
+                
+                <div className="mt-4 pt-4 border-t border-city-steel/50 flex items-center justify-between">
+                  <div className="flex gap-8">
+                    <div>
+                      <p className="text-sm text-city-muted">Estimated Value</p>
+                      <p className="font-semibold text-city-white">${quote.estimatedValue.toLocaleString()}</p>
+                    </div>
+                    {quote.quotedPrice && (
+                      <div>
+                        <p className="text-sm text-city-muted">Quoted Price</p>
+                        <p className="font-semibold text-emerald-400">${quote.quotedPrice.toLocaleString()}</p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="px-4 py-2 border border-city-steel text-city-white rounded-lg hover:bg-city-slate transition-colors flex items-center gap-2">
+                      <Eye className="w-4 h-4" />
+                      View Details
                     </button>
-                  )}
-                  {quote.status === "pending" && (
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
-                      <Send className="w-4 h-4" />
-                      Send Reminder
-                    </button>
-                  )}
+                    {quote.status === "quoted" && (
+                      <button className="px-4 py-2 bg-emerald-500 text-city-dark rounded-lg hover:bg-emerald-400 transition-colors flex items-center gap-2 font-medium">
+                        <CheckCircleSolid className="w-4 h-4" />
+                        Accept Quote
+                      </button>
+                    )}
+                    {quote.status === "pending" && (
+                      <button className="px-4 py-2 bg-city-cyan text-city-dark rounded-lg hover:bg-city-cyan-light transition-colors flex items-center gap-2 font-medium">
+                        <PaperAirplane className="w-4 h-4" />
+                        Send Reminder
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
     </div>
   )
