@@ -119,3 +119,72 @@ export function useDriverLocation(driverId: string, enabled: boolean = true) {
     refetchInterval: 5000, // Update every 5 seconds
   })
 }
+
+// Customer Deliveries - List all deliveries for account page
+export function useDeliveries() {
+  return useQuery({
+    queryKey: [...fleetbaseKeys.all, "customer-deliveries"],
+    queryFn: async () => {
+      // Return mock delivery data for the account page
+      return [
+        {
+          id: "del_001",
+          orderId: "order_001",
+          orderNumber: "ORD-2024-001",
+          status: "delivered" as const,
+          estimatedDelivery: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+          actualDelivery: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+          address: {
+            street: "123 Main Street",
+            city: "New York",
+            state: "NY",
+            postalCode: "10001",
+          },
+          carrier: "FedEx",
+          trackingNumber: "FX123456789",
+          items: [
+            { name: "Wireless Headphones", quantity: 1 },
+            { name: "USB-C Cable", quantity: 2 },
+          ],
+        },
+        {
+          id: "del_002",
+          orderId: "order_002",
+          orderNumber: "ORD-2024-002",
+          status: "in_transit" as const,
+          estimatedDelivery: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(),
+          address: {
+            street: "123 Main Street",
+            city: "New York",
+            state: "NY",
+            postalCode: "10001",
+          },
+          carrier: "UPS",
+          trackingNumber: "1Z999AA10123456784",
+          items: [
+            { name: "Smart Watch", quantity: 1 },
+          ],
+        },
+        {
+          id: "del_003",
+          orderId: "order_003",
+          orderNumber: "ORD-2024-003",
+          status: "processing" as const,
+          estimatedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+          address: {
+            street: "456 Oak Avenue",
+            city: "Los Angeles",
+            state: "CA",
+            postalCode: "90001",
+          },
+          carrier: "USPS",
+          trackingNumber: "9400111899223456789012",
+          items: [
+            { name: "Bluetooth Speaker", quantity: 1 },
+            { name: "Phone Case", quantity: 1 },
+          ],
+        },
+      ]
+    },
+  })
+}
