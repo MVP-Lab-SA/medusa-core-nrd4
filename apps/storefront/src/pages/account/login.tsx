@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Alert } from "@/components/ui/alert"
 import { useCustomer } from "@/lib/context/customer-context"
 import { Link, useNavigate, useSearch } from "@tanstack/react-router"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 interface LoginPageProps {
   countryCode: string;
@@ -18,10 +18,11 @@ const LoginPage = ({ countryCode }: LoginPageProps) => {
   const [error, setError] = useState("")
 
   // Redirect if already authenticated
-  if (isAuthenticated) {
-    navigate({ to: "/$countryCode/account", params: { countryCode } })
-    return null
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate({ to: "/$countryCode/account", params: { countryCode } })
+    }
+  }, [isAuthenticated, navigate, countryCode])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

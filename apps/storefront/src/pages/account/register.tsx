@@ -4,7 +4,7 @@ import { Alert } from "@/components/ui/alert"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useCustomer } from "@/lib/context/customer-context"
 import { Link, useNavigate } from "@tanstack/react-router"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 interface RegisterPageProps {
   countryCode: string;
@@ -24,10 +24,11 @@ const RegisterPage = ({ countryCode }: RegisterPageProps) => {
   const [error, setError] = useState("")
 
   // Redirect if already authenticated
-  if (isAuthenticated) {
-    navigate({ to: "/$countryCode/account", params: { countryCode } })
-    return null
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate({ to: "/$countryCode/account", params: { countryCode } })
+    }
+  }, [isAuthenticated, navigate, countryCode])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
