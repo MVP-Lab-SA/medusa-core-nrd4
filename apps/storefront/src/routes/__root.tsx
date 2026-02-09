@@ -59,7 +59,7 @@ function RootComponent() {
             tenant="platform"
             fallbackToDefault={true}
             config={{
-              baseUrl: import.meta.env.VITE_CITYOS_API_URL || 'https://cms.dfrnt.dev',
+              baseUrl: import.meta.env.VITE_CITYOS_API_URL || 'https://9e78ac41-ae95-440f-9196-e9263c6eadda-00-130jbk279zua2.janeway.replit.dev',
               channel: 'storefront',
               enableCache: true,
             }}

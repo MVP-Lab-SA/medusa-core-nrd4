@@ -98,3 +98,16 @@ export type {
 } from './types';
 
 export type { TenantContext, TenantMapping } from './tenant-resolver';
+
+// React hooks
+export {
+  usePlatformContext,
+  useNavigation,
+  usePage,
+  usePages,
+  usePOI,
+  usePOIs,
+  useTenantHierarchy,
+  useCMSHealth,
+  cmsQueryKeys,
+} from './hooks';
