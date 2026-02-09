@@ -49,12 +49,12 @@ export default function LoyaltyPage({ countryCode }: LoyaltyPageProps) {
   ]
 
   return (
-    <div className="py-12">
+    <div className="min-h-screen bg-black py-12">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">CityOS Rewards</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-white mb-4">CityOS Rewards</h1>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
             Earn points on every purchase and unlock exclusive benefits
           </p>
         </div>
@@ -74,7 +74,7 @@ export default function LoyaltyPage({ countryCode }: LoyaltyPageProps) {
           </div>
 
           {/* Tier Progress */}
-          <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6">
+          <div className="lg:col-span-2 bg-gray-900 rounded-xl border border-gray-800 p-6">
             <TierProgress
               tiers={tiers}
               currentPoints={1750}
@@ -94,14 +94,14 @@ export default function LoyaltyPage({ countryCode }: LoyaltyPageProps) {
             pendingRewards="$75"
           />
 
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
             <PointsHistory items={pointsHistory} />
           </div>
         </div>
 
         {/* How It Works */}
-        <div className="bg-gray-50 rounded-2xl p-8 md:p-12 mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">How It Works</h2>
+        <div className="bg-gray-900 rounded-2xl p-8 md:p-12 mb-12">
+          <h2 className="text-2xl font-bold text-white text-center mb-8">How It Works</h2>
           <div className="grid md:grid-cols-4 gap-8">
             {[
               {
@@ -126,11 +126,11 @@ export default function LoyaltyPage({ countryCode }: LoyaltyPageProps) {
               }
             ].map((step, idx) => (
               <div key={idx} className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600">
+                <div className="w-16 h-16 mx-auto mb-4 bg-cyan-500/20 rounded-full flex items-center justify-center text-cyan-400">
                   {step.icon}
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{step.title}</h3>
-                <p className="text-sm text-gray-600">{step.description}</p>
+                <h3 className="font-semibold text-white mb-2">{step.title}</h3>
+                <p className="text-sm text-gray-400">{step.description}</p>
               </div>
             ))}
           </div>
@@ -138,7 +138,7 @@ export default function LoyaltyPage({ countryCode }: LoyaltyPageProps) {
 
         {/* Rewards Catalog */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Redeem Your Points</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">Redeem Your Points</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { points: 500, value: "$5 off", description: "Any purchase" },
@@ -148,9 +148,9 @@ export default function LoyaltyPage({ countryCode }: LoyaltyPageProps) {
               { points: 2000, value: "Free Shipping", description: "1 year unlimited" },
               { points: 10000, value: "VIP Event", description: "Exclusive access" }
             ].map((reward, idx) => (
-              <div key={idx} className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-                <p className="text-3xl font-bold text-cyan-600 mb-2">{reward.value}</p>
-                <p className="text-gray-600 mb-4">{reward.description}</p>
+              <div key={idx} className="bg-gray-900 rounded-xl border border-gray-800 p-6 text-center">
+                <p className="text-3xl font-bold text-cyan-400 mb-2">{reward.value}</p>
+                <p className="text-gray-400 mb-4">{reward.description}</p>
                 <p className="text-sm text-gray-500 mb-4">{reward.points.toLocaleString()} points</p>
                 <Button variant="outline" size="sm" className="w-full">
                   Redeem

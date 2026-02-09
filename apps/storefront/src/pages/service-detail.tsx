@@ -61,9 +61,9 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-black">
         <div className="container mx-auto px-4 py-8">
-          <div className="h-8 w-48 bg-gray-200 rounded animate-pulse" />
+          <div className="h-8 w-48 bg-gray-800 rounded animate-pulse" />
         </div>
       </div>
     )
@@ -71,13 +71,13 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
 
   if (!service) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Service Not Found</h1>
+          <h1 className="text-2xl font-bold text-white">Service Not Found</h1>
           <Link
             to="/$countryCode/services"
             params={{ countryCode }}
-            className="text-teal-600 hover:underline mt-2 block"
+            className="text-cyan-400 hover:underline mt-2 block"
           >
             Back to Services
           </Link>
@@ -88,19 +88,19 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
 
   if (bookingComplete) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-xl p-8 max-w-md text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-            <Check className="w-8 h-8 text-green-600" />
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 max-w-md text-center">
+          <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto">
+            <Check className="w-8 h-8 text-emerald-400" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mt-4">Booking Confirmed!</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-2xl font-bold text-white mt-4">Booking Confirmed!</h1>
+          <p className="text-gray-400 mt-2">
             We've sent a confirmation email with all the details.
           </p>
           <Link
             to="/$countryCode/account"
             params={{ countryCode }}
-            className="inline-block mt-6 px-6 py-2.5 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors"
+            className="inline-block mt-6 px-6 py-2.5 bg-cyan-500 text-black rounded-lg hover:bg-cyan-400 transition-colors"
           >
             View My Bookings
           </Link>
@@ -112,13 +112,13 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
   const totalPrice = service.price * participants
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       <div className="container mx-auto px-4 py-8">
         {/* Back Link */}
         <Link
           to="/$countryCode/services"
           params={{ countryCode }}
-          className="inline-flex items-center gap-1 text-gray-600 hover:text-gray-900 mb-6"
+          className="inline-flex items-center gap-1 text-gray-400 hover:text-white mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Services
@@ -127,7 +127,7 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Service Details */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl overflow-hidden">
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
               <div className="aspect-video">
                 <img
                   src={service.images[0]}
@@ -136,18 +136,18 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
                 />
               </div>
               <div className="p-6">
-                <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">
+                <span className="px-2 py-0.5 bg-gray-800 text-gray-400 text-xs rounded">
                   {service.category}
                 </span>
-                <h1 className="text-2xl font-bold text-gray-900 mt-2">{service.title}</h1>
-                <p className="text-gray-600 mt-4">{service.description}</p>
+                <h1 className="text-2xl font-bold text-white mt-2">{service.title}</h1>
+                <p className="text-gray-400 mt-4">{service.description}</p>
 
-                <div className="flex items-center gap-6 mt-6 pt-6 border-t border-gray-100">
-                  <div className="flex items-center gap-2 text-gray-600">
+                <div className="flex items-center gap-6 mt-6 pt-6 border-t border-gray-800">
+                  <div className="flex items-center gap-2 text-gray-400">
                     <Clock className="w-5 h-5" />
                     <span>{service.duration} minutes</span>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex items-center gap-2 text-gray-400">
                     <Users className="w-5 h-5" />
                     <span>Up to {service.maxParticipants} participants</span>
                   </div>
@@ -157,7 +157,7 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
 
             {/* Calendar */}
             <div className="mt-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              <h2 className="text-lg font-semibold text-white mb-4">
                 Select Date & Time
               </h2>
               <BookingCalendar
@@ -173,62 +173,62 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
 
           {/* Booking Summary */}
           <div>
-            <div className="bg-white rounded-xl p-6 sticky top-24">
-              <h2 className="text-lg font-semibold text-gray-900">Booking Summary</h2>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 sticky top-24">
+              <h2 className="text-lg font-semibold text-white">Booking Summary</h2>
 
               <div className="mt-4 space-y-4">
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Service</span>
-                  <span className="font-medium text-gray-900">{service.title}</span>
+                <div className="flex items-center justify-between py-3 border-b border-gray-800">
+                  <span className="text-gray-400">Service</span>
+                  <span className="font-medium text-white">{service.title}</span>
                 </div>
 
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Duration</span>
-                  <span className="font-medium text-gray-900">{service.duration} min</span>
+                <div className="flex items-center justify-between py-3 border-b border-gray-800">
+                  <span className="text-gray-400">Duration</span>
+                  <span className="font-medium text-white">{service.duration} min</span>
                 </div>
 
-                <div className="py-3 border-b border-gray-100">
-                  <label className="block text-gray-600 mb-2">Participants</label>
+                <div className="py-3 border-b border-gray-800">
+                  <label className="block text-gray-400 mb-2">Participants</label>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setParticipants(Math.max(1, participants - 1))}
-                      className="w-8 h-8 rounded-lg border border-gray-300 hover:bg-gray-50"
+                      className="w-8 h-8 rounded-lg border border-gray-700 text-gray-300 hover:bg-gray-800"
                     >
                       -
                     </button>
-                    <span className="w-12 text-center font-medium">{participants}</span>
+                    <span className="w-12 text-center font-medium text-white">{participants}</span>
                     <button
                       onClick={() =>
                         setParticipants(Math.min(service.maxParticipants, participants + 1))
                       }
-                      className="w-8 h-8 rounded-lg border border-gray-300 hover:bg-gray-50"
+                      className="w-8 h-8 rounded-lg border border-gray-700 text-gray-300 hover:bg-gray-800"
                     >
                       +
                     </button>
                   </div>
                 </div>
 
-                <div className="py-3 border-b border-gray-100">
-                  <label className="block text-gray-600 mb-2">Special Requests</label>
+                <div className="py-3 border-b border-gray-800">
+                  <label className="block text-gray-400 mb-2">Special Requests</label>
                   <textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Any special requests or notes..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none"
+                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     rows={3}
                   />
                 </div>
 
                 <div className="flex items-center justify-between py-3">
-                  <span className="text-gray-600">Total</span>
-                  <span className="text-2xl font-bold text-gray-900">${totalPrice}</span>
+                  <span className="text-gray-400">Total</span>
+                  <span className="text-2xl font-bold text-white">${totalPrice}</span>
                 </div>
               </div>
 
               <button
                 onClick={handleBook}
                 disabled={!selectedSlot || createBooking.isPending}
-                className="w-full mt-6 py-3 bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                className="w-full mt-6 py-3 bg-cyan-500 text-black rounded-lg font-medium hover:bg-cyan-400 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
               >
                 {createBooking.isPending ? "Booking..." : "Confirm Booking"}
               </button>
