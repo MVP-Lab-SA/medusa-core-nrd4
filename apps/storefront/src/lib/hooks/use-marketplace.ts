@@ -461,6 +461,25 @@ export function useReferrals(customerId: string) {
   })
 }
 
+export function useReferralStats() {
+  return useQuery({
+    queryKey: [...marketplaceKeys.all, "referral-stats"] as const,
+    queryFn: async () => {
+      // Return mock referral stats
+      return {
+        totalReferrals: 12,
+        successfulReferrals: 8,
+        pendingReferrals: 4,
+        totalEarnings: 240,
+        pendingEarnings: 60,
+        conversionRate: 66.7,
+        referralCode: "SMART2024",
+        referralLink: "https://example.com/ref/SMART2024",
+      }
+    },
+  })
+}
+
 // ==================== PROVIDERS ====================
 
 export function useProviders() {
