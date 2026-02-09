@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Star, ThumbsUp, Camera, Funnel, ChevronDownMini } from "@medusajs/icons";
+import { Star, ThumbUp, Camera, Funnel, ChevronDownMini } from "@medusajs/icons";
 
 export const Route = createFileRoute("/$countryCode/products/$handle/reviews")({
   component: ProductReviewsPage,
@@ -296,7 +296,7 @@ function ProductReviewsPage() {
 
                   <div className="flex items-center gap-4 pt-4 border-t border-city-steel/50">
                     <button className="flex items-center gap-1 text-sm text-city-muted hover:text-city-white transition-colors">
-                      <ThumbsUp className="w-4 h-4" />
+                      <ThumbUp className="w-4 h-4" />
                       <span>Helpful ({review.helpful})</span>
                     </button>
                     <button className="text-sm text-city-muted hover:text-city-white transition-colors">

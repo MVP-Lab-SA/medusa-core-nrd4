@@ -1,4 +1,4 @@
-import { ArrowDownTray, Document, Photo, MusicalNote, Film } from "@medusajs/icons"
+import { ArrowDownTray, DocumentText, Photo, Sparkles, PlayMiniSolid } from "@medusajs/icons"
 import { useDigitalAssets } from "@/lib/hooks/use-marketplace"
 import { AccountLayout } from "@/components/account/AccountSidebar"
 import {
@@ -14,18 +14,18 @@ interface DownloadsPageProps {
   countryCode: string
 }
 
-const fileTypeIcons: Record<string, typeof Document> = {
-  pdf: Document,
-  doc: Document,
-  docx: Document,
+const fileTypeIcons: Record<string, typeof DocumentText> = {
+  pdf: DocumentText,
+  doc: DocumentText,
+  docx: DocumentText,
   jpg: Photo,
   jpeg: Photo,
   png: Photo,
   gif: Photo,
-  mp3: MusicalNote,
-  wav: MusicalNote,
-  mp4: Film,
-  mov: Film,
+  mp3: Sparkles,
+  wav: Sparkles,
+  mp4: PlayMiniSolid,
+  mov: PlayMiniSolid,
 }
 
 export function AccountDownloadsPage({ countryCode }: DownloadsPageProps) {
@@ -39,7 +39,7 @@ export function AccountDownloadsPage({ countryCode }: DownloadsPageProps) {
 
   const getFileIcon = (fileType: string) => {
     const extension = fileType.toLowerCase().replace(".", "")
-    return fileTypeIcons[extension] || Document
+    return fileTypeIcons[extension] || DocumentText
   }
 
   return (

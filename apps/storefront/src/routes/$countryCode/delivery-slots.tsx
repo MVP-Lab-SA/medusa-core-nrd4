@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
 import { DeliverySlots } from "~/components/ui/delivery-slots"
-import { Calendar, Clock, Truck, MapPin, CheckCircleSolid } from "@medusajs/icons"
+import { Calendar, Clock, TruckFast, MapPin, CheckCircleSolid } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/delivery-slots")({
   component: DeliverySlotsPage,
@@ -51,7 +51,7 @@ function DeliverySlotsPage() {
             {/* Delivery Options */}
             <div className="bg-city-navy border border-city-steel rounded-xl p-6">
               <h2 className="text-lg font-semibold text-city-white mb-4 flex items-center gap-2">
-                <Truck className="w-5 h-5 text-city-cyan" />
+                <TruckFast className="w-5 h-5 text-city-cyan" />
                 Delivery Speed
               </h2>
               <div className="space-y-3">
@@ -113,7 +113,7 @@ function DeliverySlotsPage() {
                 )}
                 
                 <div className="flex items-start gap-3">
-                  <Truck className="w-5 h-5 text-city-muted mt-0.5" />
+                  <TruckFast className="w-5 h-5 text-city-muted mt-0.5" />
                   <div>
                     <p className="text-sm text-city-muted">Delivery method</p>
                     <p className="font-medium text-city-white">

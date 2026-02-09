@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
-import { CheckCircle, XCircle, Clock, Eye, Chat, ExclamationCircle } from "@medusajs/icons"
+import { CheckCircle, XCircle, Clock, Eye, ChatBubble, ExclamationCircle } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/business/approvals")({
   component: BusinessApprovals,
@@ -143,7 +143,7 @@ function BusinessApprovals() {
                 {approval.status === "pending" && (
                   <div className="flex gap-2">
                     <button className="px-4 py-2 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 flex items-center gap-2">
-                      <Chat className="w-4 h-4" />
+                      <ChatBubble className="w-4 h-4" />
                       Comment
                     </button>
                     <button className="px-4 py-2 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/10 flex items-center gap-2">

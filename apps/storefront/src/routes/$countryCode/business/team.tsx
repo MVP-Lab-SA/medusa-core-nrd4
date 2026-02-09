@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
-import { Users, UserCircle, EnvelopeSolid, ShieldCheck, EllipsisVertical, PencilSquare, Trash, Check } from "@medusajs/icons"
+import { Users, User, EnvelopeSolid, ShieldCheck, EllipsisVertical, PencilSquare, Trash, Check } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/business/team")({
   component: BusinessTeam,
@@ -35,7 +35,7 @@ function BusinessTeam() {
             onClick={() => setShowInviteModal(true)}
             className="bg-city-cyan text-city-dark px-4 py-2 rounded-lg hover:bg-city-cyan-light transition-colors flex items-center gap-2 font-medium"
           >
-            <UserCircle className="w-4 h-4" />
+            <User className="w-4 h-4" />
             Invite Member
           </button>
         </div>

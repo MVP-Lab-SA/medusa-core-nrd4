@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
-import { ShoppingCart, DocumentText, Users, CheckCircleSolid, Clock, CurrencyDollar, ArrowTrendingUp } from "@medusajs/icons"
+import { ShoppingCart, DocumentText, Users, CheckCircleSolid, Clock, CurrencyDollar, ArrowUpRightMini } from "@medusajs/icons"
 import { BusinessLayout } from "../../../components/business/BusinessSidebar"
 
 export const Route = createFileRoute("/$countryCode/business/dashboard")({
@@ -160,7 +160,7 @@ function BusinessDashboard() {
           to={`/${countryCode}/business/invoices`} 
           className="flex items-center gap-3 p-4 bg-city-navy border border-city-steel rounded-xl hover:border-city-cyan/50 transition-colors"
         >
-          <ArrowTrendingUp className="w-6 h-6 text-city-cyan" />
+          <ArrowUpRightMini className="w-6 h-6 text-city-cyan" />
           <span className="font-medium text-city-white">View Invoices</span>
         </Link>
       </div>

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { XMark, Link as LinkIcon, ArrowUpOnBox } from "@medusajs/icons"
+import { XMark, Link as LinkIcon, ArrowUpRightOnBox } from "@medusajs/icons"
 
 interface WishlistShareModalProps {
   wishlistName: string
@@ -32,7 +32,7 @@ export function WishlistShareModal({ wishlistName, shareUrl, isOpen, onClose }: 
 
         <div className="text-center mb-6">
           <div className="w-12 h-12 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <ArrowUpOnBox className="w-6 h-6 text-cyan-400" />
+            <ArrowUpRightOnBox className="w-6 h-6 text-cyan-400" />
           </div>
           <h3 className="text-xl font-bold text-white">Share "{wishlistName}"</h3>
           <p className="text-gray-400 mt-2">Anyone with this link can view your wishlist</p>

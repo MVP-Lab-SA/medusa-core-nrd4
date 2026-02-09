@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
-import { DocumentText, Clock, CheckCircleSolid, XCircleSolid, Eye, Plus, PaperAirplane } from "@medusajs/icons"
+import { DocumentText, Clock, CheckCircleSolid, XCircleSolid, Eye, Plus, PaperPlane } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/business/quotes")({
   component: BusinessQuotes,
@@ -110,7 +110,7 @@ function BusinessQuotes() {
                     )}
                     {quote.status === "pending" && (
                       <button className="px-4 py-2 bg-city-cyan text-city-dark rounded-lg hover:bg-city-cyan-light transition-colors flex items-center gap-2 font-medium">
-                        <PaperAirplane className="w-4 h-4" />
+                        <PaperPlane className="w-4 h-4" />
                         Send Reminder
                       </button>
                     )}

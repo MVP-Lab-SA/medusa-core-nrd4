@@ -4,7 +4,7 @@ import { DeliveryTracker } from "~/components/delivery/DeliveryTracker"
 import { LiveMap } from "~/components/delivery/LiveMap"
 import { DriverCard } from "~/components/delivery/DriverCard"
 import { ProofOfDelivery } from "~/components/delivery/ProofOfDelivery"
-import { ArrowLeft, Phone, ChatBubble, MapPin, Clock, Package, Check } from "@medusajs/icons"
+import { ArrowLeft, Phone, ChatBubble, MapPin, Clock, CubeSolid, Check } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/account/deliveries/$id")({
   component: DeliveryDetailPage,
@@ -29,7 +29,7 @@ function DeliveryDetailPage() {
   if (!delivery) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
-        <Package className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+        <CubeSolid className="w-16 h-16 text-gray-600 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-white">Delivery not found</h1>
         <p className="mt-2 text-gray-400">The delivery you're looking for doesn't exist.</p>
         <Link 
@@ -45,7 +45,7 @@ function DeliveryDetailPage() {
 
   const statusSteps = [
     { key: 'confirmed', label: 'Order Confirmed', icon: Check },
-    { key: 'picked_up', label: 'Picked Up', icon: Package },
+    { key: 'picked_up', label: 'Picked Up', icon: CubeSolid },
     { key: 'in_transit', label: 'In Transit', icon: MapPin },
     { key: 'delivered', label: 'Delivered', icon: Check },
   ]

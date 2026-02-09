@@ -336,7 +336,7 @@ export default function AccountNotificationsPage() {
             <AccountCardHeader
               title="SMS Notifications"
               description={customer?.phone || "No phone number configured"}
-              icon={<DevicePhoneMobile className="w-5 h-5" />}
+              icon={<Phone className="w-5 h-5" />}
             />
             <div className="space-y-4">
               <AccountToggle
