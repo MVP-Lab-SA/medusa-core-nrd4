@@ -1,6 +1,6 @@
 import { CartDropdown } from "@/components/cart"
 import { SearchModal, SearchTrigger } from "@/components/search"
-import { WishlistIcon } from "@/components/wishlist"
+import { WishlistIcon, WishlistContent } from "@/components/wishlist"
 import {
   Drawer,
   DrawerClose,
@@ -919,7 +919,5 @@ const WishlistContentWrapper = ({
   countryCode: string;
   onClose: () => void;
 }) => {
-  // Import dynamically to avoid circular deps
-  const { WishlistContent } = require("@/components/wishlist")
   return <WishlistContent countryCode={countryCode} onClose={onClose} />
 }
