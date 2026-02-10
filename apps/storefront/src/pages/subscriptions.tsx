@@ -11,8 +11,8 @@ interface SubscriptionsPageProps {
 export default function SubscriptionsPage({ countryCode }: SubscriptionsPageProps) {
   const { customer } = useCustomer()
   const { data: plans, isLoading: plansLoading } = useSubscriptionPlans()
-  const { data: subscriptions } = useSubscriptions(customer?.id || "")
-  const createSubscription = useCreateSubscription()
+  const { data: subscriptions } = useSubscriptions()
+  const { createSubscription, isLoading: isCreating } = useCreateSubscription()
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
 
   const handleSubscribe = async (planId: string) => {
@@ -22,10 +22,7 @@ export default function SubscriptionsPage({ countryCode }: SubscriptionsPageProp
     }
 
     try {
-      await createSubscription.mutateAsync({
-        customerId: customer.id,
-        planId,
-      })
+      await createSubscription(planId)
       setSelectedPlan(null)
     } catch (error) {
       console.error("Failed to subscribe:", error)

@@ -31,7 +31,8 @@ function ReturnsPage() {
             <p className="text-gray-400">Manage your return requests</p>
           </div>
           <Link 
-            to={`/${countryCode}/returns/create`}
+            to={"/$countryCode/returns/create" as any}
+            params={{ countryCode } as any}
             className="bg-cyan-500 text-black px-4 py-2 rounded-lg hover:bg-cyan-400 flex items-center gap-2 font-medium"
           >
             <Plus className="w-4 h-4" />
@@ -83,7 +84,8 @@ function ReturnsPage() {
                   </div>
                   <div className="flex gap-2">
                     <Link 
-                      to={`/${countryCode}/returns/${ret.id}`}
+                      to={"/$countryCode/returns/$id" as any}
+                      params={{ countryCode, id: ret.id } as any}
                       className="px-4 py-2 border border-gray-700 text-gray-300 rounded-lg hover:bg-gray-800"
                     >
                       View Details

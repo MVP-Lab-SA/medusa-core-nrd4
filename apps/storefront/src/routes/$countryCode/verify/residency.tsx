@@ -32,7 +32,8 @@ function ResidencyVerificationPage() {
               Your residency has been verified. You now have access to location-specific services and benefits.
             </p>
             <Link 
-              to={`/${countryCode}/account/credentials`}
+              to={"/$countryCode/account/credentials" as any}
+              params={{ countryCode } as any}
               className="inline-block bg-cyan-500 text-black px-8 py-3 rounded-lg hover:bg-cyan-400 font-medium"
             >
               View My Credentials

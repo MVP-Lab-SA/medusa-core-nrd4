@@ -151,7 +151,7 @@ export default function BlogPage({ countryCode }: BlogPageProps) {
 
         {/* Load More */}
         <div className="text-center mt-12">
-          <Button variant="secondary" size="lg">
+          <Button variant="secondary" size="fit">
             Load More Articles
           </Button>
         </div>

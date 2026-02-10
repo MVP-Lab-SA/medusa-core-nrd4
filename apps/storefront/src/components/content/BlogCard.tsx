@@ -6,7 +6,7 @@ interface BlogPost {
   title: string
   excerpt: string
   featuredImage?: string
-  category?: string
+  category?: string | { name: string; slug: string }
   author?: string
   publishedAt?: string
 }

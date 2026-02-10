@@ -22,7 +22,7 @@ export const Route = createFileRoute('/$countryCode/poi/$slug')({
     <PageError error={error?.message} statusCode={500} />
   ),
   notFoundComponent: () => <PageError statusCode={404} />,
-  loader: async ({ params }) => {
+  loader: async ({ params }): Promise<any> => {
     const { slug, countryCode } = params;
     
     // Resolve tenant
@@ -74,7 +74,9 @@ export const Route = createFileRoute('/$countryCode/poi/$slug')({
 // =============================================================================
 
 function POIPageComponent() {
-  const { poi, relatedPOIs, isMock } = Route.useLoaderData();
+  const data = Route.useLoaderData() as any;
+  const { poi, relatedPOIs, isMock } = data || {};
+  const params = Route.useParams();
   
   return (
     <div className="min-h-screen">
@@ -86,7 +88,7 @@ function POIPageComponent() {
       )}
       
       <div className="container mx-auto px-4 py-8">
-        <POIDetail poi={poi} />
+        <POIDetail poi={poi} countryCode={params.countryCode} />
         
         {/* Related POIs */}
         {relatedPOIs.length > 0 && (
@@ -163,10 +165,8 @@ function createMockPOI(slug: string): POI {
     ],
     amenities: ['WiFi', 'Parking', 'Accessible', 'Restaurant', 'Gift Shop'],
     tags: ['popular', 'family-friendly', 'cultural'],
-    rating: {
-      average: 4.5,
-      count: 128,
-    },
+    rating: 4.5,
+    reviewCount: 128,
     status: 'active',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

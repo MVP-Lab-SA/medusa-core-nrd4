@@ -37,7 +37,7 @@ export const Route = createFileRoute('/$countryCode/explore/')({
       q: search.q as string | undefined,
     };
   },
-  loader: async ({ params }) => {
+  loader: async ({ params }): Promise<any> => {
     const { countryCode } = params;
     
     // Resolve tenant
@@ -80,16 +80,18 @@ export const Route = createFileRoute('/$countryCode/explore/')({
 // =============================================================================
 
 function ExploreComponent() {
-  const { featuredPOIs, rootNodes, isMock } = Route.useLoaderData();
-  const { category, view, q } = Route.useSearch();
+  const data = Route.useLoaderData() as any;
+  const { featuredPOIs, rootNodes, isMock } = data || {};
+  const { category, view, q } = Route.useSearch() as any;
+  const params = Route.useParams();
   
   const categories: { id: POICategory; label: string; icon: string }[] = [
-    { id: 'attraction', label: 'Attractions', icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z' },
+    { id: 'landmark', label: 'Landmarks', icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z' },
     { id: 'restaurant', label: 'Restaurants', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
     { id: 'hotel', label: 'Hotels', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
     { id: 'shopping', label: 'Shopping', icon: 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z' },
     { id: 'transport', label: 'Transport', icon: 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4' },
-    { id: 'healthcare', label: 'Healthcare', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
+    { id: 'hospital', label: 'Healthcare', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
     { id: 'government', label: 'Government', icon: 'M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z' },
   ];
   
@@ -139,7 +141,8 @@ function ExploreComponent() {
         <div className="container mx-auto">
           <div className="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-hide">
             <Link
-              to="/explore"
+              to={"/$countryCode/explore" as any}
+              params={{ countryCode: params.countryCode }}
               search={{ view }}
               className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
                 !category ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'
@@ -150,7 +153,8 @@ function ExploreComponent() {
             {categories.map((cat) => (
               <Link
                 key={cat.id}
-                to="/explore"
+                to={"/$countryCode/explore" as any}
+                params={{ countryCode: params.countryCode }}
                 search={{ category: cat.id, view }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
                   category === cat.id ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'
@@ -174,7 +178,8 @@ function ExploreComponent() {
           </p>
           <div className="flex items-center gap-2">
             <Link
-              to="/explore"
+              to={"/$countryCode/explore" as any}
+              params={{ countryCode: params.countryCode }}
               search={{ category, view: 'grid' }}
               className={`p-2 rounded-lg ${view === 'grid' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800'}`}
             >
@@ -183,7 +188,8 @@ function ExploreComponent() {
               </svg>
             </Link>
             <Link
-              to="/explore"
+              to={"/$countryCode/explore" as any}
+              params={{ countryCode: params.countryCode }}
               search={{ category, view: 'list' }}
               className={`p-2 rounded-lg ${view === 'list' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800'}`}
             >
@@ -192,7 +198,8 @@ function ExploreComponent() {
               </svg>
             </Link>
             <Link
-              to="/explore"
+              to={"/$countryCode/explore" as any}
+              params={{ countryCode: params.countryCode }}
               search={{ category, view: 'map' }}
               className={`p-2 rounded-lg ${view === 'map' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800'}`}
             >
@@ -208,16 +215,16 @@ function ExploreComponent() {
       <section className="py-8 px-4">
         <div className="container mx-auto">
           {view === 'list' ? (
-            <POIList pois={filteredPOIs} />
+            <POIList pois={filteredPOIs} countryCode={params.countryCode} />
           ) : view === 'map' ? (
             <div className="grid lg:grid-cols-2 gap-8">
-              <POIList pois={filteredPOIs} />
+              <POIList pois={filteredPOIs} countryCode={params.countryCode} />
               <div className="bg-gray-200 dark:bg-gray-800 rounded-xl h-[600px] flex items-center justify-center sticky top-24">
                 <p className="text-gray-500">Map View (Connect mapping service)</p>
               </div>
             </div>
           ) : (
-            <POIGrid pois={filteredPOIs} columns={3} />
+            <POIGrid pois={filteredPOIs} columns={3} countryCode={params.countryCode} />
           )}
         </div>
       </section>
@@ -231,7 +238,8 @@ function ExploreComponent() {
               {rootNodes.map((node) => (
                 <Link
                   key={node.id}
-                  to={`/explore/${node.slug}`}
+                  to={"/$countryCode/explore/$slug" as any}
+                  params={{ countryCode: params.countryCode, slug: node.slug }}
                   className="block p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow"
                 >
                   <h3 className="text-xl font-semibold">{node.name}</h3>
@@ -251,7 +259,7 @@ function ExploreComponent() {
 // =============================================================================
 
 function createMockPOIs(): POI[] {
-  const categories: POICategory[] = ['attraction', 'restaurant', 'hotel', 'shopping', 'transport', 'healthcare'];
+  const categories: POICategory[] = ['landmark', 'restaurant', 'hotel', 'shopping', 'transport', 'hospital'];
   const names = [
     'City Museum', 'Grand Hotel', 'Central Mall', 'Metro Station', 
     'Heritage Park', 'Fine Dining', 'Medical Center', 'Cultural Center',
@@ -262,8 +270,9 @@ function createMockPOIs(): POI[] {
     id: `mock-${index}`,
     slug: name.toLowerCase().replace(/\s+/g, '-'),
     name,
+    type: 'place' as const,
     description: `Discover ${name}, a premier destination in our city.`,
-    category: categories[index % categories.length],
+    primaryCategory: categories[index % categories.length],
     tenant: 'platform',
     node: 'city-center',
     location: {
@@ -277,7 +286,7 @@ function createMockPOIs(): POI[] {
     status: 'active',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-  }));
+  })) as POI[];
 }
 
 function createMockNodes(): Node[] {

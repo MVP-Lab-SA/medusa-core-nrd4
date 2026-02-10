@@ -25,7 +25,7 @@ export const Route = createFileRoute('/$countryCode/cms/$')({
     <PageError error={error?.message} statusCode={500} />
   ),
   notFoundComponent: () => <PageError statusCode={404} />,
-  loader: async ({ params }) => {
+  loader: async ({ params }): Promise<any> => {
     const slug = params['_splat'] || 'home';
     const locale = params.countryCode;
     
@@ -63,7 +63,7 @@ export const Route = createFileRoute('/$countryCode/cms/$')({
     
     return [
       { title: page.meta?.title || page.title },
-      { name: 'description', content: page.meta?.description || page.description },
+      { name: 'description', content: page.meta?.description || '' },
     ];
   },
 });
@@ -73,7 +73,9 @@ export const Route = createFileRoute('/$countryCode/cms/$')({
 // =============================================================================
 
 function CMSPageComponent() {
-  const { page, isMock } = Route.useLoaderData();
+  const data = Route.useLoaderData() as any;
+  const { page, isMock } = data || {};
+  const params = Route.useParams();
   
   return (
     <div>
@@ -84,7 +86,7 @@ function CMSPageComponent() {
         </div>
       )}
       
-      <PageRenderer page={page} />
+      <PageRenderer page={page} countryCode={params.countryCode} />
     </div>
   );
 }
@@ -98,7 +100,6 @@ function createMockPage(slug: string): Page {
     id: `mock-${slug}`,
     slug,
     title: formatSlugAsTitle(slug),
-    description: `This is a mock page for "${slug}". Connect to Payload CMS to see real content.`,
     template: 'default',
     tenant: 'platform',
     status: 'published',

@@ -53,13 +53,13 @@ export default function ServicesPage({ countryCode }: ServicesPageProps) {
                 <Link
                   key={service.id}
                   to="/$countryCode/services/$handle"
-                  params={{ countryCode, handle: service.handle }}
+                  params={{ countryCode, handle: service.handle || service.id }}
                   className="group bg-city-navy border border-city-steel/30 rounded-lg overflow-hidden hover:border-city-cyan/50 transition-all"
                 >
                   <div className="aspect-video overflow-hidden bg-city-slate">
                     <img
-                      src={service.images[0]}
-                      alt={service.title}
+                      src={service.images?.[0] || service.image}
+                      alt={service.title || service.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
@@ -68,7 +68,7 @@ export default function ServicesPage({ countryCode }: ServicesPageProps) {
                       {service.category}
                     </span>
                     <h3 className="text-lg font-bold text-city-white group-hover:text-city-cyan transition-colors mb-2">
-                      {service.title}
+                      {service.title || service.name}
                     </h3>
                     <p className="text-sm text-city-gray line-clamp-2 mb-4">
                       {service.description}

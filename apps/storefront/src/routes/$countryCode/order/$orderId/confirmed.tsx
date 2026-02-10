@@ -4,7 +4,7 @@ import { retrieveOrder } from "@/lib/data/order"
 import { queryKeys } from "@/lib/utils/query-keys"
 
 export const Route = createFileRoute("/$countryCode/order/$orderId/confirmed")({
-  loader: async ({ params, context }) => {
+  loader: async ({ params, context }): Promise<any> => {
     const { countryCode, orderId } = params
     const { queryClient } = context
 

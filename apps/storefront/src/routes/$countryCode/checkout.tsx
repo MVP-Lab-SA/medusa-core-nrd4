@@ -18,7 +18,7 @@ export const Route = createFileRoute("/$countryCode/checkout")({
       step,
     }
   },
-  loader: async ({ params, context, deps }) => {
+  loader: async ({ params, context, deps }): Promise<any> => {
     const { countryCode } = params
     const { queryClient } = context
     const { step } = deps

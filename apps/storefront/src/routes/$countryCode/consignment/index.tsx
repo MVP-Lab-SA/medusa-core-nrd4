@@ -39,8 +39,8 @@ function ConsignmentPage() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
-                to="/$countryCode/consignment/sell"
-                params={{ countryCode }}
+                to={"/$countryCode/consignment/sell" as any}
+                params={{ countryCode } as any}
                 className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors"
               >
                 Sell Your Devices
@@ -201,8 +201,8 @@ function ConsignmentPage() {
               ))}
             </div>
             <Link
-              to="/$countryCode/consignment/sell"
-              params={{ countryCode }}
+              to={"/$countryCode/consignment/sell" as any}
+              params={{ countryCode } as any}
               className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors"
             >
               Start Selling

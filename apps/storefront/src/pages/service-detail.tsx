@@ -30,11 +30,10 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
 
   const { data: slots } = useAvailableSlots(
     service?.id || "",
-    selectedDate,
-    selectedProvider
+    selectedDate
   )
 
-  const createBooking = useCreateBooking()
+  const { createBooking, isLoading: isBooking } = useCreateBooking()
 
   const handleBook = async () => {
     if (!customer || !service || !selectedSlot) {
@@ -45,13 +44,17 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
     }
 
     try {
-      await createBooking.mutateAsync({
-        customerId: customer.id,
+      await createBooking({
         serviceId: service.id,
-        providerId: selectedProvider,
-        slotId: selectedSlot,
-        participants,
-        notes: notes || undefined,
+        serviceName: service.name,
+        providerId: selectedProvider || '',
+        providerName: '',
+        date: new Date().toISOString(),
+        startTime: selectedSlot || '',
+        endTime: '',
+        status: 'pending',
+        price: service.price,
+        currencyCode: 'usd',
       })
       setBookingComplete(true)
     } catch (error) {
@@ -130,8 +133,8 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
             <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
               <div className="aspect-video">
                 <img
-                  src={service.images[0]}
-                  alt={service.title}
+                  src={service.images?.[0] || service.image}
+                  alt={service.title || service.name}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -139,7 +142,7 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
                 <span className="px-2 py-0.5 bg-gray-800 text-gray-400 text-xs rounded">
                   {service.category}
                 </span>
-                <h1 className="text-2xl font-bold text-white mt-2">{service.title}</h1>
+                <h1 className="text-2xl font-bold text-white mt-2">{service.title || service.name}</h1>
                 <p className="text-gray-400 mt-4">{service.description}</p>
 
                 <div className="flex items-center gap-6 mt-6 pt-6 border-t border-gray-800">
@@ -164,7 +167,7 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
                 slots={slots || []}
                 selectedSlot={selectedSlot}
                 onSelectSlot={setSelectedSlot}
-                providers={providers}
+                providers={providers as any}
                 selectedProvider={selectedProvider}
                 onSelectProvider={setSelectedProvider}
               />
@@ -179,7 +182,7 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
               <div className="mt-4 space-y-4">
                 <div className="flex items-center justify-between py-3 border-b border-gray-800">
                   <span className="text-gray-400">Service</span>
-                  <span className="font-medium text-white">{service.title}</span>
+                  <span className="font-medium text-white">{service.title || service.name}</span>
                 </div>
 
                 <div className="flex items-center justify-between py-3 border-b border-gray-800">
@@ -199,7 +202,7 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
                     <span className="w-12 text-center font-medium text-white">{participants}</span>
                     <button
                       onClick={() =>
-                        setParticipants(Math.min(service.maxParticipants, participants + 1))
+                        setParticipants(Math.min(service.maxParticipants || 10, participants + 1))
                       }
                       className="w-8 h-8 rounded-lg border border-gray-700 text-gray-300 hover:bg-gray-800"
                     >
@@ -227,10 +230,10 @@ export default function ServiceDetailPage({ handle, countryCode }: ServiceDetail
 
               <button
                 onClick={handleBook}
-                disabled={!selectedSlot || createBooking.isPending}
+                disabled={!selectedSlot || isBooking}
                 className="w-full mt-6 py-3 bg-cyan-500 text-black rounded-lg font-medium hover:bg-cyan-400 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
               >
-                {createBooking.isPending ? "Booking..." : "Confirm Booking"}
+                {isBooking ? "Booking..." : "Confirm Booking"}
               </button>
 
               {!selectedSlot && (

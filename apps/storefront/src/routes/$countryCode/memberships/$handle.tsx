@@ -52,7 +52,7 @@ function MembershipDetailPage() {
         tierId: tier.id,
         billingCycle,
       })
-      navigate({ to: "/$countryCode/account/membership", params: { countryCode } })
+      navigate({ to: "/$countryCode/memberships" as any, params: { countryCode } as any })
     } catch (error) {
       alert("Failed to create membership")
     } finally {

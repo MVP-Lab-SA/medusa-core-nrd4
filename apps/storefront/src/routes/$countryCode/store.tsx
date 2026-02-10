@@ -5,7 +5,7 @@ import { listProducts } from "@/lib/data/products"
 import { HttpTypes } from "@medusajs/types"
 
 export const Route = createFileRoute("/$countryCode/store")({
-  loader: async ({ params, context }) => {
+  loader: async ({ params, context }): Promise<any> => {
     const { countryCode } = params
     const { queryClient } = context
 

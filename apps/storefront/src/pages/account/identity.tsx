@@ -85,10 +85,10 @@ export default function AccountIdentityPage({ countryCode }: AccountIdentityPage
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-4 mb-4">
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                  kycStatus.status === "verified" ? "bg-green-500/20" : "bg-amber-500/20"
+                  kycStatus.status === "approved" ? "bg-green-500/20" : "bg-amber-500/20"
                 }`}>
                   <ShieldCheck className={`w-6 h-6 ${
-                    kycStatus.status === "verified" ? "text-green-400" : "text-amber-400"
+                    kycStatus.status === "approved" ? "text-green-400" : "text-amber-400"
                   }`} />
                 </div>
                 <div>
@@ -101,9 +101,9 @@ export default function AccountIdentityPage({ countryCode }: AccountIdentityPage
                   <div key={i} className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
                     <span className="text-gray-300 text-sm">{doc.type}</span>
                     <span className={`text-xs px-2 py-1 rounded ${
-                      doc.verified ? "bg-green-500/20 text-green-400" : "bg-gray-500/20 text-gray-400"
+                      doc.status === "verified" ? "bg-green-500/20 text-green-400" : "bg-gray-500/20 text-gray-400"
                     }`}>
-                      {doc.verified ? "Verified" : "Pending"}
+                      {doc.status === "verified" ? "Verified" : "Pending"}
                     </span>
                   </div>
                 ))}
@@ -134,7 +134,7 @@ export default function AccountIdentityPage({ countryCode }: AccountIdentityPage
                 <div key={consent.purpose} className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
                   <div>
                     <p className="font-medium text-white text-sm">{consent.purpose}</p>
-                    <p className="text-xs text-gray-500">{consent.description}</p>
+                    <p className="text-xs text-gray-500">{consent.granted ? "Enabled" : "Disabled"}</p>
                   </div>
                   <button
                     onClick={() => handleConsentToggle(consent.purpose, !consent.granted)}
@@ -193,7 +193,7 @@ export default function AccountIdentityPage({ countryCode }: AccountIdentityPage
                   </span>
                 </div>
                 <p className="text-sm text-gray-400">
-                  Expires: {new Date(credential.expirationDate).toLocaleDateString()}
+                  Expires: {credential.expiresAt ? new Date(credential.expiresAt).toLocaleDateString() : "Never"}
                 </p>
               </div>
             ))}

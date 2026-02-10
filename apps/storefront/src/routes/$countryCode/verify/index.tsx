@@ -56,7 +56,8 @@ function VerifyLanding() {
             return (
               <Link
                 key={type.id}
-                to={`/${countryCode}/verify/${type.id}`}
+                to={"/$countryCode/verify/$type" as any}
+                params={{ countryCode, type: type.id } as any}
                 className="block bg-gray-900 border border-gray-800 rounded-lg p-6 hover:border-cyan-500/50 transition-all"
               >
                 <div className="flex items-center gap-4">

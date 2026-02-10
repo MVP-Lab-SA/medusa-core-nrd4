@@ -152,7 +152,7 @@ export default function LoyaltyPage({ countryCode }: LoyaltyPageProps) {
                 <p className="text-3xl font-bold text-cyan-400 mb-2">{reward.value}</p>
                 <p className="text-gray-400 mb-4">{reward.description}</p>
                 <p className="text-sm text-gray-500 mb-4">{reward.points.toLocaleString()} points</p>
-                <Button variant="outline" size="sm" className="w-full">
+                <Button variant="secondary" size="fit" className="w-full">
                   Redeem
                 </Button>
               </div>

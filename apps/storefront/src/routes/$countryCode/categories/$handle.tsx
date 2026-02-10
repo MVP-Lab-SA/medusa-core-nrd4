@@ -5,7 +5,7 @@ import Category from "@/pages/category"
 import { HttpTypes } from "@medusajs/types"
 
 export const Route = createFileRoute("/$countryCode/categories/$handle")({
-  loader: async ({ params, context }) => {
+  loader: async ({ params, context }): Promise<any> => {
     const { countryCode, handle } = params
     const { queryClient } = context
 

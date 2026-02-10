@@ -56,7 +56,7 @@ function PreorderDetailPage() {
         productId: product.id,
       })
       alert("Pre-order confirmed! Check your email for details.")
-      navigate({ to: "/$countryCode/account/preorders", params: { countryCode } })
+      navigate({ to: "/$countryCode/account/orders" as any, params: { countryCode } as any })
     } catch (error: any) {
       alert(error.message || "Failed to create pre-order")
     } finally {

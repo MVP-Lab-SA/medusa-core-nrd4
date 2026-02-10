@@ -29,7 +29,8 @@ function AgeVerificationPage() {
               Your age has been successfully verified. You can now access age-restricted content and products.
             </p>
             <Link 
-              to={`/${countryCode}/store`}
+              to="/$countryCode/store"
+              params={{ countryCode }}
               className="inline-block bg-cyan-500 text-black px-8 py-3 rounded-lg hover:bg-cyan-400 font-medium"
             >
               Continue Shopping

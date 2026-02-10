@@ -1,5 +1,29 @@
 import { Check, Clock, Pause, XMark } from "@medusajs/icons"
-import type { SubscriptionPlan, Subscription } from "@/lib/mock/marketplace"
+
+interface SubscriptionPlan {
+  id: string
+  name: string
+  description: string
+  price: number
+  interval: string
+  features: string[]
+  discount?: number
+  trialDays?: number
+}
+
+interface Subscription {
+  id: string
+  planId?: string
+  planName?: string
+  plan?: { name: string }
+  status: string
+  currentPeriodStart?: string
+  currentPeriodEnd?: string
+  nextBillingDate?: string
+  price?: number
+  currencyCode?: string
+  items?: { product: { name: string } }[]
+}
 
 interface SubscriptionPlanCardProps {
   plan: SubscriptionPlan
@@ -106,36 +130,35 @@ export function SubscriptionStatusCard({
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-900">
-            {subscription.plan.name}
+            {subscription.planName || subscription.plan?.name || 'Subscription'}
           </h3>
           <span
             className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium mt-1 ${
-              statusColors[subscription.status]
+              statusColors[subscription.status as keyof typeof statusColors] || statusColors.active
             }`}
           >
-            {statusIcons[subscription.status]}
+            {statusIcons[subscription.status as keyof typeof statusIcons] || statusIcons.active}
             {subscription.status.charAt(0).toUpperCase() + subscription.status.slice(1)}
           </span>
         </div>
         <div className="text-right">
           <div className="text-2xl font-bold text-gray-900">
-            ${subscription.plan.price.toFixed(2)}
+            ${(subscription.price || 0).toFixed(2)}
           </div>
-          <div className="text-sm text-gray-500">/{subscription.plan.interval}</div>
+          <div className="text-sm text-gray-500">/month</div>
         </div>
       </div>
 
       {/* Subscription Items */}
-      {subscription.items.length > 0 && (
+      {subscription.items && subscription.items.length > 0 && (
         <div className="mt-4 pt-4 border-t border-gray-100">
           <h4 className="text-sm font-medium text-gray-700 mb-2">Included Items</h4>
           <ul className="space-y-2">
-            {subscription.items.map((item) => (
-              <li key={item.id} className="flex items-center justify-between text-sm">
+            {subscription.items.map((item, idx) => (
+              <li key={idx} className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">
-                  {item.productTitle} - {item.variantTitle}
+                  {item.product?.name || 'Item'}
                 </span>
-                <span className="text-gray-500">x{item.quantity}</span>
               </li>
             ))}
           </ul>
@@ -144,19 +167,23 @@ export function SubscriptionStatusCard({
 
       {/* Billing Info */}
       <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-4 text-sm">
-        <div>
-          <span className="text-gray-500">Current Period</span>
-          <p className="text-gray-900">
-            {new Date(subscription.currentPeriodStart).toLocaleDateString()} -{" "}
-            {new Date(subscription.currentPeriodEnd).toLocaleDateString()}
-          </p>
-        </div>
-        <div>
-          <span className="text-gray-500">Next Billing</span>
-          <p className="text-gray-900">
-            {new Date(subscription.nextBillingDate).toLocaleDateString()}
-          </p>
-        </div>
+        {subscription.currentPeriodStart && subscription.currentPeriodEnd && (
+          <div>
+            <span className="text-gray-500">Current Period</span>
+            <p className="text-gray-900">
+              {new Date(subscription.currentPeriodStart).toLocaleDateString()} -{" "}
+              {new Date(subscription.currentPeriodEnd).toLocaleDateString()}
+            </p>
+          </div>
+        )}
+        {subscription.nextBillingDate && (
+          <div>
+            <span className="text-gray-500">Next Billing</span>
+            <p className="text-gray-900">
+              {new Date(subscription.nextBillingDate).toLocaleDateString()}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Actions */}

@@ -73,27 +73,31 @@ export default function LookbookPage({ countryCode }: LookbookPageProps) {
       username: "smartcityfan",
       caption: "My new CityOS setup is amazing!",
       likes: 234,
+      comments: 12,
       products: [
-        { id: "prod_1", title: "Urban Sensor Hub", handle: "urban-sensor-hub" }
+        { id: "prod_1", name: "Urban Sensor Hub", handle: "urban-sensor-hub", price: 299, currencyCode: "usd" }
       ]
     },
     {
       id: "2",
       imageUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600",
       username: "techenhusiast",
-      likes: 189
+      likes: 189,
+      comments: 8
     },
     {
       id: "3",
       imageUrl: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=600",
       username: "iotlover",
-      likes: 312
+      likes: 312,
+      comments: 15
     },
     {
       id: "4",
       imageUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600",
       username: "futuretech",
-      likes: 445
+      likes: 445,
+      comments: 22
     }
   ]
 
