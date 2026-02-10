@@ -9,14 +9,14 @@ interface VendorDetailPageProps {
 }
 
 export default function VendorDetailPage({ handle, countryCode }: VendorDetailPageProps) {
-  const { data: vendor, isLoading } = useVendor(handle)
-  const { data: reviews } = useVendorReviews(vendor?.id || "")
-  const followMutation = useFollowVendor()
+  const { vendor, isLoading } = useVendor(handle)
+  const { reviews } = useVendorReviews(vendor?.id || "")
+  const { toggleFollow, isFollowing: followingStatus, isLoading: followLoading } = useFollowVendor(vendor?.id || "")
   const [isFollowing, setIsFollowing] = useState(false)
 
   const handleFollow = async () => {
     if (vendor) {
-      await followMutation.mutateAsync(vendor.id)
+      await toggleFollow()
       setIsFollowing(true)
     }
   }
@@ -53,11 +53,15 @@ export default function VendorDetailPage({ handle, countryCode }: VendorDetailPa
     <div className="min-h-screen bg-black">
       {/* Banner */}
       <div className="relative h-64 md:h-80">
-        <img
-          src={vendor.banner}
-          alt={vendor.name}
-          className="w-full h-full object-cover"
-        />
+        {vendor.banner ? (
+          <img
+            src={vendor.banner}
+            alt={vendor.name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-r from-gray-900 to-gray-800" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
       </div>
 
@@ -67,15 +71,21 @@ export default function VendorDetailPage({ handle, countryCode }: VendorDetailPa
           <div className="flex flex-col md:flex-row gap-6">
             {/* Logo & Basic Info */}
             <div className="flex items-start gap-4">
-              <img
-                src={vendor.logo}
-                alt={vendor.name}
-                className="w-24 h-24 rounded-xl border-4 border-gray-800 shadow-lg"
-              />
+              {vendor.logo ? (
+                <img
+                  src={vendor.logo}
+                  alt={vendor.name}
+                  className="w-24 h-24 rounded-xl border-4 border-gray-800 shadow-lg"
+                />
+              ) : (
+                <div className="w-24 h-24 rounded-xl border-4 border-gray-800 shadow-lg bg-gray-800 flex items-center justify-center text-2xl font-bold text-gray-500">
+                  {vendor.name.charAt(0)}
+                </div>
+              )}
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-2xl font-bold text-white">{vendor.name}</h1>
-                  {vendor.verified && (
+                  {vendor.isVerified && (
                     <span className="flex items-center gap-1 text-cyan-400 text-sm">
                       <CheckCircle className="w-4 h-4" />
                       Verified
@@ -92,7 +102,7 @@ export default function VendorDetailPage({ handle, countryCode }: VendorDetailPa
                   </div>
                   <div className="flex items-center gap-1 text-gray-400">
                     <Users className="w-4 h-4" />
-                    <span>{vendor.followerCount.toLocaleString()} followers</span>
+                    <span>{vendor.productCount.toLocaleString()} products</span>
                   </div>
                 </div>
               </div>
@@ -111,12 +121,6 @@ export default function VendorDetailPage({ handle, countryCode }: VendorDetailPa
               >
                 {isFollowing ? "Following" : "Follow"}
               </button>
-              <a
-                href={`mailto:${vendor.contact.email}`}
-                className="px-6 py-2.5 border border-gray-700 rounded-lg font-medium text-gray-300 hover:bg-gray-800 transition-colors"
-              >
-                Contact
-              </a>
             </div>
           </div>
 
@@ -131,8 +135,8 @@ export default function VendorDetailPage({ handle, countryCode }: VendorDetailPa
               <p className="text-sm text-gray-500">Reviews</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-white">{vendor.followerCount}</p>
-              <p className="text-sm text-gray-500">Followers</p>
+              <p className="text-2xl font-bold text-white">{vendor.rating}</p>
+              <p className="text-sm text-gray-500">Rating</p>
             </div>
             <div className="text-center">
               <p className="text-2xl font-bold text-white">
@@ -154,7 +158,7 @@ export default function VendorDetailPage({ handle, countryCode }: VendorDetailPa
                 <Link
                   to="/$countryCode/store"
                   params={{ countryCode }}
-                  search={{ vendor: vendor.handle }}
+                  search={{ vendor: vendor.slug }}
                   className="text-cyan-400 hover:text-cyan-300 text-sm"
                 >
                   View All
@@ -185,7 +189,7 @@ export default function VendorDetailPage({ handle, countryCode }: VendorDetailPa
                             />
                           ))}
                         </div>
-                        <span className="text-sm text-gray-400">{review.customerName}</span>
+                        <span className="text-sm text-gray-400">{review.author}</span>
                       </div>
                       <h4 className="font-medium text-white mt-2">{review.title}</h4>
                       <p className="text-sm text-gray-400 mt-1">{review.content}</p>
@@ -201,56 +205,39 @@ export default function VendorDetailPage({ handle, countryCode }: VendorDetailPa
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Categories */}
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-              <h3 className="font-semibold text-white mb-3">Categories</h3>
-              <div className="flex flex-wrap gap-2">
-                {vendor.categories.map((category) => (
-                  <span
-                    key={category}
-                    className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm"
-                  >
-                    {category}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Policies */}
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-              <h3 className="font-semibold text-white mb-3">Policies</h3>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-sm font-medium text-gray-300">Shipping</p>
-                  <p className="text-sm text-gray-500">{vendor.policies.shipping}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-300">Returns</p>
-                  <p className="text-sm text-gray-500">{vendor.policies.returns}</p>
+            {vendor.categories && vendor.categories.length > 0 && (
+              <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+                <h3 className="font-semibold text-white mb-3">Categories</h3>
+                <div className="flex flex-wrap gap-2">
+                  {vendor.categories.map((category) => (
+                    <span
+                      key={category}
+                      className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm"
+                    >
+                      {category}
+                    </span>
+                  ))}
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Contact */}
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-              <h3 className="font-semibold text-white mb-3">Contact</h3>
-              <div className="space-y-2">
-                <a
-                  href={`mailto:${vendor.contact.email}`}
-                  className="flex items-center gap-2 text-sm text-gray-400 hover:text-cyan-400"
-                >
-                  <Envelope className="w-4 h-4" />
-                  {vendor.contact.email}
-                </a>
-                {vendor.contact.phone && (
-                  <a
-                    href={`tel:${vendor.contact.phone}`}
-                    className="flex items-center gap-2 text-sm text-gray-400 hover:text-cyan-400"
-                  >
-                    <Phone className="w-4 h-4" />
-                    {vendor.contact.phone}
-                  </a>
-                )}
+            {/* Location */}
+            {vendor.location && (
+              <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+                <h3 className="font-semibold text-white mb-3">Location</h3>
+                <div className="flex items-center gap-2 text-gray-400">
+                  <MapPin className="w-4 h-4" />
+                  <span>{vendor.location}</span>
+                </div>
               </div>
+            )}
+
+            {/* Member Info */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+              <h3 className="font-semibold text-white mb-3">About</h3>
+              <p className="text-sm text-gray-400">
+                Member since {new Date(vendor.joinedAt).toLocaleDateString()}
+              </p>
             </div>
           </div>
         </div>

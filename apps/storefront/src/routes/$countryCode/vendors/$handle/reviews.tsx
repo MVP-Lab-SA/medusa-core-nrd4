@@ -10,8 +10,8 @@ export const Route = createFileRoute("/$countryCode/vendors/$handle/reviews")({
 
 function VendorReviewsPage() {
   const { handle } = Route.useParams()
-  const { data: vendor, isLoading: vendorLoading } = useVendor(handle)
-  const { data: reviews, isLoading: reviewsLoading } = useVendorReviews(handle)
+  const { vendor, isLoading: vendorLoading } = useVendor(handle)
+  const { reviews, isLoading: reviewsLoading } = useVendorReviews(handle)
 
   if (vendorLoading || reviewsLoading) {
     return (
@@ -55,7 +55,7 @@ function VendorReviewsPage() {
 
   return (
     <div className="min-h-screen bg-black">
-      <VendorHeader vendor={vendor} activeTab="reviews" />
+      <VendorHeader vendor={vendor} />
       
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

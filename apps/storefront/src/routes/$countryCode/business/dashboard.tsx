@@ -84,7 +84,7 @@ function BusinessDashboard() {
         <div className="bg-city-navy border border-city-steel rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-city-white">Recent Orders</h2>
-            <Link to={`/${countryCode}/business/orders`} className="text-city-cyan text-sm hover:text-city-cyan-light transition-colors">View All</Link>
+            <Link to={`/${countryCode}/business/orders` as any} className="text-city-cyan text-sm hover:text-city-cyan-light transition-colors">View All</Link>
           </div>
           <div className="space-y-3">
             {recentOrders.map((order) => (
@@ -112,7 +112,7 @@ function BusinessDashboard() {
         <div className="bg-city-navy border border-city-steel rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-city-white">Pending Approvals</h2>
-            <Link to={`/${countryCode}/business/approvals`} className="text-city-cyan text-sm hover:text-city-cyan-light transition-colors">View All</Link>
+            <Link to={`/${countryCode}/business/approvals` as any} className="text-city-cyan text-sm hover:text-city-cyan-light transition-colors">View All</Link>
           </div>
           <div className="space-y-3">
             {pendingApprovals.map((approval) => (
@@ -136,28 +136,28 @@ function BusinessDashboard() {
       {/* Quick Actions */}
       <div className="mt-8 grid grid-cols-2 gap-4">
         <Link 
-          to={`/${countryCode}/business/orders`} 
+          to={`/${countryCode}/business/orders` as any} 
           className="flex items-center gap-3 p-4 bg-city-navy border border-city-steel rounded-xl hover:border-city-cyan/50 transition-colors"
         >
           <ShoppingCart className="w-6 h-6 text-city-cyan" />
           <span className="font-medium text-city-white">New Order</span>
         </Link>
         <Link 
-          to={`/${countryCode}/business/quotes`} 
+          to={`/${countryCode}/business/quotes` as any} 
           className="flex items-center gap-3 p-4 bg-city-navy border border-city-steel rounded-xl hover:border-city-cyan/50 transition-colors"
         >
           <DocumentText className="w-6 h-6 text-city-cyan" />
           <span className="font-medium text-city-white">Request Quote</span>
         </Link>
         <Link 
-          to={`/${countryCode}/business/team`} 
+          to={`/${countryCode}/business/team` as any} 
           className="flex items-center gap-3 p-4 bg-city-navy border border-city-steel rounded-xl hover:border-city-cyan/50 transition-colors"
         >
           <Users className="w-6 h-6 text-city-cyan" />
           <span className="font-medium text-city-white">Manage Team</span>
         </Link>
         <Link 
-          to={`/${countryCode}/business/invoices`} 
+          to={`/${countryCode}/business/invoices` as any} 
           className="flex items-center gap-3 p-4 bg-city-navy border border-city-steel rounded-xl hover:border-city-cyan/50 transition-colors"
         >
           <ArrowUpRightMini className="w-6 h-6 text-city-cyan" />

@@ -10,7 +10,9 @@ export const Route = createFileRoute("/$countryCode/account/tax-certificates")({
 
 function TaxCertificatesPage() {
   const { countryCode } = Route.useParams()
-  const { data: certificates, isLoading } = useTaxCertificates()
+  // TODO: Get actual customer ID from auth context
+  const customerId = "mock-customer-id"
+  const { data: certificates, isLoading } = useTaxCertificates(customerId)
   const [showUpload, setShowUpload] = useState(false)
 
   const handleUpload = (file: File, type: string) => {
@@ -76,13 +78,13 @@ function TaxCertificatesPage() {
                       <DocumentText className="w-6 h-6 text-cyan-400" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-white">{cert.type || "Tax Exemption Certificate"}</h3>
+                      <h3 className="font-semibold text-white capitalize">{cert.type || "Tax Exemption Certificate"}</h3>
                       <p className="text-sm text-gray-500">
-                        Uploaded: {cert.uploadedDate ? new Date(cert.uploadedDate).toLocaleDateString() : "N/A"}
+                        Uploaded: {cert.createdAt ? new Date(cert.createdAt).toLocaleDateString() : "N/A"}
                       </p>
-                      {cert.expiresDate && (
+                      {cert.validUntil && (
                         <p className="text-sm text-gray-500">
-                          Expires: {new Date(cert.expiresDate).toLocaleDateString()}
+                          Expires: {new Date(cert.validUntil).toLocaleDateString()}
                         </p>
                       )}
                     </div>
@@ -93,10 +95,10 @@ function TaxCertificatesPage() {
                   </span>
                 </div>
 
-                {cert.status === "rejected" && cert.rejectionReason && (
+                {cert.status === "rejected" && (
                   <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-lg p-3">
                     <p className="text-red-400 text-sm">
-                      <strong>Reason:</strong> {cert.rejectionReason}
+                      Certificate was rejected. Please upload a new document.
                     </p>
                   </div>
                 )}

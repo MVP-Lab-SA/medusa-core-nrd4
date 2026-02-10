@@ -126,10 +126,10 @@ function LoyaltyPage() {
                   >
                     <div>
                       <p className="font-medium text-white">{tx.description}</p>
-                      <p className="text-sm text-gray-500">{new Date(tx.date).toLocaleDateString()}</p>
+                      <p className="text-sm text-gray-500">{new Date(tx.createdAt).toLocaleDateString()}</p>
                     </div>
-                    <span className={`font-semibold ${tx.type === "earned" ? "text-green-400" : "text-red-400"}`}>
-                      {tx.type === "earned" ? "+" : "-"}{tx.points} pts
+                    <span className={`font-semibold ${tx.type === "earn" || tx.type === "bonus" ? "text-green-400" : "text-red-400"}`}>
+                      {tx.type === "earn" || tx.type === "bonus" ? "+" : "-"}{tx.points} pts
                     </span>
                   </div>
                 ))}

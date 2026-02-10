@@ -43,13 +43,13 @@ function BusinessLanding() {
           </p>
           <div className="flex gap-4 justify-center">
             <Link
-              to={`/${countryCode}/business/register`}
+              to={`/${countryCode}/business/register` as any}
               className="px-8 py-3 bg-black text-white font-bold rounded-lg hover:bg-gray-900"
             >
               Register Your Business
             </Link>
             <Link
-              to={`/${countryCode}/account/business`}
+              to={`/${countryCode}/account/business` as any}
               className="px-8 py-3 bg-white/20 text-white font-bold rounded-lg hover:bg-white/30"
             >
               Sign In
@@ -87,7 +87,7 @@ function BusinessLanding() {
             Join thousands of businesses already benefiting from our B2B program.
           </p>
           <Link
-            to={`/${countryCode}/business/register`}
+            to={`/${countryCode}/business/register` as any}
             className="inline-block px-8 py-3 bg-cyan-500 text-black font-bold rounded-lg hover:bg-cyan-400"
           >
             Apply Now

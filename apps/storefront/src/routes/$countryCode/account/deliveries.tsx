@@ -112,8 +112,8 @@ function DeliveriesPage() {
                               Order #{delivery.orderId.slice(-8)}
                             </p>
                             <p className="text-sm text-gray-500">
-                              {delivery.deliveredAt
-                                ? `Delivered ${new Date(delivery.deliveredAt).toLocaleDateString()}`
+                              {delivery.status === "delivered" && delivery.actualDelivery
+                                ? `Delivered ${new Date(delivery.actualDelivery).toLocaleDateString()}`
                                 : "Delivery failed"}
                             </p>
                           </div>

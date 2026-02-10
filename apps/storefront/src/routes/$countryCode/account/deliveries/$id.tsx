@@ -1,10 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useDeliveryTracking } from "@/lib/hooks/use-fleetbase"
-import { DeliveryTracker } from "@/components/delivery/DeliveryTracker"
-import { LiveMap } from "@/components/delivery/LiveMap"
-import { DriverCard } from "@/components/delivery/DriverCard"
-import { ProofOfDelivery } from "@/components/delivery/ProofOfDelivery"
-import { ArrowLeft, Phone, ChatBubble, MapPin, Clock, CubeSolid, Check } from "@medusajs/icons"
+import { ArrowLeft, MapPin, Clock, CubeSolid, Check } from "@medusajs/icons"
 
 export const Route = createFileRoute("/$countryCode/account/deliveries/$id")({
   component: DeliveryDetailPage,
@@ -12,7 +8,7 @@ export const Route = createFileRoute("/$countryCode/account/deliveries/$id")({
 
 function DeliveryDetailPage() {
   const { countryCode, id } = Route.useParams()
-  const { data: delivery, isLoading } = useDeliveryTracking(id)
+  const { data: trackingEvents, isLoading } = useDeliveryTracking(id)
 
   if (isLoading) {
     return (
@@ -26,7 +22,7 @@ function DeliveryDetailPage() {
     )
   }
 
-  if (!delivery) {
+  if (!trackingEvents || trackingEvents.length === 0) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <CubeSolid className="w-16 h-16 text-gray-600 mx-auto mb-4" />
@@ -43,14 +39,26 @@ function DeliveryDetailPage() {
     )
   }
 
+  // Get latest status from tracking events
+  const latestEvent = trackingEvents[trackingEvents.length - 1]
+  const currentStatus = latestEvent?.status || "unknown"
+
   const statusSteps = [
-    { key: 'confirmed', label: 'Order Confirmed', icon: Check },
+    { key: 'order_received', label: 'Order Confirmed', icon: Check },
     { key: 'picked_up', label: 'Picked Up', icon: CubeSolid },
     { key: 'in_transit', label: 'In Transit', icon: MapPin },
     { key: 'delivered', label: 'Delivered', icon: Check },
   ]
 
-  const currentStepIndex = statusSteps.findIndex(s => s.key === delivery.status)
+  const statusToStep: Record<string, number> = {
+    'order_received': 0,
+    'picked_up': 1,
+    'in_transit': 2,
+    'out_for_delivery': 2,
+    'delivered': 3,
+  }
+  
+  const currentStepIndex = statusToStep[currentStatus] ?? 0
 
   return (
     <div className="min-h-screen bg-black">
@@ -66,26 +74,12 @@ function DeliveryDetailPage() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-white">Delivery #{id}</h1>
-            <p className="text-gray-500">Order #{delivery.orderId}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Live Map */}
-            {delivery.status === 'in_transit' && (
-              <div className="bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
-                <div className="p-4 border-b border-gray-800">
-                  <h2 className="font-semibold text-white">Live Tracking</h2>
-                </div>
-                <LiveMap 
-                  driverLocation={delivery.driverLocation}
-                  destinationLocation={delivery.destinationLocation}
-                />
-              </div>
-            )}
-
             {/* Status Timeline */}
             <div className="bg-gray-900 rounded-lg border border-gray-800 p-6">
               <h2 className="font-semibold text-white mb-6">Delivery Status</h2>
@@ -116,11 +110,6 @@ function DeliveryDetailPage() {
                         <p className={`font-medium ${isCompleted ? 'text-white' : 'text-gray-500'}`}>
                           {step.label}
                         </p>
-                        {isCurrent && delivery.estimatedArrival && (
-                          <p className="text-sm text-emerald-400 mt-1">
-                            Estimated arrival: {new Date(delivery.estimatedArrival).toLocaleTimeString()}
-                          </p>
-                        )}
                       </div>
                     </div>
                   )
@@ -128,101 +117,49 @@ function DeliveryDetailPage() {
               </div>
             </div>
 
-            {/* Delivery Details */}
+            {/* Tracking Events */}
             <div className="bg-gray-900 rounded-lg border border-gray-800 p-6">
-              <h2 className="font-semibold text-white mb-4">Delivery Details</h2>
+              <h2 className="font-semibold text-white mb-4">Tracking History</h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">Delivery Address</h3>
-                  <div className="flex items-start gap-3">
-                    <MapPin className="w-5 h-5 text-gray-600 mt-0.5" />
+              <div className="space-y-4">
+                {trackingEvents.slice().reverse().map((event) => (
+                  <div key={event.id} className="flex items-start gap-4 pb-4 border-b border-gray-800 last:border-0">
+                    <div className="flex-shrink-0">
+                      <div className="w-2 h-2 bg-cyan-400 rounded-full mt-2" />
+                    </div>
                     <div>
-                      <p className="text-white">{delivery.address?.line1}</p>
-                      {delivery.address?.line2 && (
-                        <p className="text-gray-400">{delivery.address.line2}</p>
+                      <p className="text-white capitalize">{event.status.replace(/_/g, ' ')}</p>
+                      {event.location && (
+                        <p className="text-sm text-gray-400 flex items-center gap-1 mt-1">
+                          <MapPin className="w-3 h-3" />
+                          {event.location}
+                        </p>
                       )}
-                      <p className="text-gray-400">
-                        {delivery.address?.city}, {delivery.address?.state} {delivery.address?.postalCode}
+                      <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                        <Clock className="w-3 h-3" />
+                        {new Date(event.timestamp).toLocaleString()}
                       </p>
                     </div>
                   </div>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">Delivery Window</h3>
-                  <div className="flex items-start gap-3">
-                    <Clock className="w-5 h-5 text-gray-600 mt-0.5" />
-                    <div>
-                      <p className="text-white">{delivery.deliveryWindow || 'Standard Delivery'}</p>
-                      <p className="text-gray-400">
-                        {new Date(delivery.scheduledDate).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
-
-              {delivery.instructions && (
-                <div className="mt-6 pt-6 border-t border-gray-800">
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">Delivery Instructions</h3>
-                  <p className="text-gray-400">{delivery.instructions}</p>
-                </div>
-              )}
             </div>
-
-            {/* Proof of Delivery */}
-            {delivery.status === 'delivered' && delivery.proofOfDelivery && (
-              <ProofOfDelivery proof={delivery.proofOfDelivery} />
-            )}
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Driver Info */}
-            {delivery.driver && delivery.status !== 'delivered' && (
-              <DriverCard driver={delivery.driver} />
-            )}
-
-            {/* Contact Options */}
+            {/* Need Help */}
             <div className="bg-gray-900 rounded-lg border border-gray-800 p-6">
               <h2 className="font-semibold text-white mb-4">Need Help?</h2>
-              <div className="space-y-3">
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-gray-700 text-gray-300 rounded-lg hover:bg-gray-800">
-                  <Phone className="w-4 h-4" />
-                  <span>Call Support</span>
-                </button>
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-gray-700 text-gray-300 rounded-lg hover:bg-gray-800">
-                  <ChatBubble className="w-4 h-4" />
-                  <span>Chat with Us</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Order Summary */}
-            <div className="bg-gray-900 rounded-lg border border-gray-800 p-6">
-              <h2 className="font-semibold text-white mb-4">Order Summary</h2>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Items</span>
-                  <span className="text-white">{delivery.itemCount} items</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Shipping</span>
-                  <span className="text-white">${delivery.shippingCost?.toFixed(2) || '0.00'}</span>
-                </div>
-                <div className="pt-3 border-t border-gray-800 flex justify-between font-medium">
-                  <span className="text-white">Total</span>
-                  <span className="text-white">${delivery.total?.toFixed(2)}</span>
-                </div>
-              </div>
-              
+              <p className="text-gray-400 text-sm mb-4">
+                If you have any questions about your delivery, please contact our support team.
+              </p>
               <Link 
-                to="/$countryCode/orders/$orderId"
-                params={{ countryCode, orderId: delivery.orderId }}
-                className="block mt-4 text-center text-sm text-cyan-400 hover:text-cyan-300"
+                to="/$countryCode/account/deliveries"
+                params={{ countryCode }}
+                className="block w-full text-center px-4 py-2 bg-cyan-500 text-black rounded-lg hover:bg-cyan-400"
               >
-                View Full Order
+                Back to Deliveries
               </Link>
             </div>
           </div>

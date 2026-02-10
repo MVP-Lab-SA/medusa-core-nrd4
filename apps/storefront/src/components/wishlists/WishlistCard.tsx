@@ -14,12 +14,12 @@ export function WishlistCard({ wishlist, countryCode, onEdit, onDelete }: Wishli
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden hover:border-gray-700 transition-colors">
-      <Link to={`/${countryCode}/account/wishlists/${wishlist.id}`} className="block">
+      <Link to={`/${countryCode}/account/wishlists/${wishlist.id}` as any} className="block">
         <div className="aspect-square bg-gray-800 grid grid-cols-2 gap-0.5 p-0.5">
           {previewImages.map((item, index) => (
             <div key={item.id} className="bg-gray-700 overflow-hidden">
-              {item.thumbnail ? (
-                <img src={item.thumbnail} alt={item.productName} className="w-full h-full object-cover" />
+              {item.productImage ? (
+                <img src={item.productImage} alt={item.productTitle} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-500">
                   <Heart className="w-6 h-6" />

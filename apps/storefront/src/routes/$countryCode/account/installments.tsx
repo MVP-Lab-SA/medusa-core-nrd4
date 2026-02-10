@@ -9,7 +9,9 @@ export const Route = createFileRoute("/$countryCode/account/installments")({
 
 function InstallmentsPage() {
   const { countryCode } = Route.useParams()
-  const { data: plans, isLoading } = useInstallmentPlans()
+  // TODO: Get actual customer ID from auth context
+  const customerId = "mock-customer-id"
+  const { data: plans, isLoading } = useInstallmentPlans(customerId)
 
   const handlePayNow = (installmentId: string) => {
     console.log("Pay now:", installmentId)
@@ -24,11 +26,24 @@ function InstallmentsPage() {
         return { label: "Completed", color: "bg-green-500/20 text-green-400", icon: Check }
       case "active":
         return { label: "Active", color: "bg-cyan-500/20 text-cyan-400", icon: Clock }
-      case "overdue":
-        return { label: "Overdue", color: "bg-red-500/20 text-red-400", icon: ExclamationCircle }
+      case "defaulted":
+        return { label: "Defaulted", color: "bg-red-500/20 text-red-400", icon: ExclamationCircle }
       default:
         return { label: status, color: "bg-gray-500/20 text-gray-400", icon: Clock }
     }
+  }
+
+  // Helper to calculate remaining amount for a plan
+  const getRemainingAmount = (plan: NonNullable<typeof plans>[number]) => {
+    const paidAmount = plan.installments
+      .filter(i => i.status === "paid")
+      .reduce((sum, i) => sum + i.amount, 0)
+    return plan.totalAmount - paidAmount
+  }
+
+  // Helper to get next pending installment
+  const getNextInstallment = (plan: NonNullable<typeof plans>[number]) => {
+    return plan.installments.find(i => i.status === "pending" || i.status === "overdue")
   }
 
   return (
@@ -54,7 +69,7 @@ function InstallmentsPage() {
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
             <p className="text-sm text-gray-500">Total Outstanding</p>
             <p className="text-2xl font-bold text-white">
-              ${activePlans.reduce((sum, p) => sum + (p.remainingAmount || 0), 0).toFixed(2)}
+              ${activePlans.reduce((sum, p) => sum + getRemainingAmount(p), 0).toFixed(2)}
             </p>
           </div>
         </div>
@@ -75,14 +90,17 @@ function InstallmentsPage() {
                 {activePlans.map((plan) => {
                   const status = getStatusConfig(plan.status)
                   const StatusIcon = status.icon
-                  const progress = ((plan.totalAmount - (plan.remainingAmount || 0)) / plan.totalAmount) * 100
+                  const remainingAmount = getRemainingAmount(plan)
+                  const paidAmount = plan.totalAmount - remainingAmount
+                  const progress = (paidAmount / plan.totalAmount) * 100
+                  const nextInstallment = getNextInstallment(plan)
 
                   return (
                     <div key={plan.id} className="bg-gray-900 border border-gray-800 rounded-xl p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div>
-                          <h3 className="font-semibold text-white">{plan.orderDescription || `Order #${plan.orderId}`}</h3>
-                          <p className="text-sm text-gray-500">Started: {new Date(plan.startDate).toLocaleDateString()}</p>
+                          <h3 className="font-semibold text-white">Order #{plan.orderId}</h3>
+                          <p className="text-sm text-gray-500">Started: {new Date(plan.createdAt).toLocaleDateString()}</p>
                         </div>
                         <span className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs ${status.color}`}>
                           <StatusIcon className="w-3 h-3" />
@@ -92,8 +110,8 @@ function InstallmentsPage() {
 
                       <div className="mb-4">
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-gray-400">Progress</span>
-                          <span className="text-white">${(plan.totalAmount - (plan.remainingAmount || 0)).toFixed(2)} / ${plan.totalAmount.toFixed(2)}</span>
+                          <span className="text-gray-400">Progress ({plan.installments.filter(i => i.status === "paid").length}/{plan.numberOfInstallments})</span>
+                          <span className="text-white">${paidAmount.toFixed(2)} / ${plan.totalAmount.toFixed(2)}</span>
                         </div>
                         <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
                           <div
@@ -103,14 +121,16 @@ function InstallmentsPage() {
                         </div>
                       </div>
 
-                      {plan.nextPaymentDate && (
+                      {nextInstallment && (
                         <div className="flex items-center justify-between pt-4 border-t border-gray-800">
                           <div>
                             <p className="text-sm text-gray-500">Next Payment</p>
-                            <p className="font-medium text-white">${plan.nextPaymentAmount?.toFixed(2)} on {new Date(plan.nextPaymentDate).toLocaleDateString()}</p>
+                            <p className="font-medium text-white">
+                              ${nextInstallment.amount.toFixed(2)} due {new Date(nextInstallment.dueDate).toLocaleDateString()}
+                            </p>
                           </div>
                           <button
-                            onClick={() => handlePayNow(plan.id)}
+                            onClick={() => handlePayNow(nextInstallment.id)}
                             className="px-4 py-2 bg-cyan-500 text-black font-medium rounded-lg hover:bg-cyan-400 transition-colors"
                           >
                             Pay Now
@@ -128,21 +148,31 @@ function InstallmentsPage() {
             <div>
               <h2 className="text-lg font-semibold text-white mb-4">Completed Plans</h2>
               <div className="space-y-4">
-                {completedPlans.map((plan) => (
-                  <div key={plan.id} className="bg-gray-900 border border-gray-800 rounded-xl p-6 opacity-75">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h3 className="font-semibold text-white">{plan.orderDescription || `Order #${plan.orderId}`}</h3>
-                        <p className="text-sm text-gray-500">Completed: {plan.completedDate ? new Date(plan.completedDate).toLocaleDateString() : "N/A"}</p>
+                {completedPlans.map((plan) => {
+                  const lastPaidInstallment = [...plan.installments]
+                    .filter(i => i.paidAt)
+                    .sort((a, b) => new Date(b.paidAt!).getTime() - new Date(a.paidAt!).getTime())[0]
+                  
+                  return (
+                    <div key={plan.id} className="bg-gray-900 border border-gray-800 rounded-xl p-6 opacity-75">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="font-semibold text-white">Order #{plan.orderId}</h3>
+                          <p className="text-sm text-gray-500">
+                            Completed: {lastPaidInstallment?.paidAt 
+                              ? new Date(lastPaidInstallment.paidAt).toLocaleDateString() 
+                              : "N/A"}
+                          </p>
+                        </div>
+                        <span className="flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-400">
+                          <Check className="w-3 h-3" />
+                          Paid Off
+                        </span>
                       </div>
-                      <span className="flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-400">
-                        <Check className="w-3 h-3" />
-                        Paid Off
-                      </span>
+                      <p className="mt-2 text-gray-400">Total: ${plan.totalAmount.toFixed(2)}</p>
                     </div>
-                    <p className="mt-2 text-gray-400">Total: ${plan.totalAmount.toFixed(2)}</p>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           )}

@@ -8,9 +8,9 @@ export const Route = createFileRoute("/$countryCode/vendors/$handle/products")({
 })
 
 function VendorProductsPage() {
-  const { handle } = Route.useParams()
-  const { data: vendor, isLoading: vendorLoading } = useVendor(handle)
-  const { data: products, isLoading: productsLoading } = useVendorProducts(handle)
+  const { handle, countryCode } = Route.useParams()
+  const { vendor, isLoading: vendorLoading } = useVendor(handle)
+  const { products, isLoading: productsLoading } = useVendorProducts(handle)
 
   if (vendorLoading || productsLoading) {
     return (
@@ -42,7 +42,7 @@ function VendorProductsPage() {
 
   return (
     <div className="min-h-screen bg-black">
-      <VendorHeader vendor={vendor} activeTab="products" />
+      <VendorHeader vendor={vendor} />
       
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
@@ -114,7 +114,7 @@ function VendorProductsPage() {
 
           {/* Products Grid */}
           <div className="flex-1">
-            <VendorProducts products={products || []} />
+            <VendorProducts products={products || []} countryCode={countryCode} vendorName={vendor?.name || ""} />
           </div>
         </div>
       </div>

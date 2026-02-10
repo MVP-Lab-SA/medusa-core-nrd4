@@ -1,17 +1,10 @@
 import { WishlistCard } from "./WishlistCard"
 import { Plus } from "@medusajs/icons"
-
-interface Wishlist {
-  id: string
-  name: string
-  itemCount: number
-  isPublic: boolean
-  coverImage?: string
-  createdAt: string
-}
+import type { Wishlist } from "@/lib/mock/marketplace"
 
 interface WishlistGridProps {
   wishlists: Wishlist[]
+  countryCode: string
   onCreateNew?: () => void
   onSelectWishlist?: (id: string) => void
   onDeleteWishlist?: (id: string) => void
@@ -20,6 +13,7 @@ interface WishlistGridProps {
 
 export function WishlistGrid({ 
   wishlists, 
+  countryCode,
   onCreateNew, 
   onSelectWishlist,
   onDeleteWishlist,
@@ -45,9 +39,9 @@ export function WishlistGrid({
         <WishlistCard
           key={wishlist.id}
           wishlist={wishlist}
-          onClick={() => onSelectWishlist?.(wishlist.id)}
+          countryCode={countryCode}
+          onEdit={() => onSelectWishlist?.(wishlist.id)}
           onDelete={() => onDeleteWishlist?.(wishlist.id)}
-          onShare={() => onShareWishlist?.(wishlist.id)}
         />
       ))}
       

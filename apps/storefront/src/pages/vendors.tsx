@@ -18,7 +18,7 @@ export default function VendorsPage({ countryCode }: VendorsPageProps) {
   const filteredVendors = vendors?.filter(
     (vendor) =>
       vendor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      vendor.description.toLowerCase().includes(searchQuery.toLowerCase())
+      (vendor.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false)
   )
 
   return (
