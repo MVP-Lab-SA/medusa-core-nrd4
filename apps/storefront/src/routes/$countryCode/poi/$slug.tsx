@@ -39,12 +39,7 @@ export const Route = createFileRoute('/$countryCode/poi/$slug')({
         throw notFound();
       }
       
-      // Get related POIs
-      const relatedPOIs = poi.relatedPOIs 
-        ? poi.relatedPOIs.filter((p): p is POI => typeof p !== 'string')
-        : [];
-      
-      return { poi, relatedPOIs, tenantSlug };
+      return { poi, relatedPOIs: [], tenantSlug };
     } catch (error) {
       // Development mock
       if (process.env.NODE_ENV === 'development') {
@@ -57,15 +52,6 @@ export const Route = createFileRoute('/$countryCode/poi/$slug')({
       }
       throw error;
     }
-  },
-  meta: ({ loaderData }) => {
-    const poi = loaderData?.poi;
-    if (!poi) return [];
-    
-    return [
-      { title: poi.meta?.title || poi.name },
-      { name: 'description', content: poi.meta?.description || poi.description },
-    ];
   },
 });
 
@@ -138,37 +124,31 @@ function createMockPOI(slug: string): POI {
     id: `mock-${slug}`,
     slug,
     name,
+    type: 'place' as const,
     description: `Experience ${name}, one of the most popular destinations in the city. This is mock data - connect to Payload CMS to see real POI content.`,
-    category: 'attraction',
+    primaryCategory: 'museum' as const,
     tenant: 'platform',
     node: 'city-center',
-    location: {
-      address: '123 Main Street, City Center',
-      coordinates: {
-        lat: 24.7136,
-        lng: 46.6753,
-      },
+    address: '123 Main Street, City Center',
+    coordinates: {
+      lat: 24.7136,
+      lng: 46.6753,
     },
-    contact: {
-      phone: '+1 234 567 8900',
-      email: 'info@example.com',
-      website: 'https://example.com',
-    },
-    hours: [
-      { day: 'monday', open: '09:00', close: '18:00' },
-      { day: 'tuesday', open: '09:00', close: '18:00' },
-      { day: 'wednesday', open: '09:00', close: '18:00' },
-      { day: 'thursday', open: '09:00', close: '18:00' },
-      { day: 'friday', open: '10:00', close: '16:00' },
-      { day: 'saturday', open: '10:00', close: '20:00' },
-      { day: 'sunday', open: '10:00', close: '20:00', closed: true },
+    phone: '+1 234 567 8900',
+    email: 'info@example.com',
+    website: 'https://example.com',
+    regularOpeningHours: [
+      { day: 'monday' as const, open: '09:00', close: '18:00' },
+      { day: 'tuesday' as const, open: '09:00', close: '18:00' },
+      { day: 'wednesday' as const, open: '09:00', close: '18:00' },
+      { day: 'thursday' as const, open: '09:00', close: '18:00' },
+      { day: 'friday' as const, open: '10:00', close: '16:00' },
+      { day: 'saturday' as const, open: '10:00', close: '20:00' },
+      { day: 'sunday' as const, open: '10:00', close: '20:00', closed: true },
     ],
-    amenities: ['WiFi', 'Parking', 'Accessible', 'Restaurant', 'Gift Shop'],
-    tags: ['popular', 'family-friendly', 'cultural'],
     rating: 4.5,
-    reviewCount: 128,
-    status: 'active',
+    totalReviews: 128,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-  };
+  } as unknown as POI;
 }

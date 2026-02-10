@@ -150,7 +150,7 @@ const Cart = () => {
               </div>
 
               <div className="mt-8">
-                <Link to="/$countryCode/checkout" params={{ countryCode }} search={{}}>
+                <Link to={"/$countryCode/checkout" as any} params={{ countryCode } as any}>
                   <Button className="w-full" variant="primary">
                     Proceed to Checkout
                   </Button>

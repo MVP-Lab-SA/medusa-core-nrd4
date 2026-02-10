@@ -73,6 +73,7 @@ export function useStatements() {
       return [
         {
           id: "stmt_001",
+          title: "January 2026 Statement",
           period: "January 2026",
           startDate: "2026-01-01",
           endDate: "2026-01-31",
@@ -84,6 +85,7 @@ export function useStatements() {
         },
         {
           id: "stmt_002",
+          title: "December 2025 Statement",
           period: "December 2025",
           startDate: "2025-12-01",
           endDate: "2025-12-31",
@@ -95,6 +97,7 @@ export function useStatements() {
         },
         {
           id: "stmt_003",
+          title: "November 2025 Statement",
           period: "November 2025",
           startDate: "2025-11-01",
           endDate: "2025-11-30",

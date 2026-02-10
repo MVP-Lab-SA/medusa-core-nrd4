@@ -1,9 +1,20 @@
 import { useState } from "react"
 import { SquareTwoStack, User, Gift } from "@medusajs/icons"
-import type { ReferralProgram } from "../../lib/mock/marketplace"
+
+interface ReferralProgramData {
+  id: string
+  name: string
+  description: string
+  rewardType?: string
+  referrerReward: number | { type: string; value: number; currencyCode?: string }
+  refereeReward: number | { type: string; value: number; currencyCode?: string }
+  currency: string
+  termsUrl?: string
+  active?: boolean
+}
 
 interface ReferralCardProps {
-  program: ReferralProgram
+  program: ReferralProgramData
   referralCode: string
   referralCount: number
   totalEarned: number
@@ -69,7 +80,7 @@ export function ReferralCard({ program, referralCode, referralCount, totalEarned
       </div>
 
       <div className="mt-4 text-center text-sm text-white/80">
-        Get {program.referrerReward} for each friend who signs up! They get {program.refereeReward} too.
+        Get {typeof program.referrerReward === 'number' ? `$${program.referrerReward}` : `$${program.referrerReward.value}`} for each friend who signs up! They get {typeof program.refereeReward === 'number' ? `$${program.refereeReward}` : `${program.refereeReward.value}%`} too.
       </div>
     </div>
   )

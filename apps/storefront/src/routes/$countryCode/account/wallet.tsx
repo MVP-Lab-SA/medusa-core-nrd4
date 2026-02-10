@@ -110,7 +110,7 @@ function WalletPage() {
                       </div>
                       <div>
                         <p className="font-medium text-white">{tx.description}</p>
-                        <p className="text-sm text-gray-500">{new Date(tx.date).toLocaleDateString()}</p>
+                        <p className="text-sm text-gray-500">{new Date(tx.createdAt).toLocaleDateString()}</p>
                       </div>
                     </div>
                     <span className={`font-semibold ${tx.type === "credit" ? "text-green-400" : "text-red-400"}`}>
@@ -145,7 +145,7 @@ function WalletPage() {
                 <CreditCard className="w-6 h-6 text-gray-400" />
                 <div>
                   <p className="font-medium text-white">{method.brand} ending in {method.last4}</p>
-                  <p className="text-sm text-gray-500">Expires {method.expMonth}/{method.expYear}</p>
+                  <p className="text-sm text-gray-500">Expires {method.expiryMonth}/{method.expiryYear}</p>
                 </div>
               </div>
               {method.isDefault && (

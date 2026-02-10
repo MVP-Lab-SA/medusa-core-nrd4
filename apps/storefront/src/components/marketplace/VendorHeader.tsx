@@ -3,10 +3,11 @@ import { Star, CheckCircle, MapPin } from "@medusajs/icons"
 interface Vendor {
   id: string
   name: string
-  description: string
+  description?: string
   logo?: string
   banner?: string
-  verified: boolean
+  verified?: boolean
+  isVerified?: boolean
   rating: number
   reviewCount: number
   productCount: number
@@ -42,9 +43,9 @@ export function VendorHeader({ vendor }: VendorHeaderProps) {
             <div className="mt-4 sm:mt-0 sm:pb-2 flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{vendor.name}</h1>
-                {vendor.verified && <CheckCircle className="w-6 h-6 text-blue-500" />}
+                {(vendor.verified || vendor.isVerified) && <CheckCircle className="w-6 h-6 text-blue-500" />}
               </div>
-              <p className="text-gray-600 mb-2">{vendor.description}</p>
+              {vendor.description && <p className="text-gray-600 mb-2">{vendor.description}</p>}
               <div className="flex flex-wrap items-center gap-4 text-sm">
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />

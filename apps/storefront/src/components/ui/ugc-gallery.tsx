@@ -24,9 +24,10 @@ interface UGCGalleryProps {
   items: UGCItem[]
   columns?: 3 | 4 | 5
   className?: string
+  title?: string
 }
 
-export function UGCGallery({ items, columns = 4, className = "" }: UGCGalleryProps) {
+export function UGCGallery({ items, columns = 4, className = "", title }: UGCGalleryProps) {
   const [selectedItem, setSelectedItem] = useState<UGCItem | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
 
@@ -50,6 +51,7 @@ export function UGCGallery({ items, columns = 4, className = "" }: UGCGalleryPro
 
   return (
     <>
+      {title && <h2 className="text-2xl font-semibold text-white mb-6">{title}</h2>}
       <div className={`grid ${gridCols[columns]} gap-2 ${className}`}>
         {items.map((item, index) => (
           <button
@@ -85,6 +87,7 @@ export function UGCGallery({ items, columns = 4, className = "" }: UGCGalleryPro
           <button
             onClick={() => setSelectedItem(null)}
             className="absolute top-4 right-4 text-white hover:text-gray-300"
+            aria-label="Close gallery"
           >
             <XMark className="w-8 h-8" />
           </button>
@@ -92,6 +95,7 @@ export function UGCGallery({ items, columns = 4, className = "" }: UGCGalleryPro
           <button
             onClick={handlePrev}
             className="absolute left-4 text-white hover:text-gray-300"
+            aria-label="Previous image"
           >
             <ChevronLeft className="w-8 h-8" />
           </button>
@@ -99,6 +103,7 @@ export function UGCGallery({ items, columns = 4, className = "" }: UGCGalleryPro
           <button
             onClick={handleNext}
             className="absolute right-4 text-white hover:text-gray-300"
+            aria-label="Next image"
           >
             <ChevronRight className="w-8 h-8" />
           </button>

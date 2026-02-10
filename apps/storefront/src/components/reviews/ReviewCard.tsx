@@ -5,11 +5,13 @@ interface Review {
   rating: number
   title?: string
   content: string
-  customerName: string
+  customerName?: string
+  author?: string
   customerAvatar?: string
   createdAt: string
   images?: string[]
   verified?: boolean
+  isVerified?: boolean
   helpfulCount?: number
 }
 
@@ -19,21 +21,24 @@ interface ReviewCardProps {
 }
 
 export function ReviewCard({ review, onHelpful }: ReviewCardProps) {
+  const displayName = review.customerName || review.author || 'Anonymous'
+  const isVerified = review.verified || review.isVerified
+  
   return (
     <div className="border-b border-gray-200 pb-6 mb-6 last:border-0 last:pb-0 last:mb-0">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
             {review.customerAvatar ? (
-              <img src={review.customerAvatar} alt={review.customerName} className="w-full h-full object-cover" />
+              <img src={review.customerAvatar} alt={displayName} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-500 font-medium">
-                {review.customerName.charAt(0)}
+                {displayName.charAt(0)}
               </div>
             )}
           </div>
           <div>
-            <p className="font-medium text-gray-900">{review.customerName}</p>
+            <p className="font-medium text-gray-900">{displayName}</p>
             <p className="text-sm text-gray-500">
               {new Date(review.createdAt).toLocaleDateString()}
             </p>
@@ -68,7 +73,7 @@ export function ReviewCard({ review, onHelpful }: ReviewCardProps) {
         </div>
       )}
 
-      {review.verified && (
+      {isVerified && (
         <p className="text-sm text-green-600 mb-3">Verified Purchase</p>
       )}
 

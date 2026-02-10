@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router"
-import Layout from "@/components/layout"
 import LoyaltyPage from "@/pages/loyalty"
 
 export const Route = createFileRoute("/$countryCode/loyalty")({
@@ -9,9 +8,5 @@ export const Route = createFileRoute("/$countryCode/loyalty")({
 function RouteComponent() {
   const { countryCode } = Route.useParams()
 
-  return (
-    <Layout countryCode={countryCode}>
-      <LoyaltyPage countryCode={countryCode} />
-    </Layout>
-  )
+  return <LoyaltyPage countryCode={countryCode} />
 }

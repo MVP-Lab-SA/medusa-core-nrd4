@@ -2,8 +2,10 @@ import { Link } from "@tanstack/react-router"
 
 interface BundleProduct {
   id: string
-  title: string
+  title?: string
+  name?: string
   image?: string
+  thumbnail?: string
 }
 
 interface Bundle {
@@ -45,10 +47,10 @@ export function BundleCard({ bundle, countryCode }: BundleCardProps) {
           <div className="grid grid-cols-2 gap-0.5 bg-gray-100">
             {bundle.products.slice(0, 4).map((product) => (
               <div key={product.id} className="aspect-square bg-white">
-                {product.image ? (
+                {(product.image || product.thumbnail) ? (
                   <img
-                    src={product.image}
-                    alt={product.title}
+                    src={product.image || product.thumbnail}
+                    alt={product.title || product.name || 'Product'}
                     className="w-full h-full object-cover"
                   />
                 ) : (

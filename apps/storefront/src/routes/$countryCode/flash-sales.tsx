@@ -58,7 +58,8 @@ function FlashSalesPage() {
                       <div className="flex items-center justify-between">
                         <span className="text-3xl font-bold">Up to {sale.discountPercent}% OFF</span>
                         <Link
-                          to={`/${countryCode}/collections/${sale.collectionHandle || "sale"}`}
+                          to={"/$countryCode/store" as any}
+                          params={{ countryCode } as any}
                           className="px-6 py-2 bg-black text-white font-bold rounded-lg hover:bg-gray-900"
                         >
                           Shop Now

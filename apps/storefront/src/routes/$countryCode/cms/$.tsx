@@ -57,15 +57,6 @@ export const Route = createFileRoute('/$countryCode/cms/$')({
       throw error;
     }
   },
-  meta: ({ loaderData }) => {
-    const page = loaderData?.page;
-    if (!page) return [];
-    
-    return [
-      { title: page.meta?.title || page.title },
-      { name: 'description', content: page.meta?.description || '' },
-    ];
-  },
 });
 
 // =============================================================================
@@ -100,26 +91,26 @@ function createMockPage(slug: string): Page {
     id: `mock-${slug}`,
     slug,
     title: formatSlugAsTitle(slug),
-    template: 'default',
     tenant: 'platform',
+    version: 1,
     status: 'published',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    hero: {
-      id: 'mock-hero',
-      blockType: 'hero',
-      variant: 'default',
-      heading: formatSlugAsTitle(slug),
-      subheading: 'Content managed by Payload CMS',
-      overlay: {
-        enabled: true,
-        color: '#000000',
-        opacity: 0.4,
-      },
-      alignment: 'center',
-      height: 'half',
-    },
     layout: [
+      {
+        id: 'mock-hero',
+        blockType: 'hero',
+        variant: 'default',
+        heading: formatSlugAsTitle(slug),
+        subheading: 'Content managed by Payload CMS',
+        overlay: {
+          enabled: true,
+          color: '#000000',
+          opacity: 0.4,
+        },
+        alignment: 'center',
+        height: 'half',
+      } as any,
       {
         id: 'mock-content',
         blockType: 'richText',
@@ -209,10 +200,6 @@ function createMockPage(slug: string): Page {
         ],
       },
     ],
-    breadcrumb: {
-      enabled: true,
-      items: [{ label: formatSlugAsTitle(slug) }],
-    },
   };
 }
 

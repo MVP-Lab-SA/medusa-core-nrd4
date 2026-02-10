@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router"
-import Layout from "@/components/layout"
 import LookbookPage from "@/pages/lookbook"
 
 export const Route = createFileRoute("/$countryCode/lookbook")({
@@ -9,9 +8,5 @@ export const Route = createFileRoute("/$countryCode/lookbook")({
 function RouteComponent() {
   const { countryCode } = Route.useParams()
 
-  return (
-    <Layout countryCode={countryCode}>
-      <LookbookPage countryCode={countryCode} />
-    </Layout>
-  )
+  return <LookbookPage countryCode={countryCode} />
 }

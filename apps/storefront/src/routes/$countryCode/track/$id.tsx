@@ -17,12 +17,15 @@ function TrackOrderDetail() {
     currentLocation: { lat: 24.7136, lng: 46.6753 },
     destination: { lat: 24.7742, lng: 46.7386 },
     driver: {
+      id: "driver_1",
       name: "Mohammed Ali",
       phone: "+966 50 123 4567",
       photo: "/driver.jpg",
+      avatar: "/driver.jpg",
       rating: 4.9,
-      vehicle: "White Toyota Hilux",
-      licensePlate: "ABC 1234",
+      totalDeliveries: 1250,
+      vehicleType: "White Toyota Hilux",
+      vehiclePlate: "ABC 1234",
     },
     timeline: [
       { time: "09:00", status: "Order Confirmed", completed: true },

@@ -23,6 +23,7 @@ interface Subscription {
   price?: number
   currencyCode?: string
   items?: { product: { name: string } }[]
+  pausedUntil?: string
 }
 
 interface SubscriptionPlanCardProps {

@@ -1,18 +1,21 @@
 import { useState } from "react"
 import { XMark, Link as LinkIcon, ArrowUpRightOnBox } from "@medusajs/icons"
 
-interface WishlistShareModalProps {
+export interface WishlistShareModalProps {
+  wishlistId?: string
   wishlistName: string
-  shareUrl: string
-  isOpen: boolean
+  shareUrl?: string
+  isOpen?: boolean
   onClose: () => void
 }
 
-export function WishlistShareModal({ wishlistName, shareUrl, isOpen, onClose }: WishlistShareModalProps) {
+export function WishlistShareModal({ wishlistId, wishlistName, shareUrl, isOpen = true, onClose }: WishlistShareModalProps) {
+  // Generate shareUrl from wishlistId if not provided
+  const url = shareUrl || (typeof window !== 'undefined' ? `${window.location.origin}/wishlist/${wishlistId}` : '')
   const [copied, setCopied] = useState(false)
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(shareUrl)
+    await navigator.clipboard.writeText(url)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -41,7 +44,7 @@ export function WishlistShareModal({ wishlistName, shareUrl, isOpen, onClose }: 
         <div className="flex gap-2 mb-6">
           <input
             type="text"
-            value={shareUrl}
+            value={url}
             readOnly
             className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-gray-300"
           />

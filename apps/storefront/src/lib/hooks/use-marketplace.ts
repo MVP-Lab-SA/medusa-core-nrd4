@@ -12,6 +12,7 @@ export interface Vendor {
   reviewCount: number
   productCount: number
   isVerified: boolean
+  verified: boolean
   joinedAt: string
   location?: string
   categories?: string[]
@@ -24,6 +25,7 @@ export interface VendorProduct {
   thumbnail?: string
   price: number
   currencyCode: string
+  currency: string
   rating?: number
   reviewCount?: number
 }
@@ -34,6 +36,7 @@ export interface VendorReview {
   title?: string
   content: string
   author: string
+  customerName: string
   createdAt: string
   isVerified: boolean
 }
@@ -55,6 +58,7 @@ export function useVendors(options?: { category?: string }) {
         reviewCount: 256,
         productCount: 89,
         isVerified: true,
+        verified: true,
         joinedAt: "2022-06-15",
         location: "San Francisco, CA",
         categories: ["Electronics", "Accessories"]
@@ -68,6 +72,7 @@ export function useVendors(options?: { category?: string }) {
         reviewCount: 184,
         productCount: 120,
         isVerified: true,
+        verified: true,
         joinedAt: "2022-08-20",
         location: "Los Angeles, CA",
         categories: ["Fashion", "Streetwear"]
@@ -81,6 +86,7 @@ export function useVendors(options?: { category?: string }) {
         reviewCount: 92,
         productCount: 65,
         isVerified: false,
+        verified: false,
         joinedAt: "2023-02-10",
         location: "Chicago, IL",
         categories: ["Home", "Decor"]
@@ -115,6 +121,7 @@ export function useVendor(handle: string) {
       reviewCount: 128,
       productCount: 45,
       isVerified: true,
+      verified: true,
       joinedAt: "2023-01-15",
       location: "New York, NY"
     }
@@ -152,6 +159,7 @@ export function useVendorReviews(vendorId: string) {
         title: "Great seller!",
         content: "Fast shipping and excellent product quality.",
         author: "John D.",
+        customerName: "John D.",
         createdAt: "2024-01-15",
         isVerified: true
       },
@@ -161,6 +169,7 @@ export function useVendorReviews(vendorId: string) {
         title: "Good experience",
         content: "Product as described, would buy again.",
         author: "Sarah M.",
+        customerName: "Sarah M.",
         createdAt: "2024-01-10",
         isVerified: true
       }
@@ -694,12 +703,16 @@ export function useCreateSubscription() {
 export interface Bundle {
   id: string
   name: string
+  handle: string
   description: string
-  products: { id: string; name: string; thumbnail?: string }[]
+  products: { id: string; name: string; title?: string; thumbnail?: string; image?: string }[]
   originalPrice: number
   bundlePrice: number
   currencyCode: string
+  currency: string
   savings: number
+  savingsPercent: number
+  image?: string
 }
 
 export function useBundles() {
@@ -741,9 +754,13 @@ export interface FlashSale {
   name: string
   description: string
   startDate: string
+  startTime: string
   endDate: string
+  endTime: string
   status: 'active' | 'upcoming' | 'ended'
   discount: number
+  discountPercent: number
+  collectionHandle?: string
   products: { id: string; name: string; thumbnail?: string; originalPrice: number; salePrice: number }[]
 }
 
@@ -752,15 +769,21 @@ export function useFlashSales() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    const now = new Date()
+    const end = new Date(Date.now() + 48 * 60 * 60 * 1000)
     const mockSales: FlashSale[] = [
       {
         id: "flash_1",
         name: "Weekend Flash Sale",
         description: "Up to 50% off electronics",
-        startDate: new Date().toISOString(),
-        endDate: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+        startDate: now.toISOString(),
+        startTime: now.toISOString(),
+        endDate: end.toISOString(),
+        endTime: end.toISOString(),
         status: "active",
         discount: 50,
+        discountPercent: 50,
+        collectionHandle: "flash-sale",
         products: [],
       },
     ]
@@ -802,6 +825,10 @@ export interface ReferralProgram {
   referralLink: string
   totalReferrals: number
   totalEarnings: number
+  rewardType: 'fixed' | 'percentage'
+  currency: string
+  termsUrl: string
+  active: boolean
 }
 
 export function useReferralProgram() {
@@ -819,6 +846,10 @@ export function useReferralProgram() {
       referralLink: "https://example.com/ref/FRIEND10",
       totalReferrals: 5,
       totalEarnings: 50,
+      rewardType: "fixed",
+      currency: "USD",
+      termsUrl: "/terms/referral",
+      active: true,
     }
     setData(mockProgram)
     setIsLoading(false)

@@ -69,10 +69,6 @@ export const Route = createFileRoute('/$countryCode/explore/')({
       };
     }
   },
-  meta: () => [
-    { title: 'Explore - Discover Places' },
-    { name: 'description', content: 'Explore points of interest, attractions, and services in your city.' },
-  ],
 });
 
 // =============================================================================
@@ -142,8 +138,8 @@ function ExploreComponent() {
           <div className="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-hide">
             <Link
               to={"/$countryCode/explore" as any}
-              params={{ countryCode: params.countryCode }}
-              search={{ view }}
+              params={{ countryCode: params.countryCode } as any}
+              search={{ view } as any}
               className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
                 !category ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
@@ -154,8 +150,8 @@ function ExploreComponent() {
               <Link
                 key={cat.id}
                 to={"/$countryCode/explore" as any}
-                params={{ countryCode: params.countryCode }}
-                search={{ category: cat.id, view }}
+                params={{ countryCode: params.countryCode } as any}
+                search={{ category: cat.id, view } as any}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
                   category === cat.id ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
@@ -179,8 +175,8 @@ function ExploreComponent() {
           <div className="flex items-center gap-2">
             <Link
               to={"/$countryCode/explore" as any}
-              params={{ countryCode: params.countryCode }}
-              search={{ category, view: 'grid' }}
+              params={{ countryCode: params.countryCode } as any}
+              search={{ category, view: 'grid' } as any}
               className={`p-2 rounded-lg ${view === 'grid' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800'}`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -189,8 +185,8 @@ function ExploreComponent() {
             </Link>
             <Link
               to={"/$countryCode/explore" as any}
-              params={{ countryCode: params.countryCode }}
-              search={{ category, view: 'list' }}
+              params={{ countryCode: params.countryCode } as any}
+              search={{ category, view: 'list' } as any}
               className={`p-2 rounded-lg ${view === 'list' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800'}`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -199,8 +195,8 @@ function ExploreComponent() {
             </Link>
             <Link
               to={"/$countryCode/explore" as any}
-              params={{ countryCode: params.countryCode }}
-              search={{ category, view: 'map' }}
+              params={{ countryCode: params.countryCode } as any}
+              search={{ category, view: 'map' } as any}
               className={`p-2 rounded-lg ${view === 'map' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800'}`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -239,7 +235,7 @@ function ExploreComponent() {
                 <Link
                   key={node.id}
                   to={"/$countryCode/explore/$slug" as any}
-                  params={{ countryCode: params.countryCode, slug: node.slug }}
+                  params={{ countryCode: params.countryCode, slug: node.slug } as any}
                   className="block p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow"
                 >
                   <h3 className="text-xl font-semibold">{node.name}</h3>
@@ -275,14 +271,10 @@ function createMockPOIs(): POI[] {
     primaryCategory: categories[index % categories.length],
     tenant: 'platform',
     node: 'city-center',
-    location: {
-      address: `${100 + index} Main Street`,
-      coordinates: { lat: 24.7136 + (index * 0.01), lng: 46.6753 + (index * 0.01) },
-    },
-    rating: {
-      average: 3.5 + (Math.random() * 1.5),
-      count: Math.floor(Math.random() * 200) + 10,
-    },
+    address: `${100 + index} Main Street`,
+    coordinates: { lat: 24.7136 + (index * 0.01), lng: 46.6753 + (index * 0.01) },
+    rating: 3.5 + (Math.random() * 1.5),
+    totalReviews: Math.floor(Math.random() * 200) + 10,
     status: 'active',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
