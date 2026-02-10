@@ -6,9 +6,11 @@ type PaymentMethodInfoProps = {
 
 const PaymentMethodInfo = ({ provider_id }: PaymentMethodInfoProps) => {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 text-city-gray">
       <span>{paymentMethodsData[provider_id]?.title || provider_id}</span>
-      {paymentMethodsData[provider_id]?.icon}
+      <span className="text-city-cyan">
+        {paymentMethodsData[provider_id]?.icon}
+      </span>
     </div>
   )
 }

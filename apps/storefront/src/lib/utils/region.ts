@@ -38,7 +38,7 @@ export function getCountryCodeFromPath(pathname: string): string | undefined {
 // ============ DEFAULT COUNTRY CODE ============
 
 export default function getDefaultCountryCode(regions: HttpTypes.StoreRegion[]): string | undefined {
-  let defaultCountryCode = undefined
+  let defaultCountryCode: string | undefined = undefined
   regions.some((r) => {
     defaultCountryCode = r.countries?.[0]?.iso_2
     return defaultCountryCode !== undefined

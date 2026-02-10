@@ -21,21 +21,21 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
 
   return (
     <div
-      className={`flex flex-col gap-y-2 text-sm cursor-pointer py-4 border px-8 mb-2 hover:border-zinc-300 transition-colors ${
+      className={`flex flex-col gap-y-2 text-sm cursor-pointer py-4 border px-6 rounded-lg transition-colors ${
         isSelected
-          ? "border-zinc-900 bg-zinc-50"
-          : "border-zinc-200"
+          ? "border-city-cyan bg-city-cyan/5"
+          : "border-city-steel/30 hover:border-city-steel"
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
       onClick={disabled ? undefined : onClick}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-4">
           <Radio checked={isSelected} readOnly />
-          <p className="text-base font-medium">
+          <p className="text-base font-medium text-city-white">
             {paymentMethodsData[paymentProviderId]?.title || paymentProviderId}
           </p>
         </div>
-        <span className="justify-self-end text-zinc-900">
+        <span className="justify-self-end text-city-cyan">
           {paymentMethodsData[paymentProviderId]?.icon}
         </span>
       </div>

@@ -1,14 +1,16 @@
 import { forwardRef } from "react"
+import { clsx } from "clsx"
 
 interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  description?: string;
 }
 
 const Radio = forwardRef<HTMLInputElement, RadioProps>(
-  ({ className, label, checked, ...props }, ref) => {
+  ({ className, label, description, checked, ...props }, ref) => {
     return (
-      <div className="flex items-center gap-2">
-        <div className="relative">
+      <label className="flex items-start gap-3 cursor-pointer group">
+        <div className="relative mt-0.5">
           <input
             type="radio"
             ref={ref}
@@ -17,26 +19,34 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
             {...props}
           />
           <div
-            className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${
+            className={clsx(
+              "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200",
               checked
-                ? "bg-zinc-900 border-transparent"
-                : "bg-white border-zinc-200"
-            } ${className || ""}`}
+                ? "bg-city-cyan border-city-cyan"
+                : "bg-city-navy border-city-steel group-hover:border-city-gray",
+              className
+            )}
           >
             {checked && (
-              <div className="w-2 h-2 bg-white rounded-full"></div>
+              <div className="w-2 h-2 bg-city-dark rounded-full" />
             )}
           </div>
         </div>
-        {label && (
-          <label
-            htmlFor={props.id || props.name}
-            className="text-zinc-900 text-base font-medium cursor-pointer"
-          >
-            {label}
-          </label>
+        {(label || description) && (
+          <div className="flex flex-col">
+            {label && (
+              <span className="text-city-white text-base font-medium">
+                {label}
+              </span>
+            )}
+            {description && (
+              <span className="text-city-muted text-sm">
+                {description}
+              </span>
+            )}
+          </div>
         )}
-      </div>
+      </label>
     )
   }
 )

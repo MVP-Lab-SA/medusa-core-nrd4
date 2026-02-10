@@ -118,71 +118,73 @@ const Checkout = () => {
   }
 
   return (
-    <div className="content-container py-8 flex flex-col gap-8">
-      {/* Progress Steps */}
-      <CheckoutProgress
-        steps={steps}
-        currentStepIndex={currentStepIndex}
-        handleStepChange={goToStep}
-      />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-24">
-        <div className="flex flex-col gap-1 lg:col-span-2">
-          <h2 className="text-zinc-900 text-xl">
-            {steps[currentStepIndex]?.title}
-          </h2>
-          <p className="text-base font-medium text-zinc-600">
-            {steps[currentStepIndex]?.description}
-          </p>
+    <div className="min-h-screen bg-city-dark">
+      <div className="content-container py-8 flex flex-col gap-8">
+        {/* Progress Steps */}
+        <CheckoutProgress
+          steps={steps}
+          currentStepIndex={currentStepIndex}
+          handleStepChange={goToStep}
+        />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-24">
+          <div className="flex flex-col gap-1 lg:col-span-2">
+            <h2 className="text-city-white text-xl font-semibold">
+              {steps[currentStepIndex]?.title}
+            </h2>
+            <p className="text-base font-medium text-city-muted">
+              {steps[currentStepIndex]?.description}
+            </p>
+          </div>
+          <div className="flex flex-col gap-1">
+            <h2 className="text-city-white text-xl font-semibold">Order Summary</h2>
+          </div>
         </div>
-        <div className="flex flex-col gap-1">
-          <h2 className="text-zinc-900 text-xl">Order Summary</h2>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-24">
-        {/* Left Column - Checkout Steps */}
-        <div className="space-y-6 lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-24">
+          {/* Left Column - Checkout Steps */}
+          <div className="space-y-6 lg:col-span-2">
+            <Suspense fallback={<Loading />}>
+              {cartLoading && <Loading />}
+              {cart && (
+                <>
+                  {/* Address Step */}
+                  {step === CheckoutStepKey.ADDRESSES && (
+                    <AddressStep cart={cart} onNext={handleNext} />
+                  )}
+
+                  {/* Delivery Step */}
+                  {step === CheckoutStepKey.DELIVERY && (
+                    <DeliveryStep
+                      cart={cart}
+                      onNext={handleNext}
+                      onBack={handleBack}
+                    />
+                  )}
+
+                  {/* Payment Step */}
+                  {step === CheckoutStepKey.PAYMENT && (
+                    <PaymentStep
+                      cart={cart}
+                      onNext={handleNext}
+                      onBack={handleBack}
+                    />
+                  )}
+
+                  {/* Review Step */}
+                  {step === CheckoutStepKey.REVIEW && (
+                    <ReviewStep cart={cart} onBack={handleBack} />
+                  )}
+                </>
+              )}
+            </Suspense>
+          </div>
+
+          {/* Right Column - Order Summary */}
           <Suspense fallback={<Loading />}>
             {cartLoading && <Loading />}
-            {cart && (
-              <>
-                {/* Address Step */}
-                {step === CheckoutStepKey.ADDRESSES && (
-                  <AddressStep cart={cart} onNext={handleNext} />
-                )}
-
-                {/* Delivery Step */}
-                {step === CheckoutStepKey.DELIVERY && (
-                  <DeliveryStep
-                    cart={cart}
-                    onNext={handleNext}
-                    onBack={handleBack}
-                  />
-                )}
-
-                {/* Payment Step */}
-                {step === CheckoutStepKey.PAYMENT && (
-                  <PaymentStep
-                    cart={cart}
-                    onNext={handleNext}
-                    onBack={handleBack}
-                  />
-                )}
-
-                {/* Review Step */}
-                {step === CheckoutStepKey.REVIEW && (
-                  <ReviewStep cart={cart} onBack={handleBack} />
-                )}
-              </>
-            )}
+            {cart && <CheckoutSummary cart={cart} />}
+            {!cart && !cartLoading && <CartEmpty />}
           </Suspense>
         </div>
-
-        {/* Right Column - Order Summary */}
-        <Suspense fallback={<Loading />}>
-          {cartLoading && <Loading />}
-          {cart && <CheckoutSummary cart={cart} />}
-          {!cart && !cartLoading && <CartEmpty />}
-        </Suspense>
       </div>
     </div>
   )

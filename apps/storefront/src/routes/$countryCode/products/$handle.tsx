@@ -6,7 +6,7 @@ import { HttpTypes } from "@medusajs/types";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/$countryCode/products/$handle")({
-  loader: async ({ params, context }) => {
+  loader: async ({ params, context }): Promise<any> => {
     const { countryCode, handle } = params;
     const { queryClient } = context;
 

@@ -11,8 +11,10 @@ type AddressProps = {
 
 const Address = ({ address, className }: AddressProps) => {
   return (
-    <p className={clsx("text-sm text-secondary-text", className)}>
-      {address.first_name} {address.last_name}
+    <p className={clsx("text-sm text-city-gray", className)}>
+      <span className="text-city-white font-medium">
+        {address.first_name} {address.last_name}
+      </span>
       <br />
       {address.address_1}
       {address.address_2 && `, ${address.address_2}`}

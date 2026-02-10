@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { CheckoutStep, CheckoutStepKey } from "@/lib/types/global"
+import { CheckCircleSolid } from "@medusajs/icons"
 import { clsx } from "clsx"
 
 type CheckoutProgressProps = {
@@ -16,28 +17,52 @@ const CheckoutProgress = ({
   className,
 }: CheckoutProgressProps) => {
   return (
-    <div className={clsx("flex flex-wrap gap-4 items-center", className)}>
-      {steps.map((step, index) => (
-        <div key={step.key} className="flex items-center gap-4">
-          <Button
-            onClick={() => handleStepChange(step.key)}
-            variant={"transparent"}
-            className={clsx(
-              "p-0 hover:bg-transparent",
-              index !== currentStepIndex &&
-                "text-zinc-600 hover:text-zinc-500",
-              index === currentStepIndex &&
-                "text-zinc-900 hover:text-zinc-600"
+    <div className={clsx("flex flex-wrap items-center gap-2 md:gap-4", className)}>
+      {steps.map((step, index) => {
+        const isCompleted = step.completed
+        const isCurrent = index === currentStepIndex
+        const isPast = index < currentStepIndex
+
+        return (
+          <div key={step.key} className="flex items-center gap-2 md:gap-4">
+            <Button
+              onClick={() => handleStepChange(step.key)}
+              variant="transparent"
+              className={clsx(
+                "p-0 hover:bg-transparent flex items-center gap-2 transition-colors",
+                isCurrent && "text-city-cyan hover:text-city-cyan-light",
+                isPast && isCompleted && "text-city-white hover:text-city-cyan",
+                !isCurrent && !isPast && "text-city-muted hover:text-city-gray"
+              )}
+              disabled={index > currentStepIndex && !isCompleted}
+            >
+              {isCompleted && isPast ? (
+                <CheckCircleSolid className="w-4 h-4 text-city-cyan" />
+              ) : (
+                <span
+                  className={clsx(
+                    "w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold border-2",
+                    isCurrent && "border-city-cyan text-city-cyan",
+                    isPast && "border-city-cyan bg-city-cyan text-city-dark",
+                    !isCurrent && !isPast && "border-city-steel text-city-muted"
+                  )}
+                >
+                  {index + 1}
+                </span>
+              )}
+              <span className="hidden sm:inline">{step.title}</span>
+            </Button>
+            {index < steps.length - 1 && (
+              <div
+                className={clsx(
+                  "w-8 md:w-12 h-0.5 transition-colors",
+                  isCompleted ? "bg-city-cyan" : "bg-city-steel"
+                )}
+              />
             )}
-            disabled={index > currentStepIndex}
-          >
-            {step.title}
-          </Button>
-          {index < steps.length - 1 && (
-            <div className="w-8 h-px bg-zinc-200" />
-          )}
-        </div>
-      ))}
+          </div>
+        )
+      })}
     </div>
   )
 }

@@ -1,8 +1,19 @@
 @theme {
-  /* Font Family */
-  --font-sans:
-    Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Ubuntu, sans-serif;
+  /* Font Family - Outfit for futuristic geometric feel */
+  --font-sans: "Outfit", system-ui, sans-serif;
+  --font-display: "Outfit", system-ui, sans-serif;
+
+  /* CityOS Brand Colors */
+  --color-city-dark: #0a0f1a;
+  --color-city-navy: #111827;
+  --color-city-slate: #1e293b;
+  --color-city-steel: #334155;
+  --color-city-cyan: #06b6d4;
+  --color-city-cyan-light: #22d3ee;
+  --color-city-cyan-glow: #67e8f9;
+  --color-city-white: #f8fafc;
+  --color-city-gray: #94a3b8;
+  --color-city-muted: #64748b;
 
   /* Animation */
   --animation-ring: ring 2.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
@@ -19,6 +30,8 @@
   --animation-enter: enter 200ms ease-out;
   --animation-slide-in: slide-in 1.2s cubic-bezier(0.41, 0.73, 0.51, 1.02);
   --animation-leave: leave 150ms ease-in forwards;
+  --animation-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animation-grid-flow: grid-flow 20s linear infinite;
 
   /* Keyframes definitions */
   @keyframes ring {
@@ -116,6 +129,24 @@
     }
     100% {
       transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes grid-flow {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50%);
     }
   }
 }

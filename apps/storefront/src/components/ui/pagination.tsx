@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { clsx } from "clsx"
 
 type PaginationProps = {
   page: number;
@@ -14,7 +15,7 @@ const Pagination = ({
   "data-testid": dataTestId,
 }: PaginationProps) => {
   const getPageNumbers = () => {
-    const pageNumbers = []
+    const pageNumbers: number[] = []
     const startPage = Math.max(1, page - 2)
     const endPage = Math.min(totalPages, page + 2)
 
@@ -46,37 +47,42 @@ const Pagination = ({
           <>
             <button
               onClick={() => onPageChange(1)}
-              className="px-3 py-2 text-sm font-medium text-zinc-600 bg-white border border-zinc-300 hover:bg-zinc-50"
+              className="px-3 py-2 text-sm font-medium text-city-gray bg-city-navy border border-city-steel/30 hover:bg-city-steel/30 hover:text-city-white rounded-lg transition-colors"
             >
               1
             </button>
             {page > 4 && (
-              <span className="px-2 py-2 text-sm text-zinc-600">...</span>
+              <span className="px-2 py-2 text-sm text-city-muted">...</span>
             )}
           </>
         )}
 
         {getPageNumbers().map((pageNum) => (
-          <Button
+          <button
             key={pageNum}
             onClick={() => onPageChange(pageNum)}
-            variant="secondary"
+            className={clsx(
+              "px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+              pageNum === page
+                ? "bg-city-cyan text-city-dark"
+                : "text-city-gray bg-city-navy border border-city-steel/30 hover:bg-city-steel/30 hover:text-city-white"
+            )}
           >
             {pageNum}
-          </Button>
+          </button>
         ))}
 
         {page < totalPages - 2 && (
           <>
             {page < totalPages - 3 && (
-              <span className="px-2 py-2 text-sm text-zinc-600">...</span>
+              <span className="px-2 py-2 text-sm text-city-muted">...</span>
             )}
-            <Button
+            <button
               onClick={() => onPageChange(totalPages)}
-              variant="secondary"
+              className="px-3 py-2 text-sm font-medium text-city-gray bg-city-navy border border-city-steel/30 hover:bg-city-steel/30 hover:text-city-white rounded-lg transition-colors"
             >
               {totalPages}
-            </Button>
+            </button>
           </>
         )}
       </div>
