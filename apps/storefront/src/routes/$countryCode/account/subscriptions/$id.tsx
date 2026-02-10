@@ -2,6 +2,13 @@ import { createFileRoute } from "@tanstack/react-router"
 import { NextBillingCard, SubscriptionStatus } from "@/components/subscriptions"
 import { CubeSolid, Calendar, CreditCard, CogSixTooth, ArrowLeft, PauseSolid, XMark, ArrowPath } from "@medusajs/icons"
 
+// Alias for icon consistency
+const Package = CubeSolid
+const Settings = CogSixTooth
+const RefreshCw = ArrowPath
+const Pause = PauseSolid
+const X = XMark
+
 export const Route = createFileRoute("/$countryCode/account/subscriptions/$id")({
   component: SubscriptionDetailPage,
 })

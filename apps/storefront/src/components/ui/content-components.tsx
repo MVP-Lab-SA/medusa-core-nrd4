@@ -180,3 +180,9 @@ export function ContactForm({ onSubmit, className = "" }: ContactFormProps) {
     </form>
   )
 }
+
+// Alias for HelpCenterSearch
+export const HelpCenterSearch = FAQSearch
+
+// Export types
+export type { FAQItem, FAQAccordionProps }

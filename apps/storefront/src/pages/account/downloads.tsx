@@ -37,8 +37,8 @@ export function AccountDownloadsPage({ countryCode }: DownloadsPageProps) {
     alert(`Starting download: ${assetName}`)
   }
 
-  const getFileIcon = (fileType: string) => {
-    const extension = fileType.toLowerCase().replace(".", "")
+  const getFileIcon = (fileType: string | undefined) => {
+    const extension = (fileType || 'doc').toLowerCase().replace(".", "")
     return fileTypeIcons[extension] || DocumentText
   }
 
@@ -76,7 +76,7 @@ export function AccountDownloadsPage({ countryCode }: DownloadsPageProps) {
                       <div className="flex items-center gap-3 text-sm text-gray-500">
                         <span>{asset.fileSize}</span>
                         <span className="w-1 h-1 bg-gray-600 rounded-full" />
-                        <AccountBadge variant="default">{asset.fileType.toUpperCase()}</AccountBadge>
+                        <AccountBadge variant="default">{(asset.fileType || 'FILE').toUpperCase()}</AccountBadge>
                       </div>
                     </div>
                   </div>

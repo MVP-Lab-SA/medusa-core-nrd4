@@ -4,19 +4,38 @@
  * Error display for CMS pages.
  */
 
-interface PageErrorProps {
-  error?: Error
+export interface PageErrorProps {
+  error?: Error | string
   reset?: () => void
+  statusCode?: number
 }
 
-export function PageError({ error, reset }: PageErrorProps) {
+export function PageError({ error, reset, statusCode }: PageErrorProps) {
+  const errorMessage = typeof error === 'string' 
+    ? error 
+    : error?.message || 'An error occurred while loading this page.'
+  
+  const getStatusMessage = (code?: number) => {
+    switch (code) {
+      case 404:
+        return 'Page not found'
+      case 500:
+        return 'Server error'
+      default:
+        return 'Something went wrong'
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-16 text-center">
       <h1 className="text-2xl font-semibold text-gray-900 mb-4">
-        Something went wrong
+        {getStatusMessage(statusCode)}
       </h1>
+      {statusCode && (
+        <p className="text-6xl font-bold text-gray-200 mb-4">{statusCode}</p>
+      )}
       <p className="text-gray-600 mb-6">
-        {error?.message || 'An error occurred while loading this page.'}
+        {errorMessage}
       </p>
       {reset && (
         <button

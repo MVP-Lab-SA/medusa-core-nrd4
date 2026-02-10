@@ -376,7 +376,15 @@ export function useContextHeaders(tenant?: string): {
   const getHeaders = useCallback((
     overrides?: Partial<Record<string, string>>
   ): Record<string, string> => {
-    return { ...headers, ...overrides }
+    const result: Record<string, string> = { ...headers }
+    if (overrides) {
+      for (const [key, value] of Object.entries(overrides)) {
+        if (value !== undefined) {
+          result[key] = value
+        }
+      }
+    }
+    return result
   }, [headers])
 
   return { headers, getHeaders }

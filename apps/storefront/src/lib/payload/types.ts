@@ -333,6 +333,9 @@ export type POIPrimaryCategory =
   | 'charging-station'
   | 'other';
 
+// Alias for POIPrimaryCategory
+export type POICategory = POIPrimaryCategory;
+
 export type POISource = 'imported' | 'user-created' | 'partner-created' | 'authority-created';
 
 export type BusinessStatus = 'OPERATIONAL' | 'CLOSED_TEMPORARILY' | 'CLOSED_PERMANENTLY';

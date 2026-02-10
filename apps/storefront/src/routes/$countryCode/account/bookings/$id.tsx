@@ -2,6 +2,11 @@ import { createFileRoute } from "@tanstack/react-router"
 import { BookingConfirmation } from "@/components/bookings"
 import { Calendar, Clock, MapPin, User, ArrowLeft, Phone, ChatBubble, XMark, ArrowPath } from "@medusajs/icons"
 
+// Alias for icon consistency
+const MessageSquare = ChatBubble
+const RefreshCw = ArrowPath
+const X = XMark
+
 export const Route = createFileRoute("/$countryCode/account/bookings/$id")({
   component: BookingDetailPage,
 })

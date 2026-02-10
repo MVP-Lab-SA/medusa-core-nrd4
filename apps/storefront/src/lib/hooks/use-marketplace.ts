@@ -731,3 +731,98 @@ export function useFollowVendor(vendorId: string) {
 
   return { isFollowing, toggleFollow, isLoading }
 }
+
+// =============================================================================
+// FLASH SALES
+// =============================================================================
+
+export interface FlashSale {
+  id: string
+  name: string
+  description: string
+  startDate: string
+  endDate: string
+  status: 'active' | 'upcoming' | 'ended'
+  discount: number
+  products: { id: string; name: string; thumbnail?: string; originalPrice: number; salePrice: number }[]
+}
+
+export function useFlashSales() {
+  const [data, setData] = useState<FlashSale[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const mockSales: FlashSale[] = [
+      {
+        id: "flash_1",
+        name: "Weekend Flash Sale",
+        description: "Up to 50% off electronics",
+        startDate: new Date().toISOString(),
+        endDate: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+        status: "active",
+        discount: 50,
+        products: [],
+      },
+    ]
+    setData(mockSales)
+    setIsLoading(false)
+  }, [])
+
+  return { data, isLoading }
+}
+
+// =============================================================================
+// SERVICE PROVIDERS
+// =============================================================================
+
+export function useProviders() {
+  const [data, setData] = useState<ServiceProvider[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Use existing service providers logic
+    setData([])
+    setIsLoading(false)
+  }, [])
+
+  return { data, isLoading }
+}
+
+// =============================================================================
+// REFERRAL PROGRAM
+// =============================================================================
+
+export interface ReferralProgram {
+  id: string
+  name: string
+  description: string
+  referrerReward: { type: 'fixed' | 'percentage'; value: number; currencyCode?: string }
+  refereeReward: { type: 'fixed' | 'percentage'; value: number; currencyCode?: string }
+  referralCode: string
+  referralLink: string
+  totalReferrals: number
+  totalEarnings: number
+}
+
+export function useReferralProgram() {
+  const [data, setData] = useState<ReferralProgram | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const mockProgram: ReferralProgram = {
+      id: "referral_1",
+      name: "Refer & Earn",
+      description: "Share with friends and earn rewards",
+      referrerReward: { type: "fixed", value: 10, currencyCode: "USD" },
+      refereeReward: { type: "percentage", value: 10 },
+      referralCode: "FRIEND10",
+      referralLink: "https://example.com/ref/FRIEND10",
+      totalReferrals: 5,
+      totalEarnings: 50,
+    }
+    setData(mockProgram)
+    setIsLoading(false)
+  }, [])
+
+  return { data, isLoading }
+}

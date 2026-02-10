@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { Link } from "@tanstack/react-router"
 import { href } from "@/lib/utils/link"
 import { Star, StarSolid, PencilSquare, Trash, Clock, Check } from "@medusajs/icons"
@@ -203,7 +203,7 @@ export function AccountReviewsPage({ countryCode }: ReviewsPageProps) {
 interface ReviewCardProps {
   review: typeof mockReviews[0]
   countryCode: string
-  renderStars: (rating: number) => JSX.Element
+  renderStars: (rating: number) => React.ReactElement
   isPending?: boolean
 }
 

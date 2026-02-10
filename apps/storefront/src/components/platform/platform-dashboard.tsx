@@ -250,7 +250,7 @@ export function PlatformDashboard(): React.ReactElement {
                   { key: 'workflowOrchestration', label: 'Workflows' },
                   { key: 'openApiDocs', label: 'OpenAPI Docs' },
                 ].map(feature => {
-                  const enabled = hasFeature(feature.key as keyof typeof capabilities.features)
+                  const enabled = capabilities && hasFeature(feature.key as keyof typeof capabilities.features)
                   return (
                     <div
                       key={feature.key}

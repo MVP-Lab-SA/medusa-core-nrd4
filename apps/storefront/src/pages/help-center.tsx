@@ -126,7 +126,7 @@ export default function HelpCenterPage({ countryCode }: HelpCenterPageProps) {
                   ))}
                 </div>
               ) : filteredFaqs && filteredFaqs.length > 0 ? (
-                <FAQAccordion faqs={filteredFaqs} />
+                <FAQAccordion items={filteredFaqs} />
               ) : (
                 <div className="text-center py-12">
                   <p className="text-gray-400">No FAQs found.</p>
